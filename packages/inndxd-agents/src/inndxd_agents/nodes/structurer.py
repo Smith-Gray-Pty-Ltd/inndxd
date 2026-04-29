@@ -3,13 +3,12 @@
 import json
 import logging
 
+from inndxd_agents.config import settings
 from inndxd_agents.llm import create_ollama_client
 from inndxd_agents.prompts.structurer import STRUCTURER_SYSTEM, STRUCTURER_USER
 from inndxd_agents.state import ResearchState as AgentState
 
 logger = logging.getLogger(__name__)
-
-DEFAULT_MODEL = "deepseek-r1:latest"
 
 
 async def structurer_node(state: AgentState) -> dict:
@@ -34,7 +33,7 @@ async def structurer_node(state: AgentState) -> dict:
     )
 
     response = await client.chat.completions.create(
-        model=DEFAULT_MODEL,
+        model=settings.ollama_model,
         temperature=0.2,
         max_tokens=4096,
         messages=[
