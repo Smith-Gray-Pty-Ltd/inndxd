@@ -1,13 +1,11 @@
 from collections.abc import AsyncGenerator
-from contextvars import ContextVar
 from uuid import UUID
 
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Header, HTTPException, status
+from inndxd_core.db import async_session_factory
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from inndxd_core.db import async_session_factory
-
-current_tenant_id: ContextVar[UUID | None] = ContextVar("tenant_id", default=None)
+from inndxd_api.middleware.tenant import current_tenant_id
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
