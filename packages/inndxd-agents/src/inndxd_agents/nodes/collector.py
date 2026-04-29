@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 
-from inndxd_agents.state import AgentState
+from inndxd_agents.state import ResearchState as AgentState
 from inndxd_agents.tools.web_search import web_search_tool
 
 logger = logging.getLogger(__name__)
