@@ -1,0 +1,16 @@
+[project]
+name = "inndxd-agents"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "inndxd-core",
+    "langgraph>=0.3,<1",
+    "langchain-community>=0.3,<1",
+    "crawl4ai>=0.4,<1",
+    "openai>=1.60,<2",
+    "httpx>=0.28,<1",
+]
+
+[build-system]
+requires = ["uv-core"]
+build-backend = "uv.core"

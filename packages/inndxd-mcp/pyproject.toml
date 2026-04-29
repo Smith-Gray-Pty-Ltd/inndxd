@@ -1,0 +1,9 @@
+[project]
+name = "inndxd-mcp"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["uv-core"]
+build-backend = "uv.core"
