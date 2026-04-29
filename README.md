@@ -1,6 +1,17 @@
 # inndxd
 
+[![Stage 1 Complete](https://img.shields.io/badge/Stage-1%20Complete-brightgreen)](https://github.com/Smith-Gray-Pty-Ltd/inndxd)
+
 Open-source agentic data platform. Define a project → autonomous agents research, collect, structure & deliver real-time data via API, MCP, WebSocket & skills.
+
+## Features (Stage 1)
+
+- ✅ **FastAPI REST API** - Tenant-scoped CRUD endpoints for projects, briefs, data-items, and runs
+- ✅ **LangGraph Research Swarm** - Automated research pipeline: planner → collector → structurer
+- ✅ **Docker Compose Infrastructure** - PostgreSQL with pgvector, Redis, and Ollama
+- ✅ **Async SQLAlchemy** - Full async support for database operations
+- ✅ **Tenant Isolation** - Multi-tenant support via X-Tenant-ID header
+- ✅ **Integration Tests** - pytest-asyncio test suite with SQLite in-memory
 
 ## Architecture
 
@@ -47,15 +58,38 @@ cp .env.example .env
 
 # 3. Start infrastructure (PostgreSQL with pgvector, Redis, Ollama)
 docker compose up -d
+```
 
-# 4. Start the API server (in a new terminal)
-uv run uvicorn inndxd_api.main:app --reload --host 0.0.0.0 --port 8000
+### Create Project
 
-# 5. Test with curl
-curl -X POST http://localhost:8000/api/projects \
+```bash
+TENANT_ID=$(uuidgen)
+PROJECT_ID=$(curl -s -X POST http://localhost:8000/api/projects \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: $(uuidgen)" \
-  -d '{"name": "Test Project", "description": "Testing Stage 1"}'
+  -H "X-Tenant-ID: ${TENANT_ID}" \
+  -d '{"name": "Property Investment", "description": "Find commercial properties"}' | jq -r '.id')
+
+echo "Created project: ${PROJECT_ID}"
+```
+
+### Create Brief (Triggers Research Swarm)
+
+```bash
+curl -s -X POST http://localhost:8000/api/briefs \
+  -H "Content-Type: application/json" \
+  -H "X-Tenant-ID: ${TENANT_ID}" \
+  -d "{\"project_id\": \"${PROJECT_ID}\", \"natural_language\": \"Find top 5 commercial property platforms in Sydney\"}" | jq .
+
+# Check brief status
+curl -s http://localhost:8000/api/briefs \
+  -H "X-Tenant-ID: ${TENANT_ID}" | jq .
+```
+
+### Check Data Items
+
+```bash
+curl -s http://localhost:8000/api/data-items \
+  -H "X-Tenant-ID: ${TENANT_ID}" | jq .
 ```
 
 ## API Endpoints

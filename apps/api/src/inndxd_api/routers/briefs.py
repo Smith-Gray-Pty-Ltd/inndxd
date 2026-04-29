@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 
 from inndxd_api.dependencies import get_db, get_tenant_id
@@ -13,6 +14,8 @@ from inndxd_core.models.brief import Brief
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
+logger.info("Briefs router initialized")
+
 
 @router.post("/", response_model=BriefRead, status_code=status.HTTP_201_CREATED)
 async def create_brief(
@@ -21,6 +24,9 @@ async def create_brief(
     tenant_id: UUID = Depends(get_tenant_id),
     db: AsyncSession = Depends(get_db),
 ):
+    """Create a new research brief."""
+    logger.debug("Creating brief for tenant %s, project %s", tenant_id, body.project_id)
+    
     brief = Brief(
         tenant_id=tenant_id,
         project_id=body.project_id,
@@ -39,6 +45,7 @@ async def create_brief(
         body.natural_language,
     )
 
+    logger.info("Brief created: %s", brief.id)
     return brief
 
 
@@ -48,6 +55,9 @@ async def list_briefs(
     tenant_id: UUID = Depends(get_tenant_id),
     db: AsyncSession = Depends(get_db),
 ):
+    """List all briefs for a tenant."""
+    logger.debug("Listing briefs for tenant %s", tenant_id)
+    
     stmt = (
         select(Brief)
         .where(Brief.tenant_id == tenant_id)
@@ -57,7 +67,24 @@ async def list_briefs(
         stmt = stmt.where(Brief.project_id == project_id)
 
     result = await db.execute(stmt)
-    return list(result.scalars().all())
+    briefs = list(result.scalars().all())
+    logger.info("Found %d briefs for tenant %s", len(briefs), tenant_id)
+    return briefs
+
+
+async def _update_brief_status(db: AsyncSession, brief_id: UUID, status: str, error: str | None = None):
+    """Update brief status with error context."""
+    brief = await db.get(Brief, brief_id)
+    if brief:
+        brief.status = status
+        db.add(brief)
+        await db.commit()
+        if error:
+            logger.error("Brief %s set to %s: %s", brief_id, status, error)
+        else:
+            logger.info("Brief %s updated to %s", brief_id, status)
+    else:
+        logger.warning("Brief %s not found for status update", brief_id)
 
 
 async def _run_research_task(
@@ -66,25 +93,32 @@ async def _run_research_task(
     project_id: UUID,
     natural_language: str,
 ):
-    try:
-        from inndxd_agents.swarm import run_research_swarm
-        from inndxd_core.db import async_session_factory
+    """Run the research swarm in background with robust error handling."""
+    logger.info("Starting research task for brief %s", brief_id)
+    
+    async with _get_async_session() as session:
+        try:
+            from inndxd_agents.swarm import run_research_swarm
+            
+            logger.info("Executing research swarm for brief %s", brief_id)
+            result = await run_research_swarm(brief_id, tenant_id, project_id, natural_language)
+            
+            await _update_brief_status(session, brief_id, "completed")
+            logger.info("Research completed successfully for brief %s", brief_id)
+            return result
+            
+        except ImportError as exc:
+            logger.error("Import error during research: %s", exc)
+            await _update_brief_status(session, brief_id, "failed", "Import error: " + str(exc))
+        except SQLAlchemyError as exc:
+            logger.error("Database error during research: %s", exc, exc_info=True)
+            await _update_brief_status(session, brief_id, "failed", "Database error: " + str(exc))
+        except Exception as exc:
+            logger.error("Unexpected error during research: %s", exc, exc_info=True)
+            await _update_brief_status(session, brief_id, "failed", "Unexpected error: " + str(exc))
 
-        logger.info("Starting research for brief %s", brief_id)
-        await run_research_swarm(brief_id, tenant_id, project_id, natural_language)
 
-        async with async_session_factory() as session:
-            brief = await session.get(Brief, brief_id)
-            if brief:
-                brief.status = "completed"
-                session.add(brief)
-                await session.commit()
-            logger.info("Research completed for brief %s", brief_id)
-    except Exception:
-        async with async_session_factory() as session:
-            brief = await session.get(Brief, brief_id)
-            if brief:
-                brief.status = "failed"
-                session.add(brief)
-                await session.commit()
-        logger.exception("Research failed for brief %s", brief_id)
+async def _get_async_session():
+    """Get async session for task execution."""
+    from inndxd_core.db import async_session_factory
+    return async_session_factory()
