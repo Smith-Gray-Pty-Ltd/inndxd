@@ -8,6 +8,9 @@ class AgentSettings(BaseSettings):
 
     ollama_base_url: str = "http://localhost:11434/v1"
     ollama_model: str = "deepseek-r1:latest"
+    planner_model: str | None = None
+    collector_model: str | None = None
+    structurer_model: str | None = None
 
 
 settings = AgentSettings()
