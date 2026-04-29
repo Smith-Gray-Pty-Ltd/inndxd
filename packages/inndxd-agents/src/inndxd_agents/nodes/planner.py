@@ -5,7 +5,7 @@ import logging
 
 from inndxd_agents.llm import create_ollama_client
 from inndxd_agents.prompts.planner import PLANNER_SYSTEM, PLANNER_USER
-from inndxd_agents.state import AgentState
+from inndxd_agents.state import ResearchState as AgentState
 
 logger = logging.getLogger(__name__)
 

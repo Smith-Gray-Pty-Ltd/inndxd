@@ -42,3 +42,7 @@ python_version = "3.12"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["apps", "packages"]
+[tool.uv.sources]
+inndxd-core = { workspace = true }
+inndxd-agents = { workspace = true }
+inndxd-mcp = { workspace = true }
