@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict
-from pydantic_core import JsonValue
 
 
 class DataItemCreate(BaseModel):
@@ -12,8 +11,8 @@ class DataItemCreate(BaseModel):
     brief_id: UUID
     source_url: str | None = None
     content_type: str
-    raw_payload: dict[str, JsonValue]
-    structured_payload: dict[str, JsonValue]
+    raw_payload: dict
+    structured_payload: dict
 
 
 class DataItemRead(BaseModel):
@@ -24,5 +23,5 @@ class DataItemRead(BaseModel):
     brief_id: UUID
     source_url: str | None
     content_type: str
-    structured_payload: dict[str, JsonValue]
+    structured_payload: dict
     created_at: datetime

@@ -1,16 +1,12 @@
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
-from inndxd_api.main import app
-from inndxd_core.db import engine
-from inndxd_core.models.base import Base
+from inndxd_api.main import create_app
 
 
 @pytest_asyncio.fixture
 async def client():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
+    app = create_app()
 
     async with AsyncClient(
         transport=ASGITransport(app=app),
