@@ -1,19 +1,17 @@
-from __future__ import annotations
+# packages/inndxd-agents/src/inndxd_agents/state.py
 
-from operator import add
-from typing import Annotated, Any, Sequence
-from uuid import UUID
-from typing_extensions import TypedDict
-from langgraph.graph.message import add_messages
+import operator
+from typing import Annotated
+
+from langgraph.graph import MessagesState
 
 
-class AgentState(TypedDict):
-    brief_id: UUID
-    tenant_id: UUID
-    project_id: UUID
+class ResearchState(MessagesState):
+    brief_id: str
+    tenant_id: str
+    project_id: str
     natural_language: str
-    messages: Annotated[Sequence[dict[str, Any]], add_messages]
     plan: str | None
-    collected_data: Annotated[list[dict[str, Any]], add]
-    structured_items: Annotated[list[dict[str, Any]], add]
-    errors: Annotated[list[str], add]
+    collected_data: Annotated[list, operator.add]
+    structured_items: Annotated[list, operator.add]
+    errors: Annotated[list[str], operator.add]
