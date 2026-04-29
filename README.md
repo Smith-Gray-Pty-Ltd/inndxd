@@ -1,2 +1,118 @@
 # inndxd
-Inndxd: Open-source agentic data platform. Define a project → autonomous agents research, collect, structure &amp; deliver real-time data via API, MCP, WebSocket &amp; skills.
+
+Open-source agentic data platform. Define a project → autonomous agents research, collect, structure & deliver real-time data via API, MCP, WebSocket & skills.
+
+## Architecture
+
+A monorepo with three key packages:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     apps/api (FastAPI)                      │
+│  REST endpoints: projects, briefs, data-items, runs         │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                 packages/inndxd-agents (LangGraph)          │
+│  Swarm: planner → collector → structurer                    │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  packages/inndxd-core (Models)              │
+│  SQLAlchemy models, repositories, domain schemas            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/) package manager
+- Docker & Docker Compose
+- [just](https://github.com/casey/just) (optional task runner)
+
+### Setup
+
+```bash
+# 1. Clone and sync dependencies
+git clone https://github.com/Smith-Gray-Pty-Ltd/inndxd.git
+cd inndxd
+uv sync
+
+# 2. Create .env file
+cp .env.example .env
+# Edit .env with your PostgreSQL connection string
+# INNDXD_DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/inndxd
+
+# 3. Start infrastructure (PostgreSQL with pgvector, Redis, Ollama)
+docker compose up -d
+
+# 4. Start the API server (in a new terminal)
+uv run uvicorn inndxd_api.main:app --reload --host 0.0.0.0 --port 8000
+
+# 5. Test with curl
+curl -X POST http://localhost:8000/api/projects \
+  -H "Content-Type: application/json" \
+  -H "X-Tenant-ID: $(uuidgen)" \
+  -d '{"name": "Test Project", "description": "Testing Stage 1"}'
+```
+
+## API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/projects` | Create a new project |
+| GET | `/api/projects` | List projects for tenant |
+| GET | `/api/projects/{id}` | Get project details |
+| DELETE | `/api/projects/{id}` | Delete project |
+| POST | `/api/briefs` | Create brief (triggers research swarm) |
+| GET | `/api/briefs` | List briefs for tenant |
+| GET | `/api/briefs/{id}` | Get brief details |
+| GET | `/api/data-items` | List data items for tenant |
+| GET | `/api/data-items/{id}` | Get data item details |
+| GET | `/api/runs/{brief_id}` | Get run status for brief |
+
+All endpoints require the `X-Tenant-ID` header (UUID format).
+
+## Status
+
+### Stage 1 ✅ Complete
+
+- [x] Core models & repositories (`packages/inndxd-core/`)
+- [x] LangGraph research swarm (`packages/inndxd-agents/`)
+- [x] FastAPI REST API (`apps/api/`)
+- [x] Docker Compose infrastructure
+- [x] Tenant-scoped security
+- [x] Integration tests
+
+### Next: Stage 2 🔄
+
+- [ ] MCP tool server (`packages/inndxd-mcp/`)
+- [ ] Authentication / API keys
+- [ ] Redis/Celery task queue
+- [ ] Conditional edges in agent graph
+- [ ] Full agent integration tests
+
+## Development
+
+```bash
+# Run tests
+just test
+
+# Lint and format
+just lint
+just fmt
+
+# Start dev server
+uv run uvicorn inndxd_api.main:app --reload
+
+# Docker tasks
+just up      # Start services
+just down    # Stop services
+just logs    # Follow logs
+```
+
+## License
+
+MIT
