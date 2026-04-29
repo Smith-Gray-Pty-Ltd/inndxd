@@ -47,3 +47,4 @@ htmlcov/
 # OpenCode
 .opencode/
 plan/**
+opencode.json
