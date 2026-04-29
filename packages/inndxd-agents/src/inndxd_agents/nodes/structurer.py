@@ -2,29 +2,44 @@
 
 import json
 import logging
+from typing import Any
 
-from inndxd_agents.config import settings
-from inndxd_agents.llm import create_ollama_client
+from inndxd_agents.llm import create_ollama_client, resolve_model_for_node
 from inndxd_agents.prompts.structurer import STRUCTURER_SYSTEM, STRUCTURER_USER
 from inndxd_agents.state import ResearchState as AgentState
 
 logger = logging.getLogger(__name__)
 
 
-async def structurer_node(state: AgentState) -> dict:
+async def structurer_node(
+    state: AgentState,
+    llm_client: Any = None,
+    model: str | None = None,
+) -> dict:
     plan_raw = state.get("plan")
     collected_data = state.get("collected_data", [])
 
     if not plan_raw or not collected_data:
-        return {"structured_items": [], "errors": ["Missing plan or collected data"]}
+        return {
+            "structured_items": [],
+            "errors": ["Missing plan or collected data"],
+            "structurer_retries": state.get("structurer_retries", 0) + 1,
+        }
 
     try:
         plan = json.loads(plan_raw)
         data_schema = json.dumps(plan.get("data_schema", {}))
     except json.JSONDecodeError:
-        return {"structured_items": [], "errors": ["Could not parse plan JSON"]}
+        return {
+            "structured_items": [],
+            "errors": ["Could not parse plan JSON"],
+            "structurer_retries": state.get("structurer_retries", 0) + 1,
+        }
 
-    client = create_ollama_client()
+    if llm_client is None:
+        llm_client = create_ollama_client()
+    if model is None:
+        model = resolve_model_for_node("structurer")
 
     user_prompt = STRUCTURER_USER.format(
         natural_language=state["natural_language"],
@@ -32,8 +47,8 @@ async def structurer_node(state: AgentState) -> dict:
         collected_data=json.dumps(collected_data, indent=2),
     )
 
-    response = await client.chat.completions.create(
-        model=settings.ollama_model,
+    response = await llm_client.chat.completions.create(
+        model=model,
         temperature=0.2,
         max_tokens=4096,
         messages=[
@@ -68,7 +83,11 @@ async def structurer_node(state: AgentState) -> dict:
         logger.error(error_msg)
         errors.append(error_msg)
 
-    return {"structured_items": structured_items, "errors": errors}
+    return {
+        "structured_items": structured_items,
+        "errors": errors,
+        "structurer_retries": state.get("structurer_retries", 0) + 1,
+    }
 
 
 def _extract_json_array(text: str) -> str:
