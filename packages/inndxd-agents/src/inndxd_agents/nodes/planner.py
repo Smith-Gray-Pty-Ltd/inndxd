@@ -2,21 +2,29 @@
 
 import json
 import logging
+from typing import Any
 
-from inndxd_agents.config import settings
-from inndxd_agents.llm import create_ollama_client
+from inndxd_agents.llm import create_ollama_client, resolve_model_for_node
 from inndxd_agents.prompts.planner import PLANNER_SYSTEM, PLANNER_USER
 from inndxd_agents.state import ResearchState as AgentState
 
 logger = logging.getLogger(__name__)
 
 
-async def planner_node(state: AgentState) -> dict:
-    client = create_ollama_client()
+async def planner_node(
+    state: AgentState,
+    llm_client: Any = None,
+    model: str | None = None,
+) -> dict:
+    if llm_client is None:
+        llm_client = create_ollama_client()
+    if model is None:
+        model = resolve_model_for_node("planner")
+
     user_prompt = PLANNER_USER.format(natural_language=state["natural_language"])
 
-    response = await client.chat.completions.create(
-        model=settings.ollama_model,
+    response = await llm_client.chat.completions.create(
+        model=model,
         temperature=0.3,
         max_tokens=2048,
         messages=[
@@ -43,7 +51,7 @@ async def planner_node(state: AgentState) -> dict:
         errors.append(error_msg)
         plan = json.dumps({"queries": [], "target_domains": [], "data_schema": {}})
 
-    return {"plan": plan, "errors": errors}
+    return {"plan": plan, "errors": errors, "planner_retries": state.get("planner_retries", 0) + 1}
 
 
 def _extract_json(text: str) -> str:
