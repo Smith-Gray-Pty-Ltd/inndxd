@@ -3,8 +3,8 @@ from __future__ import annotations
 from uuid import UUID
 
 from sqlalchemy import String, Text
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 from inndxd_core.models.base import Base, TimestampMixin, UUIDMixin
 

@@ -48,10 +48,12 @@ async def _search_and_collect(query: str) -> list[dict]:
 
     collected: list[dict] = []
     for r in results:
-        collected.append({
-            "url": r.url,
-            "title": r.title,
-            "text": r.text,
-        })
+        collected.append(
+            {
+                "url": r.url,
+                "title": r.title,
+                "text": r.text,
+            }
+        )
 
     return collected

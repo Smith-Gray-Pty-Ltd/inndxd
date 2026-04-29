@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import re
 
 from crawl4ai import AsyncWebCrawler, CrawlerRunConfig
@@ -79,7 +78,7 @@ async def web_search_tool(query: str, max_results: int = 5) -> list[WebSearchRes
 
 def _extract_result_links(markdown: str) -> list[str]:
     urls: list[str] = []
-    for match in re.finditer(r'\[([^\]]*)\]\((https?://[^\s\)]+)\)', markdown):
+    for match in re.finditer(r"\[([^\]]*)\]\((https?://[^\s\)]+)\)", markdown):
         url = match.group(2)
         if not _is_internal_duckduckgo(url):
             urls.append(url)
@@ -88,7 +87,4 @@ def _extract_result_links(markdown: str) -> list[str]:
 
 def _is_internal_duckduckgo(url: str) -> bool:
     skip_domains = {"duckduckgo.com", "duck.co"}
-    for domain in skip_domains:
-        if domain in url:
-            return True
-    return False
+    return any(domain in url for domain in skip_domains)

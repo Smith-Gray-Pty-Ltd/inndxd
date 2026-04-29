@@ -1,6 +1,3 @@
-import pytest
-from uuid import uuid4
-
 from inndxd_api.main import create_app
 
 
@@ -14,5 +11,6 @@ def test_runs_router_exists():
 def test_create_app_returns_fastapi_instance():
     """Test that create_app returns a FastAPI instance."""
     from fastapi import FastAPI
+
     app = create_app()
     assert isinstance(app, FastAPI)

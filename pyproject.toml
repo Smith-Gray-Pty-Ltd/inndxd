@@ -4,6 +4,12 @@ version = "0.1.0"
 description = "Open-source agentic data platform"
 requires-python = ">=3.12"
 license = { text = "MIT" }
+dependencies = [
+    "inndxd-core",
+    "inndxd-agents",
+    "inndxd-mcp",
+    "inndxd-api",
+]
 
 [tool.uv.workspace]
 members = [
@@ -30,6 +36,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "T20"]
+ignore = ["B008"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -38,6 +45,7 @@ indent-style = "space"
 [tool.mypy]
 strict = true
 python_version = "3.12"
+exclude = ["^(apps/.*/tests|packages/.*/tests)/"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -46,3 +54,4 @@ testpaths = ["apps", "packages"]
 inndxd-core = { workspace = true }
 inndxd-agents = { workspace = true }
 inndxd-mcp = { workspace = true }
+inndxd-api = { workspace = true }

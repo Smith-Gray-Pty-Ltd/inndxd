@@ -1,12 +1,12 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
+from inndxd_core.models.brief import Brief
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from inndxd_api.dependencies import get_db, get_tenant_id
 from inndxd_api.schemas.run import RunStatus
-from inndxd_core.models.brief import Brief
 
 router = APIRouter()
 

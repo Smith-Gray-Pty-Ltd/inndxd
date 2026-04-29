@@ -1,6 +1,5 @@
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
-
 from inndxd_api.main import create_app
 
 
@@ -11,5 +10,6 @@ async def client():
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://test",
+        follow_redirects=True,
     ) as ac:
         yield ac

@@ -2,7 +2,6 @@ import uuid
 
 import pytest
 
-
 TENANT = str(uuid.uuid4())
 
 

@@ -3,9 +3,10 @@
 import logging
 from uuid import UUID
 
-from inndxd_agents.graph import build_research_graph
 from inndxd_core.db import async_session_factory
 from inndxd_core.repositories.data_items import DataItemRepository
+
+from inndxd_agents.graph import build_research_graph
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +19,13 @@ async def run_research_swarm(
 ) -> list[dict]:
     """Execute the research swarm with comprehensive error handling."""
     logger.info("Starting research swarm for brief %s", brief_id)
-    logger.debug("Parameters: brief_id=%s, tenant_id=%s, project_id=%s", brief_id, tenant_id, project_id)
-    
+    logger.debug(
+        "Parameters: brief_id=%s, tenant_id=%s, project_id=%s",
+        brief_id,
+        tenant_id,
+        project_id,
+    )
+
     try:
         graph = build_research_graph()
         logger.info("Research graph built successfully")
@@ -29,7 +35,7 @@ async def run_research_swarm(
     except Exception as exc:
         logger.error("Failed to build research graph: %s", exc, exc_info=True)
         return []
-    
+
     state = {
         "brief_id": str(brief_id),
         "tenant_id": str(tenant_id),
@@ -41,7 +47,7 @@ async def run_research_swarm(
         "structured_items": [],
         "errors": [],
     }
-    
+
     try:
         logger.info("Invoking research graph for brief %s", brief_id)
         result = await graph.ainvoke(state)
@@ -49,17 +55,26 @@ async def run_research_swarm(
     except Exception as exc:
         logger.error("Graph execution failed for brief %s: %s", brief_id, exc, exc_info=True)
         return []
-    
+
     structured_items = result.get("structured_items", [])
-    
+
     if structured_items:
         try:
             async with async_session_factory() as session:
                 repo = DataItemRepository(session)
                 await repo.bulk_insert(structured_items)
                 await session.commit()
-            logger.info("Persisted %d structured items for brief %s", len(structured_items), brief_id)
+            logger.info(
+                "Persisted %d structured items for brief %s",
+                len(structured_items),
+                brief_id,
+            )
         except Exception as exc:
-            logger.error("Failed to persist structured items for brief %s: %s", brief_id, exc, exc_info=True)
-    
+            logger.error(
+                "Failed to persist structured items for brief %s: %s",
+                brief_id,
+                exc,
+                exc_info=True,
+            )
+
     return structured_items

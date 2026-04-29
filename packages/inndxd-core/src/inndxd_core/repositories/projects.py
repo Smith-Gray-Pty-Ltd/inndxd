@@ -29,7 +29,11 @@ class ProjectRepository:
         return await self.session.get(Project, id)
 
     async def list_by_tenant(self, tenant_id: UUID) -> list[Project]:
-        stmt = select(Project).where(Project.tenant_id == tenant_id).order_by(Project.created_at.desc())
+        stmt = (
+            select(Project)
+            .where(Project.tenant_id == tenant_id)
+            .order_by(Project.created_at.desc())
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 

@@ -1,9 +1,10 @@
-import pytest
 from uuid import uuid4
-from pydantic import ValidationError
-from inndxd_core.domain.project import ProjectCreate
+
+import pytest
 from inndxd_core.domain.brief import BriefCreate
 from inndxd_core.domain.data_item import DataItemCreate
+from inndxd_core.domain.project import ProjectCreate
+from pydantic import ValidationError
 
 
 def test_project_create_valid():
