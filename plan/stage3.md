@@ -35,7 +35,7 @@
 | 2 — Multi-Provider LLM | ✅ Complete |
 | 3 — API Key Management | ✅ Complete |
 | 4 — Observability | ✅ Complete |
-| 5 — Agent Graph Upgrades | ⬜ Pending |
+| 5 — Agent Graph Upgrades | ✅ Complete |
 
 ---
 

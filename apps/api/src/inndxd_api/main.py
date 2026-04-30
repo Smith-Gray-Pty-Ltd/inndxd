@@ -13,6 +13,7 @@ from inndxd_api.routers import briefs_router, data_items_router, projects_router
 from inndxd_api.routers.api_keys import router as api_keys_router
 from inndxd_api.routers.audit_logs import router as audit_logs_router
 from inndxd_api.routers.auth import router as auth_router
+from inndxd_api.routers.benchmark import router as benchmark_router
 from inndxd_api.routers.llm_providers import router as llm_providers_router
 from inndxd_api.routers.ws import router as ws_router
 from inndxd_api.tracing import instrument_app, setup_tracing
@@ -56,6 +57,7 @@ def create_app() -> FastAPI:
     app.include_router(briefs_router, prefix="/api/briefs", tags=["briefs"])
     app.include_router(data_items_router, prefix="/api/data-items", tags=["data-items"])
     app.include_router(runs_router, prefix="/api/runs", tags=["runs"])
+    app.include_router(benchmark_router, prefix="/api/benchmark", tags=["benchmark"])
     app.include_router(ws_router, tags=["websocket"])
     instrument_app(app)
     return app
