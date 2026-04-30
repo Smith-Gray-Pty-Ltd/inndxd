@@ -152,10 +152,19 @@ All endpoints require the `X-Tenant-ID` header (UUID format).
 - [x] `GET /api/runs/{brief_id}/task-status` endpoint for Celery task state
 - [x] `celery_worker` service in docker-compose.yml
 
-#### Next: Phase 3 →
-- [ ] New tools: Twitter/X, API fetch, browser, DB query
-- [ ] Tool registry v2 with capability-based routing
-- [ ] MCP server full implementation (Phase 4)
+#### Phase 3: ✅ Complete
+- [x] Twitter/X search tool (`twitter_search_tool`)
+- [x] API fetch tool (`api_fetch_tool`) — REST/GraphQL endpoints
+- [x] Browser automation tool (`browser_tool`) — table extraction
+- [x] Database query tool (`db_query_tool`) — stats and recent items
+- [x] Tool registry v2 with capability-based routing (`get_tools_by_capability`)
+- [x] `invoke_tool_with_timeout` wrapper for all tools
+- [x] Collector node uses tool registry for dynamic tool selection
+- [x] Crawl4AI cache enabled for repeated queries
+- [x] Planner prompt updated with tool names and selection guidance
+
+#### Next: Phase 4 →
+- [ ] MCP server full implementation (tools, resources, prompts, SSE)
 - [ ] DB RLS, observability, export, WebSocket streaming (Phase 5)
 
 ## Development

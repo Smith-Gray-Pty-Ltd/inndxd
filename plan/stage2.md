@@ -140,7 +140,7 @@ If any fail, edit the file to fix the issue, then re-run before committing.
 | 0.5 — LLM Groundwork | ✅ Complete (7 commits, merged to main) |
 | 1 — Enhanced Graph | ✅ Complete (11 commits, merged to main) |
 | 2 — Celery Workers | ✅ Complete (1 commit, merged to main) |
-| 3 — New Tools | ⬜ Pending |
+| 3 — New Tools | ✅ Complete (8 commits, merged to main) |
 | 4 — MCP Server | ⬜ Pending |
 | 5 — Production | ⬜ Pending |
 
