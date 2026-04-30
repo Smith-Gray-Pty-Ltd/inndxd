@@ -10,6 +10,7 @@ from inndxd_api.metrics import get_metrics
 from inndxd_api.middleware.tenant import TenantMiddleware
 from inndxd_api.routers import briefs_router, data_items_router, projects_router, runs_router
 from inndxd_api.routers.auth import router as auth_router
+from inndxd_api.routers.llm_providers import router as llm_providers_router
 from inndxd_api.routers.ws import router as ws_router
 
 
@@ -31,6 +32,7 @@ def create_app() -> FastAPI:
     app.add_middleware(TenantMiddleware)
     app.add_route("/metrics", get_metrics)
     app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
+    app.include_router(llm_providers_router, prefix="/api/llm-providers", tags=["llm-providers"])
     app.include_router(projects_router, prefix="/api/projects", tags=["projects"])
     app.include_router(briefs_router, prefix="/api/briefs", tags=["briefs"])
     app.include_router(data_items_router, prefix="/api/data-items", tags=["data-items"])
