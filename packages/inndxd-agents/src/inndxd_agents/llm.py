@@ -1,10 +1,11 @@
 """LLM client factory supporting multiple providers."""
+
 from __future__ import annotations
 
+from inndxd_core.domain.llm_provider import LLMConfig, LLMProviderConfig
 from openai import AsyncOpenAI
 
 from inndxd_agents.config import settings
-from inndxd_core.domain.llm_provider import LLMConfig, LLMProviderConfig
 
 
 def _build_default_llm_config() -> LLMConfig:
@@ -50,7 +51,9 @@ def create_openai_compatible_client(provider_name: str | None = None) -> AsyncOp
         if config.providers:
             provider = next(iter(config.providers.values()))
         else:
-            raise ValueError(f"No LLM provider configured. Available: {list(config.providers.keys())}")
+            raise ValueError(
+                f"No LLM provider configured. Available: {list(config.providers.keys())}"
+            )
 
     return AsyncOpenAI(
         base_url=provider.base_url,
