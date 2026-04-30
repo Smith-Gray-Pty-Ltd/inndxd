@@ -1,4 +1,5 @@
 """Sync DB provider configs into the runtime LLM config."""
+
 from __future__ import annotations
 
 import json

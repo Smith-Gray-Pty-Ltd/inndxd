@@ -1,4 +1,5 @@
 """LLM provider configuration model."""
+
 from __future__ import annotations
 
 from uuid import UUID
