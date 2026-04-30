@@ -171,12 +171,21 @@ All endpoints require the `X-Tenant-ID` header (UUID format).
 - [x] Dual transport: stdio (local AI tools) + SSE on port 8001 (web clients)
 - [x] Server versioned at 0.2.0
 
-#### Next: Phase 5 →
-- [ ] DB RLS enforcement at application level
-- [ ] Structured JSON logging
-- [ ] Prometheus metrics endpoint
-- [ ] CSV/JSON export endpoints
-- [ ] WebSocket streaming for agent progress
+#### Phase 5: ✅ Complete
+- [x] pgvector embedding column on DataItem + semantic search (`cosine_distance`)
+- [x] Embedding generation utility via Ollama API (`nomic-embed-text`)
+- [x] DB-level RLS enforced via `SET app.current_tenant_id` per session
+- [x] Structured JSON logging configuration (`configure_logging()`)
+- [x] Prometheus metrics endpoint (`GET /metrics`) with counters and histogram
+- [x] CSV and JSON export endpoints (`GET /api/data-items/export/csv|json`)
+- [x] WebSocket endpoint (`ws://.../ws/runs/{brief_id}`) for streaming agent progress
+
+### Stage 2 ✅ Complete — All 5 Phases Merged
+
+#### Next: Stage 3 →
+- [ ] Full multi-provider LLM system (API endpoints, DB-backed registry, hot-swap)
+- [ ] JWT-based session authentication
+- [ ] Web UI (to be planned)
 
 ## Development
 
