@@ -16,6 +16,7 @@ async def structurer_node(
     llm_client: Any = None,
     model: str | None = None,
 ) -> dict:
+    logger.debug("Entering structurer_node for brief %s", state.get("brief_id"))
     plan_raw = state.get("plan")
     collected_data = state.get("collected_data", [])
 
@@ -83,6 +84,7 @@ async def structurer_node(
         logger.error(error_msg)
         errors.append(error_msg)
 
+    logger.info("structurer_node completed for brief %s", state.get("brief_id"))
     return {
         "structured_items": structured_items,
         "errors": errors,
