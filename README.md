@@ -120,13 +120,28 @@ All endpoints require the `X-Tenant-ID` header (UUID format).
 - [x] Tenant-scoped security
 - [x] Integration tests
 
-### Next: Stage 2 🔄
+### Stage 2 🔄 In Progress
 
-- [ ] MCP tool server (`packages/inndxd-mcp/`)
-- [ ] Authentication / API keys
-- [ ] Redis/Celery task queue
-- [ ] Conditional edges in agent graph
-- [ ] Full agent integration tests
+#### Phase 0: ✅ Complete
+- [x] Fixed broken AgentState imports
+- [x] Wired TenantMiddleware into FastAPI app
+- [x] Alembic migration structure set up
+- [x] Pre-commit hooks configured
+- [x] Added test suite for routers, domain models, graph
+
+#### Phase 0.5: ✅ Complete
+- [x] Multi-provider LLM config models (`LLMProviderConfig`, `LLMConfig`)
+- [x] Injectable LLM clients per agent node
+- [x] Per-node model override env vars (`INNDXD_PLANNER_MODEL`, etc.)
+- [x] `resolve_model_for_node()` utility
+- [x] Roadmap entry for Stage 3
+
+#### Next: Phase 1 →
+- [ ] Enhanced agent graph (conditional routing, quality gates, retry logic)
+- [ ] Celery distributed workers (Phase 2)
+- [ ] New tools: Twitter/X, API fetch, browser, DB query (Phase 3)
+- [ ] MCP server full implementation (Phase 4)
+- [ ] DB RLS, observability, export, WebSocket streaming (Phase 5)
 
 ## Development
 
