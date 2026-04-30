@@ -11,7 +11,7 @@
 |---|---|---|---|
 | **Stage 1** | ✅ Complete | ~1,100 | Core models, linear agent graph, FastAPI API, Docker infra, tenant isolation |
 | **Stage 2** | ✅ Complete | ~2,800 | Enhanced graph, Celery workers, 5 tools, MCP server, pgvector, logging, Prometheus, export, WebSocket |
-| **Stage 3** | ⬜ Planned | — | Multi-provider LLM, JWT auth, Web UI |
+| **Stage 3** | ✅ Complete | ~2,400 | JWT auth, multi-provider LLM, API keys, OTel observability, fan-out/recursive/plugin graph upgrades |
 
 ---
 
