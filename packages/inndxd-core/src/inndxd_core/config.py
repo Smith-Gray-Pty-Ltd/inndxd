@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://inndxd:inndxd@localhost:5432/inndxd"
     ollama_base_url: str = "http://localhost:11434/v1"
     ollama_model: str = "deepseek-r1:latest"
+    redis_url: str = "redis://localhost:6379/0"
     log_level: str = "INFO"
 
 

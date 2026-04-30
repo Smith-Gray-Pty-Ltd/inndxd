@@ -60,6 +60,35 @@ services:
       - .:/app
     command: ["uvicorn", "inndxd_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
+  celery_worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command:
+      [
+        "uv",
+        "run",
+        "celery",
+        "-A",
+        "inndxd_api.celery_app",
+        "worker",
+        "--loglevel=info",
+        "--concurrency=4",
+      ]
+    environment:
+      INNDXD_DATABASE_URL: postgresql+asyncpg://inndxd:inndxd@postgres:5432/inndxd
+      INNDXD_OLLAMA_BASE_URL: http://ollama:11434/v1
+      INNDXD_REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    volumes:
+      - .:/app
+
 volumes:
   pgdata:
   ollama_data:
