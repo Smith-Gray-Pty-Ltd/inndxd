@@ -5,7 +5,7 @@ import json
 import logging
 
 from inndxd_agents.state import ResearchState as AgentState
-from inndxd_agents.tools.web_search import web_search_tool
+from inndxd_agents.tools.registry import get_tools_by_capability
 
 logger = logging.getLogger(__name__)
 
@@ -70,15 +70,23 @@ async def collector_node(state: AgentState) -> dict:
 
 
 async def _search_and_collect(query: str) -> list[dict]:
-    results = await web_search_tool.ainvoke({"query": query, "max_results": 5})
+    search_tools = get_tools_by_capability("search", "web")
+    if not search_tools:
+        return []
+
+    primary_tool = search_tools[0]
+    try:
+        results = await primary_tool.ainvoke({"query": query, "max_results": 5})
+    except Exception:
+        return []
 
     collected: list[dict] = []
     for r in results:
         collected.append(
             {
-                "url": r.url,
-                "title": r.title,
-                "text": r.text,
+                "url": r.url if hasattr(r, "url") else "",
+                "title": r.title if hasattr(r, "title") else None,
+                "text": r.text if hasattr(r, "text") else str(r),
             }
         )
 
