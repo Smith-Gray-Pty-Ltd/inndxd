@@ -45,3 +45,82 @@ async def get_data_item(
     if data_item.tenant_id != tenant_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     return data_item
+
+
+@router.get("/export/json")
+async def export_json(
+    project_id: UUID,
+    tenant_id: UUID = Depends(get_tenant_id),
+    db: AsyncSession = Depends(get_db),
+):
+    import io
+    import json
+
+    from fastapi.responses import StreamingResponse
+
+    result = await db.execute(
+        select(DataItem).where(
+            DataItem.project_id == project_id,
+            DataItem.tenant_id == tenant_id,
+        )
+    )
+    items = result.scalars().all()
+
+    data = [
+        {
+            "id": str(item.id),
+            "source_url": item.source_url,
+            "content_type": item.content_type,
+            "structured_payload": item.structured_payload,
+            "created_at": str(item.created_at),
+        }
+        for item in items
+    ]
+
+    return StreamingResponse(
+        io.StringIO(json.dumps(data, indent=2)),
+        media_type="application/json",
+        headers={"Content-Disposition": f"attachment; filename=project-{project_id}.json"},
+    )
+
+
+@router.get("/export/csv")
+async def export_csv(
+    project_id: UUID,
+    tenant_id: UUID = Depends(get_tenant_id),
+    db: AsyncSession = Depends(get_db),
+):
+    import csv
+    import io
+
+    from fastapi.responses import StreamingResponse
+
+    result = await db.execute(
+        select(DataItem).where(
+            DataItem.project_id == project_id,
+            DataItem.tenant_id == tenant_id,
+        )
+    )
+    items = result.scalars().all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["id", "source_url", "content_type", "structured_payload", "created_at"])
+
+    for item in items:
+        writer.writerow(
+            [
+                str(item.id),
+                item.source_url or "",
+                item.content_type,
+                item.structured_payload,
+                str(item.created_at),
+            ]
+        )
+
+    output.seek(0)
+    return StreamingResponse(
+        output,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=project-{project_id}.csv"},
+    )

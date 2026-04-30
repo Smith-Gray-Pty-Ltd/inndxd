@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import Header, HTTPException, status
 from inndxd_core.db import async_session_factory
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from inndxd_api.middleware.tenant import current_tenant_id
@@ -10,6 +11,10 @@ from inndxd_api.middleware.tenant import current_tenant_id
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_factory() as session:
+        await session.execute(
+            text("SELECT set_config('app.current_tenant_id', :tid, false)"),
+            {"tid": str(current_tenant_id.get())},
+        )
         yield session
 
 

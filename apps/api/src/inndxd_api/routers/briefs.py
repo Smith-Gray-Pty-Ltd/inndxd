@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from inndxd_api.dependencies import get_db, get_tenant_id
+from inndxd_api.metrics import briefs_created
 from inndxd_api.schemas.brief import BriefCreate, BriefRead
 from inndxd_api.tasks import run_research_task
 
@@ -35,6 +36,8 @@ async def create_brief(
     db.add(brief)
     await db.commit()
     await db.refresh(brief)
+
+    briefs_created.inc()
 
     run_research_task.delay(
         str(brief.id), str(tenant_id), str(body.project_id), body.natural_language
