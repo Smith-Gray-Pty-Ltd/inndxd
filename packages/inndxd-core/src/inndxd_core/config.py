@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     ollama_model: str = "deepseek-r1:latest"
     redis_url: str = "redis://localhost:6379/0"
     log_level: str = "INFO"
+    jwt_secret: str = "inndxd-dev-secret-change-me"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 1440
 
 
 settings = Settings()

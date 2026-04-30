@@ -31,7 +31,7 @@
 | Phase | Status |
 |---|---|
 | 0 — Stage 2 Cleanup | ⬜ Pending |
-| 1 — JWT Authentication | ⬜ Pending |
+| 1 — JWT Authentication | ✅ Complete |
 | 2 — Multi-Provider LLM | ⬜ Pending |
 | 3 — API Key Management | ⬜ Pending |
 | 4 — Observability | ⬜ Pending |
