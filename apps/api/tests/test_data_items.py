@@ -2,9 +2,12 @@ import uuid
 
 import pytest
 
+from apps.api.tests.conftest import needs_postgres
+
 TENANT = str(uuid.uuid4())
 
 
+@needs_postgres
 @pytest.mark.anyio
 async def test_list_data_items_empty(client):
     headers = {"X-Tenant-ID": TENANT}
