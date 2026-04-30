@@ -163,9 +163,20 @@ All endpoints require the `X-Tenant-ID` header (UUID format).
 - [x] Crawl4AI cache enabled for repeated queries
 - [x] Planner prompt updated with tool names and selection guidance
 
-#### Next: Phase 4 →
-- [ ] MCP server full implementation (tools, resources, prompts, SSE)
-- [ ] DB RLS, observability, export, WebSocket streaming (Phase 5)
+#### Phase 4: ✅ Complete
+- [x] MCP SDK dependency added to `inndxd-mcp`
+- [x] Full MCP server exposing all 5 agent tools (`list_tools`, `call_tool`)
+- [x] Resource exposure: `inndxd://projects`, `inndxd://data-items/{project_id}`
+- [x] Prompt templates: `research_brief` with topic and depth arguments
+- [x] Dual transport: stdio (local AI tools) + SSE on port 8001 (web clients)
+- [x] Server versioned at 0.2.0
+
+#### Next: Phase 5 →
+- [ ] DB RLS enforcement at application level
+- [ ] Structured JSON logging
+- [ ] Prometheus metrics endpoint
+- [ ] CSV/JSON export endpoints
+- [ ] WebSocket streaming for agent progress
 
 ## Development
 
