@@ -1,4 +1,5 @@
 """Prometheus metrics for the inndxd API."""
+
 from fastapi import Response
 from prometheus_client import REGISTRY, Counter, Histogram, generate_latest
 

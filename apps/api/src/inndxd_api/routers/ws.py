@@ -1,4 +1,5 @@
 """WebSocket endpoint for streaming agent progress."""
+
 from __future__ import annotations
 
 import asyncio

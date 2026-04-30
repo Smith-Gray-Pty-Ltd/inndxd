@@ -53,8 +53,10 @@ async def export_json(
     tenant_id: UUID = Depends(get_tenant_id),
     db: AsyncSession = Depends(get_db),
 ):
+    import io
+    import json
+
     from fastapi.responses import StreamingResponse
-    import io, json
 
     result = await db.execute(
         select(DataItem).where(
@@ -88,8 +90,10 @@ async def export_csv(
     tenant_id: UUID = Depends(get_tenant_id),
     db: AsyncSession = Depends(get_db),
 ):
+    import csv
+    import io
+
     from fastapi.responses import StreamingResponse
-    import io, csv
 
     result = await db.execute(
         select(DataItem).where(

@@ -2,12 +2,11 @@ from __future__ import annotations
 
 from uuid import UUID
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
-
-from pgvector.sqlalchemy import Vector
 
 from inndxd_core.models.base import Base, TimestampMixin, UUIDMixin
 

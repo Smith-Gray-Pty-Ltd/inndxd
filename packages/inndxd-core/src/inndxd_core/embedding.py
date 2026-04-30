@@ -1,4 +1,5 @@
 """Embedding generation via Ollama API."""
+
 from __future__ import annotations
 
 import httpx
