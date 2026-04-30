@@ -1,4 +1,5 @@
 """Tool registry v2 with capability-based tool selection."""
+
 from __future__ import annotations
 
 import asyncio
@@ -78,5 +79,5 @@ async def invoke_tool_with_timeout(
             tool.ainvoke(input_dict),
             timeout=timeout_seconds,
         )
-    except asyncio.TimeoutError:
+    except TimeoutError:
         return {"error": f"Tool {tool.name} timed out after {timeout_seconds}s"}

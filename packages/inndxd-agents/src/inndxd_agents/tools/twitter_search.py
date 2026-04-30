@@ -1,4 +1,5 @@
 """Twitter/X search tool using DuckDuckGo social search."""
+
 from __future__ import annotations
 
 import re

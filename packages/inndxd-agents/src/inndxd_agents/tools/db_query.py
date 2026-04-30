@@ -1,4 +1,5 @@
 """Database query tool for accessing previously collected data."""
+
 from __future__ import annotations
 
 from uuid import UUID

@@ -1,4 +1,5 @@
 """API fetch tool for REST and GraphQL endpoints."""
+
 from __future__ import annotations
 
 import httpx

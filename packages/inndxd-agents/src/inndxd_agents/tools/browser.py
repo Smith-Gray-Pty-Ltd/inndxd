@@ -1,4 +1,5 @@
 """Browser automation tool using Crawl4AI."""
+
 from __future__ import annotations
 
 import re
@@ -10,7 +11,9 @@ from pydantic import BaseModel, Field
 
 class BrowserInput(BaseModel):
     url: str = Field(description="URL to load and extract content from")
-    wait_for: str | None = Field(default=None, description="CSS selector to wait for before extraction")
+    wait_for: str | None = Field(
+        default=None, description="CSS selector to wait for before extraction"
+    )
     extract_tables: bool = Field(default=False, description="Whether to extract HTML tables")
 
 
@@ -61,9 +64,7 @@ async def browser_tool(
 
 def _extract_markdown_tables(markdown: str) -> list[dict]:
     tables: list[dict] = []
-    table_pattern = re.compile(
-        r"\|[^\n]+\|\n\|[-| ]+\|\n((?:\|[^\n]+\|\n?)+)", re.MULTILINE
-    )
+    table_pattern = re.compile(r"\|[^\n]+\|\n\|[-| ]+\|\n((?:\|[^\n]+\|\n?)+)", re.MULTILINE)
     for match in table_pattern.finditer(markdown):
         tables.append({"raw": match.group(0)})
     return tables
