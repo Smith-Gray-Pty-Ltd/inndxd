@@ -9,6 +9,7 @@ dependencies = [
     "inndxd-agents",
     "inndxd-mcp",
     "inndxd-api",
+    "inndxd-web",
 ]
 
 [tool.uv.workspace]
@@ -17,6 +18,7 @@ members = [
     "packages/inndxd-agents",
     "packages/inndxd-mcp",
     "apps/api",
+    "apps/web",
 ]
 
 [tool.uv]
@@ -55,3 +57,4 @@ inndxd-core = { workspace = true }
 inndxd-agents = { workspace = true }
 inndxd-mcp = { workspace = true }
 inndxd-api = { workspace = true }
+inndxd-web = { workspace = true }
