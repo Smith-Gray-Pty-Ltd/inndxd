@@ -46,6 +46,9 @@ async def run_research_swarm(
         "collected_data": [],
         "structured_items": [],
         "errors": [],
+        "collector_retries": 0,
+        "structurer_retries": 0,
+        "planner_retries": 0,
     }
 
     try:

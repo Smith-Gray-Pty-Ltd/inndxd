@@ -6,6 +6,7 @@ TENANT = str(uuid.uuid4())
 
 
 @pytest.mark.anyio
+@pytest.mark.db
 async def test_create_and_list_projects(client):
     headers = {"X-Tenant-ID": TENANT}
     resp = await client.post(

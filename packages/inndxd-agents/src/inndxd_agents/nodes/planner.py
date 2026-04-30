@@ -16,6 +16,7 @@ async def planner_node(
     llm_client: Any = None,
     model: str | None = None,
 ) -> dict:
+    logger.debug("Entering planner_node for brief %s", state.get("brief_id"))
     if llm_client is None:
         llm_client = create_ollama_client()
     if model is None:
@@ -51,6 +52,7 @@ async def planner_node(
         errors.append(error_msg)
         plan = json.dumps({"queries": [], "target_domains": [], "data_schema": {}})
 
+    logger.info("planner_node completed for brief %s", state.get("brief_id"))
     return {"plan": plan, "errors": errors, "planner_retries": state.get("planner_retries", 0) + 1}
 
 
