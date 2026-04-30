@@ -25,3 +25,11 @@ def get_metrics() -> Response:
         content=generate_latest(REGISTRY),
         media_type="text/plain",
     )
+
+
+request_duration = Histogram(
+    "inndxd_request_duration_seconds",
+    "HTTP request duration",
+    ["method", "endpoint"],
+    buckets=[0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+)
