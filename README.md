@@ -136,10 +136,25 @@ All endpoints require the `X-Tenant-ID` header (UUID format).
 - [x] `resolve_model_for_node()` utility
 - [x] Roadmap entry for Stage 3
 
-#### Next: Phase 1 →
-- [ ] Enhanced agent graph (conditional routing, quality gates, retry logic)
-- [ ] Celery distributed workers (Phase 2)
-- [ ] New tools: Twitter/X, API fetch, browser, DB query (Phase 3)
+#### Phase 1: ✅ Complete
+- [x] Conditional routing with retry limits
+- [x] Quality gate evaluator (collect data sufficiency, structured output validity)
+- [x] Plan validator node
+- [x] Human-in-the-loop approval interrupt point
+- [x] Graph state serialization helper
+- [x] Inter-step entry/exit logging on all nodes
+
+#### Phase 2: ✅ Complete
+- [x] Celery app with Redis broker/backend
+- [x] `run_research_task` Celery task (replaces BackgroundTasks)
+- [x] `cleanup_stuck_briefs` periodic task (Celery beat, every 30 min)
+- [x] Brief repository for async status updates
+- [x] `GET /api/runs/{brief_id}/task-status` endpoint for Celery task state
+- [x] `celery_worker` service in docker-compose.yml
+
+#### Next: Phase 3 →
+- [ ] New tools: Twitter/X, API fetch, browser, DB query
+- [ ] Tool registry v2 with capability-based routing
 - [ ] MCP server full implementation (Phase 4)
 - [ ] DB RLS, observability, export, WebSocket streaming (Phase 5)
 
