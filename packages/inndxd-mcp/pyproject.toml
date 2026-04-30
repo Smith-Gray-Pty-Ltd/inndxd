@@ -2,7 +2,11 @@
 name = "inndxd-mcp"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "mcp>=1.0,<2",
+    "inndxd-core",
+    "inndxd-agents",
+]
 
 [build-system]
 requires = ["hatchling"]
