@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Inndxd{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-lg shadow p-6">
+        <p class="text-sm text-gray-500 uppercase tracking-wide">Projects</p>
+        <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.projects }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+        <p class="text-sm text-gray-500 uppercase tracking-wide">Briefs</p>
+        <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.briefs }}</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+        <p class="text-sm text-gray-500 uppercase tracking-wide">Data Items</p>
+        <p class="text-3xl font-bold text-purple-600 mt-2">{{ stats.data_items }}</p>
+    </div>
+</div>
+
+{% if stats.projects == 0 %}
+<div class="mt-12 bg-white rounded-lg shadow p-12 text-center">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Welcome to Inndxd</h2>
+    <p class="text-gray-500 mb-6">Create your first project to get started with autonomous research.</p>
+    <a href="/ui/projects/create" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+        Create Your First Project
+    </a>
+</div>
+{% endif %}
+{% endblock %}

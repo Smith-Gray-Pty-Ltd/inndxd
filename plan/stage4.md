@@ -31,7 +31,7 @@
 
 | Phase | Status |
 |---|---|
-| 0 — Foundation | ⬜ Pending |
+| 0 — Foundation | ✅ Complete |
 | 1 — Auth Pages | ⬜ Pending |
 | 2 — Dashboard & Projects | ⬜ Pending |
 | 3 — Briefs Management | ⬜ Pending |
