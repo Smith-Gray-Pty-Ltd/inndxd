@@ -147,6 +147,10 @@ just down    # Stop services
 just logs    # Follow logs
 ```
 
+## Roadmap
+
+- **Stage 3 (Coming Soon):** Multi-Provider LLM Support — configure any OpenAI-compatible LLM provider (OpenAI, Anthropic, Groq, Ollama, DeepSeek API, etc.) and assign different models to each agent node. API endpoints for managing providers at runtime.
+
 ## License
 
 MIT
