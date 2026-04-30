@@ -7,6 +7,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
+from pgvector.sqlalchemy import Vector
+
 from inndxd_core.models.base import Base, TimestampMixin, UUIDMixin
 
 
@@ -22,3 +24,4 @@ class DataItem(Base, UUIDMixin, TimestampMixin):
     content_type: Mapped[str] = mapped_column(String(50), nullable=False)
     raw_payload: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
     structured_payload: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(1536), nullable=True)

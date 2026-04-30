@@ -53,6 +53,20 @@ class DataItemRepository:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
+    async def semantic_search(
+        self,
+        query_embedding: list[float],
+        limit: int = 10,
+    ) -> list[DataItem]:
+        stmt = (
+            select(DataItem)
+            .where(DataItem.embedding.is_not(None))
+            .order_by(DataItem.embedding.cosine_distance(query_embedding))
+            .limit(limit)
+        )
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())
+
     async def bulk_insert(self, items: list[dict]) -> list[DataItem]:
         instances = [DataItem(**item) for item in items]
         self.session.add_all(instances)
