@@ -138,7 +138,7 @@ If any fail, edit the file to fix the issue, then re-run before committing.
 |---|---|
 | 0 — Stage 1 Fixes | ✅ Complete (18 commits, merged to main) |
 | 0.5 — LLM Groundwork | ✅ Complete (7 commits, merged to main) |
-| 1 — Enhanced Graph | ⬜ Pending |
+| 1 — Enhanced Graph | ✅ Complete (11 commits, merged to main) |
 | 2 — Celery Workers | ⬜ Pending |
 | 3 — New Tools | ⬜ Pending |
 | 4 — MCP Server | ⬜ Pending |
