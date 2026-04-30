@@ -1,4 +1,5 @@
 """Human-in-the-loop approval node."""
+
 import logging
 
 from inndxd_agents.state import ResearchState as AgentState

@@ -1,4 +1,5 @@
 """Research graph builder with conditional routing, quality gates, and retry limits."""
+
 from langgraph.graph import END, START, StateGraph
 
 from inndxd_agents.nodes.collector import collector_node

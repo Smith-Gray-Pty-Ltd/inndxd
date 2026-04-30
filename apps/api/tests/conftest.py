@@ -20,10 +20,27 @@ def _postgres_available():
 
 POSTGRES_AVAILABLE = _postgres_available()
 
-needs_postgres = pytest.mark.skipif(
-    not POSTGRES_AVAILABLE,
-    reason="PostgreSQL not available on localhost:5432",
-)
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "db: mark test as requiring a PostgreSQL database")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--run-db", False) or POSTGRES_AVAILABLE:
+        return
+    skip_db = pytest.mark.skip(reason="Postgres not available; use --run-db to force")
+    for item in items:
+        if "db" in item.keywords:
+            item.add_marker(skip_db)
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-db",
+        action="store_true",
+        default=False,
+        help="Run tests that require a PostgreSQL database",
+    )
 
 
 @pytest_asyncio.fixture

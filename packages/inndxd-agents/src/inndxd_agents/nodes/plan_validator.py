@@ -1,4 +1,5 @@
 """Validates the planner output before collection proceeds."""
+
 import json
 import logging
 
