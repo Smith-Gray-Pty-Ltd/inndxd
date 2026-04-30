@@ -1,14 +1,14 @@
 """MCP server exposing inndxd agent tools, resources, and prompts."""
+
 from __future__ import annotations
 
 import asyncio
 import json
 import logging
 
+from inndxd_agents.tools.registry import TOOL_REGISTRY
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-
-from inndxd_agents.tools.registry import TOOL_REGISTRY
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +61,7 @@ async def call_tool(name: str, arguments: dict) -> list[dict]:
         result = await tool.ainvoke(arguments)
         if hasattr(result, "__iter__") and not isinstance(result, dict):
             text_parts = [
-                str(r) if isinstance(r, str) else getattr(r, "text", str(r))
-                for r in result
+                str(r) if isinstance(r, str) else getattr(r, "text", str(r)) for r in result
             ]
             return [{"type": "text", "text": "\n\n---\n\n".join(text_parts)}]
         return [{"type": "text", "text": str(result)}]
@@ -167,7 +166,10 @@ async def get_prompt(name: str, arguments: dict | None = None) -> dict:
         depth_instructions = {
             "shallow": "Perform a quick surface-level search with 3-5 results.",
             "medium": "Perform a thorough search across multiple sources with 10-15 results.",
-            "deep": "Perform an exhaustive deep-dive across web, social media, and APIs with 20+ results.",
+            "deep": (
+                "Perform an exhaustive deep-dive across web, social media, "
+                "and APIs with 20+ results."
+            ),
         }
 
         return {
@@ -192,27 +194,21 @@ async def get_prompt(name: str, arguments: dict | None = None) -> dict:
         }
 
     return {
-        "messages": [
-            {"role": "user", "content": {"type": "text", "text": "Prompt not found."}}
-        ]
+        "messages": [{"role": "user", "content": {"type": "text", "text": "Prompt not found."}}]
     }
 
 
 async def run_sse(port: int = 8001):
+    import uvicorn
     from mcp.server.sse import SseServerTransport
     from starlette.applications import Starlette
     from starlette.routing import Mount, Route
-    import uvicorn
 
     sse = SseServerTransport("/messages/")
 
     async def handle_sse(request):
-        async with sse.connect_sse(
-            request.scope, request.receive, request._send
-        ) as streams:
-            await server.run(
-                streams[0], streams[1], server.create_initialization_options()
-            )
+        async with sse.connect_sse(request.scope, request.receive, request._send) as streams:
+            await server.run(streams[0], streams[1], server.create_initialization_options())
 
     starlette_app = Starlette(
         routes=[
