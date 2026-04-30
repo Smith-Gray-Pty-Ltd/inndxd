@@ -45,7 +45,7 @@ async def web_search_tool(query: str, max_results: int = 5) -> list[WebSearchRes
             word_count_threshold=200,
             excluded_tags=["nav", "footer", "script", "style"],
             remove_overlay_elements=True,
-            cache_mode="BYPASS",
+            cache_mode="ENABLED",
         )
         page_result = await crawler.arun(url=search_url, config=config)
 
