@@ -15,3 +15,6 @@ class ResearchState(MessagesState):
     collected_data: Annotated[list, operator.add]
     structured_items: Annotated[list, operator.add]
     errors: Annotated[list[str], operator.add]
+    collector_retries: int
+    structurer_retries: int
+    planner_retries: int
