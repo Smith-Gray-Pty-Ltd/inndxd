@@ -1,21 +1,12 @@
   ```                                                                                                  
                                                        dddddddd                             dddddddd
-  iiii                                                 d::::::d                             d::::::d
- i::::i                                                d::::::d                             d::::::d
-  iiii                                                 d::::::d                             d::::::d
-                                                       d:::::d                              d:::::d 
-iiiiiiinnnn  nnnnnnnn    nnnn  nnnnnnnn        ddddddddd:::::d xxxxxxx      xxxxxxx ddddddddd:::::d 
-i:::::in:::nn::::::::nn  n:::nn::::::::nn    dd::::::::::::::d  x:::::x    x:::::xdd::::::::::::::d 
- i::::in::::::::::::::nn n::::::::::::::nn  d::::::::::::::::d   x:::::x  x:::::xd::::::::::::::::d 
- i::::inn:::::::::::::::nnn:::::::::::::::nd:::::::ddddd:::::d    x:::::xx:::::xd:::::::ddddd:::::d 
- i::::i  n:::::nnnn:::::n  n:::::nnnn:::::nd::::::d    d:::::d     x::::::::::x d::::::d    d:::::d 
- i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d      x::::::::x  d:::::d     d:::::d 
- i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d      x::::::::x  d:::::d     d:::::d 
- i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d     x::::::::::x d:::::d     d:::::d 
-i::::::i n::::n    n::::n  n::::n    n::::nd::::::ddddd::::::dd   x:::::xx:::::xd::::::ddddd::::::dd
-i::::::i n::::n    n::::n  n::::n    n::::n d:::::::::::::::::d  x:::::x  x:::::xd:::::::::::::::::d
-i::::::i n::::n    n::::n  n::::n    n::::n  d:::::::::ddd::::d x:::::x    x:::::xd:::::::::ddd::::d
-iiiiiiii nnnnnn    nnnnnn  nnnnnn    nnnnnn   ddddddddd   dddddxxxxxxx      xxxxxxxddddddddd   ddddd
+ _                 _         _ 
+(_)               | |       | |
+ _ _ __  _ __   __| |_  ____| |
+| | '_ \| '_ \ / _` \ \/ / _` |
+| | | | | | | | (_| |>  < (_| |
+|_|_| |_|_| |_|\__,_/_/\_\__,_|
+                               
                                                                                                     
 ```                                                                                                    
                                                                                                             
