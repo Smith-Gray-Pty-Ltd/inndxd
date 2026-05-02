@@ -12,7 +12,7 @@
 
 **AI agents that research, collect, and structure data — on autopilot.**
 
-[![AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](LICENSE)
+[![MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://python.org)
 [![Docker](https://img.shields.io/badge/docker-ready-brightgreen)](https://docker.com)
 
@@ -24,7 +24,7 @@ Define a project in plain English. Autonomous agents plan the research, search t
 
 **Multi-agent swarm** that plans, searches, validates, and structures. Five research tools with capability-based routing. Fan-out for parallel execution. Recursive follow-ups when data is incomplete.
 
-**AGPLv3.** Self-host or cloud. Your data stays yours. No vendor lock-in. Full API, MCP, WebSocket — integrate with anything.
+**MIT.** Self-host or cloud. Your data stays yours. No vendor lock-in. Full API, MCP, WebSocket — integrate with anything.
 
 **JWT auth, API keys, rate limiting.** OpenTelemetry tracing, Prometheus metrics, JSON-structured logging. PostgreSQL + pgvector for semantic search. Celery + Redis for reliable distributed execution.
 
@@ -243,6 +243,6 @@ OpenTelemetry distributed tracing across the agent graph. JSON-structured loggin
 
 ## License
 
-AGPL-3.0-only — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
 
 Built by [Smith & Gray](https://github.com/Smith-Gray-Pty-Ltd).
