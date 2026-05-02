@@ -1,4 +1,5 @@
 """UI session management via JWT httpOnly cookie."""
+
 from __future__ import annotations
 
 from fastapi import HTTPException, Request, Response, status

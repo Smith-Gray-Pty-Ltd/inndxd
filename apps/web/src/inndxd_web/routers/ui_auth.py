@@ -1,4 +1,5 @@
 """UI authentication routes."""
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Form, Request
@@ -15,9 +16,13 @@ router = APIRouter()
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request) -> HTMLResponse:
     templates = request.app.state.templates
-    return templates.TemplateResponse("auth/login.html", {
-        "request": request, "user": None,
-    })
+    return templates.TemplateResponse(
+        "auth/login.html",
+        {
+            "request": request,
+            "user": None,
+        },
+    )
 
 
 @router.post("/login")
@@ -31,13 +36,25 @@ async def login_post(
         repo = UserRepository(session)
         user = await repo.get_by_email(email)
         if not user or not verify_password(password, user.hashed_password):
-            return templates.TemplateResponse("auth/login.html", {
-                "request": request, "user": None, "error": "Invalid email or password",
-            }, status_code=401)
+            return templates.TemplateResponse(
+                "auth/login.html",
+                {
+                    "request": request,
+                    "user": None,
+                    "error": "Invalid email or password",
+                },
+                status_code=401,
+            )
         if not user.is_active:
-            return templates.TemplateResponse("auth/login.html", {
-                "request": request, "user": None, "error": "Account is disabled",
-            }, status_code=403)
+            return templates.TemplateResponse(
+                "auth/login.html",
+                {
+                    "request": request,
+                    "user": None,
+                    "error": "Account is disabled",
+                },
+                status_code=403,
+            )
         response = RedirectResponse(url="/ui", status_code=303)
         set_auth_cookie(response, str(user.id), str(user.tenant_id) if user.tenant_id else None)
         return response
@@ -46,9 +63,13 @@ async def login_post(
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request) -> HTMLResponse:
     templates = request.app.state.templates
-    return templates.TemplateResponse("auth/register.html", {
-        "request": request, "user": None,
-    })
+    return templates.TemplateResponse(
+        "auth/register.html",
+        {
+            "request": request,
+            "user": None,
+        },
+    )
 
 
 @router.post("/register")
@@ -62,13 +83,25 @@ async def register_post(
         repo = UserRepository(session)
         existing = await repo.get_by_email(email)
         if existing:
-            return templates.TemplateResponse("auth/register.html", {
-                "request": request, "user": None, "error": "Email already registered",
-            }, status_code=409)
+            return templates.TemplateResponse(
+                "auth/register.html",
+                {
+                    "request": request,
+                    "user": None,
+                    "error": "Email already registered",
+                },
+                status_code=409,
+            )
         if len(password) < 8:
-            return templates.TemplateResponse("auth/register.html", {
-                "request": request, "user": None, "error": "Password must be at least 8 characters",
-            }, status_code=400)
+            return templates.TemplateResponse(
+                "auth/register.html",
+                {
+                    "request": request,
+                    "user": None,
+                    "error": "Password must be at least 8 characters",
+                },
+                status_code=400,
+            )
         hashed = hash_password(password)
         user = await repo.create(email, hashed)
         await session.commit()
