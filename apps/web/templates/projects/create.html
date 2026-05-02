@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Create Project — Inndxd{% endblock %}
+{% block page_title %}Create Project{% endblock %}
+{% block content %}
+<div class="max-w-2xl bg-white rounded-lg shadow p-8">
+    {% if error %}
+    <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">{{ error }}</div>
+    {% endif %}
+    <form method="POST" action="/ui/projects/create" class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Name *</label>
+            <input type="text" name="name" required
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea name="description" rows="3"
+                      class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+        </div>
+        <div class="flex space-x-4">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create</button>
+            <a href="/ui/projects" class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
