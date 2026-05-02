@@ -2,20 +2,7 @@
 {% block title %}Dashboard — Inndxd{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Projects</p>
-        <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.projects }}</p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Briefs</p>
-        <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.briefs }}</p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Data Items</p>
-        <p class="text-3xl font-bold text-purple-600 mt-2">{{ stats.data_items }}</p>
-    </div>
-</div>
+{% include 'partials/_stats_cards.html' %}
 
 {% if stats.projects == 0 %}
 <div class="mt-12 bg-white rounded-lg shadow p-12 text-center">

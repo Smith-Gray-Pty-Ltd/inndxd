@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Projects — Inndxd{% endblock %}
+{% block page_title %}Projects{% endblock %}
+{% block content %}
+<div class="mb-6 flex justify-between">
+    <p class="text-gray-500">{{ projects|length }} project(s)</p>
+    <a href="/ui/projects/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create Project</a>
+</div>
+
+{% if projects %}
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for project in projects %}
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap font-medium">{{ project.name }}</td>
+                <td class="px-6 py-4 text-gray-500 truncate max-w-xs">{{ project.description or "—" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ project.created_at.strftime('%Y-%m-%d') }}</td>
+                <td class="px-6 py-4 text-right space-x-2">
+                    <a href="/ui/projects/{{ project.id }}" class="text-blue-600 hover:underline text-sm">View</a>
+                    <a href="/ui/projects/{{ project.id }}/edit" class="text-gray-600 hover:underline text-sm">Edit</a>
+                    <button hx-delete="/ui/projects/{{ project.id }}"
+                            hx-confirm="Delete this project?"
+                            hx-target="closest tr"
+                            hx-swap="outerHTML swap:1s"
+                            class="text-red-600 hover:underline text-sm">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow p-12 text-center">
+    <p class="text-gray-500 text-lg mb-4">No projects yet.</p>
+    <a href="/ui/projects/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create your first project</a>
+</div>
+{% endif %}
+{% endblock %}
