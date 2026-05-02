@@ -1,10 +1,28 @@
-```
-                          ____  _   _ _   _ ____  ____  __  __
-                         |_  _|| \ | | \ | |  _ \|  _ \ \ \/ /
-                           ||  |  \| |  \| | | | | | | | \  / 
-                           ||  | |\  | |\  | |_| | |_| | /  \ 
-                          |___||_| \_|_| \_|____/|____/ /_/\_\
-```
+                                                                                                    
+                                                       dddddddd                             dddddddd
+  iiii                                                 d::::::d                             d::::::d
+ i::::i                                                d::::::d                             d::::::d
+  iiii                                                 d::::::d                             d::::::d
+                                                       d:::::d                              d:::::d 
+iiiiiiinnnn  nnnnnnnn    nnnn  nnnnnnnn        ddddddddd:::::d xxxxxxx      xxxxxxx ddddddddd:::::d 
+i:::::in:::nn::::::::nn  n:::nn::::::::nn    dd::::::::::::::d  x:::::x    x:::::xdd::::::::::::::d 
+ i::::in::::::::::::::nn n::::::::::::::nn  d::::::::::::::::d   x:::::x  x:::::xd::::::::::::::::d 
+ i::::inn:::::::::::::::nnn:::::::::::::::nd:::::::ddddd:::::d    x:::::xx:::::xd:::::::ddddd:::::d 
+ i::::i  n:::::nnnn:::::n  n:::::nnnn:::::nd::::::d    d:::::d     x::::::::::x d::::::d    d:::::d 
+ i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d      x::::::::x  d:::::d     d:::::d 
+ i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d      x::::::::x  d:::::d     d:::::d 
+ i::::i  n::::n    n::::n  n::::n    n::::nd:::::d     d:::::d     x::::::::::x d:::::d     d:::::d 
+i::::::i n::::n    n::::n  n::::n    n::::nd::::::ddddd::::::dd   x:::::xx:::::xd::::::ddddd::::::dd
+i::::::i n::::n    n::::n  n::::n    n::::n d:::::::::::::::::d  x:::::x  x:::::xd:::::::::::::::::d
+i::::::i n::::n    n::::n  n::::n    n::::n  d:::::::::ddd::::d x:::::x    x:::::xd:::::::::ddd::::d
+iiiiiiii nnnnnn    nnnnnn  nnnnnn    nnnnnn   ddddddddd   dddddxxxxxxx      xxxxxxxddddddddd   ddddd
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
 
 # inndxd
 
@@ -105,7 +123,101 @@ START → planner → plan_validator → collector → quality_gate
 
 The planner reads your brief and builds a query plan. The collector executes searches using the right tools for each target (web search, API fetch, browser scrape, database query, Twitter/X search). A quality gate checks if enough data was gathered — if not, it loops back for more. The structurer extracts clean, typed data and persists it to PostgreSQL.
 
-[Full source tree →](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project/blob/main/inndxd/architecture/source-tree.md)
+### Full Source Tree
+
+```
+inndxd/
+├── packages/
+│   ├── inndxd-core/                    # Shared domain layer
+│   │   ├── pyproject.toml
+│   │   ├── src/inndxd_core/
+│   │   │   ├── config.py               # DB, Ollama, Redis, JWT
+│   │   │   ├── db.py                   # Async engine + session factory
+│   │   │   ├── auth.py                 # hash_password, verify_password, JWT
+│   │   │   ├── embedding.py            # Ollama nomic-embed-text
+│   │   │   ├── logging_config.py       # JSON-structured logging
+│   │   │   ├── models/                 # SQLAlchemy ORM (7 models)
+│   │   │   ├── domain/                 # Pydantic schemas
+│   │   │   ├── repositories/           # Data access layer (8 repos)
+│   │   │   └── migrations/             # Alembic
+│   │   └── tests/
+│   │
+│   ├── inndxd-agents/                  # LangGraph swarm + 5 tools
+│   │   ├── pyproject.toml
+│   │   ├── src/inndxd_agents/
+│   │   │   ├── graph.py                # StateGraph builder
+│   │   │   ├── llm.py                  # Multi-provider factory + failover
+│   │   │   ├── swarm.py                # Orchestrator
+│   │   │   ├── fanout.py               # Parallel sub-graph execution
+│   │   │   ├── benchmark.py            # Performance benchmark
+│   │   │   ├── plugins.py              # Plugin system + registry
+│   │   │   ├── state.py                # ResearchState
+│   │   │   ├── nodes/                  # 7 graph nodes
+│   │   │   ├── tools/                  # 5 tools + registry v2
+│   │   │   └── prompts/                # System prompts
+│   │   └── tests/
+│   │
+│   └── inndxd-mcp/                     # MCP server (v0.2.0)
+│       ├── pyproject.toml
+│       └── src/inndxd_mcp/
+│           └── server.py               # tools, resources, prompts, SSE
+│
+├── apps/
+│   ├── api/                            # REST API — Port 8000
+│   │   ├── Dockerfile
+│   │   ├── pyproject.toml
+│   │   ├── src/inndxd_api/
+│   │   │   ├── main.py                 # App factory, 9 API routers + /metrics
+│   │   │   ├── config.py               # Re-export stub → inndxd_core
+│   │   │   ├── dependencies.py         # get_db, get_tenant_id
+│   │   │   ├── celery_app.py           # Celery + Redis + beat
+│   │   │   ├── tasks.py                # run_research_task
+│   │   │   ├── metrics.py              # Prometheus counters + histograms
+│   │   │   ├── provider_health.py      # LLM provider health checks
+│   │   │   ├── provider_sync.py        # DB → runtime LLMConfig sync
+│   │   │   ├── auth_deps.py            # get_current_user, require_admin
+│   │   │   ├── tracing.py              # OpenTelemetry + FastAPI instrumentor
+│   │   │   ├── routers/               # 10 routers (auth, projects, briefs, etc.)
+│   │   │   ├── schemas/
+│   │   │   └── middleware/tenant.py
+│   │   └── tests/
+│   │
+│   └── web/                            # Dashboard UI — Port 8080
+│       ├── pyproject.toml
+│       ├── src/inndxd_web/
+│       │   ├── main.py                 # Jinja2Templates, static mount
+│       │   ├── auth.py                 # JWT httpOnly cookie session
+│       │   └── routers/
+│       │       ├── ui.py               # Dashboard home (real DB stats)
+│       │       ├── ui_auth.py          # Login, register, logout
+│       │       └── ui_projects.py      # Project list, create, edit, delete
+│       ├── templates/
+│       │   ├── base.html               # Sidebar + header layout
+│       │   ├── auth/
+│       │   │   ├── login.html
+│       │   │   └── register.html
+│       │   ├── dashboard/
+│       │   │   └── index.html
+│       │   ├── projects/
+│       │   │   ├── list.html
+│       │   │   ├── create.html
+│       │   │   ├── edit.html
+│       │   │   └── detail.html
+│       │   └── partials/
+│       │       ├── _status_badge.html
+│       │       └── _stats_cards.html
+│       ├── static/css/input.css
+│       └── tests/
+│
+├── docker/
+│   ├── postgres/init.sql               # pgvector, UUID, RLS
+│   └── ollama/entrypoint.sh
+│
+├── docker-compose.yml                  # postgres, redis, ollama, api, web
+├── pyproject.toml                      # Root workspace — 5 members
+├── .env.example
+└── README.md
+```
 
 ---
 
@@ -117,9 +229,7 @@ The planner reads your brief and builds a query plan. The collector executes sea
 | **2** — Production | ✅ Complete | Celery workers, 5 research tools, MCP server, Prometheus, export, WebSocket |
 | **3** — Security & Observability | ✅ Complete | JWT auth, multi-provider LLM, API keys, OpenTelemetry, audit logs |
 | **4** — Web Dashboard | 🔄 In Progress | Jinja2 + Tailwind + HTMX — Phase 0-2 done, Phase 3 (Briefs) next |
-| **Cloud** | ⬜ Planned | Signup, billing, admin, gateway — [plan →](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project/blob/main/inndxd-cloud/planning/stage-cloud.md) |
-
-Detailed plans live in the [project docs repo](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project).
+| **Cloud** | ⬜ Planned | Business ops — website, identity, billing, admin, gateway |
 
 ---
 
