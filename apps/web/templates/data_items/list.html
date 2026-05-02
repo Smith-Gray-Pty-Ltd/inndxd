@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Data Items — Inndxd{% endblock %}
+{% block page_title %}Data Items{% endblock %}
+{% block content %}
+<div id="filters" class="mb-6 flex space-x-4">
+    <select name="project_id" hx-get="/ui/data-items/rows" hx-target="#table-body"
+            hx-include="#filters" class="border rounded p-2">
+        <option value="">All Projects</option>
+        {% for p in projects %}
+        <option value="{{ p.id }}" {% if p.id|string == current_project %}selected{% endif %}>{{ p.name }}</option>
+        {% endfor %}
+    </select>
+    <select name="brief_id" hx-get="/ui/data-items/rows" hx-target="#table-body"
+            hx-include="#filters" class="border rounded p-2">
+        <option value="">All Briefs</option>
+        {% for b in all_briefs %}
+        <option value="{{ b.id }}" {% if b.id|string == current_brief %}selected{% endif %}>{{ b.natural_language[:50] }}{% if b.natural_language|length > 50 %}...{% endif %}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="mb-4 flex space-x-4">
+    <a href="/api/data-items/export/json?project_id={{ current_project }}&brief_id={{ current_brief }}"
+       class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">JSON Export</a>
+    <a href="/api/data-items/export/csv?project_id={{ current_project }}&brief_id={{ current_brief }}"
+       class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">CSV Export</a>
+</div>
+
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer select-none"
+                    hx-get="/ui/data-items/rows?sort=content_type&order={% if sort == 'content_type' and order == 'asc' %}desc{% else %}asc{% endif %}"
+                    hx-include="#filters" hx-target="#table-body">
+                    Type {% if sort == 'content_type' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Key / Value</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer select-none"
+                    hx-get="/ui/data-items/rows?sort=created_at&order={% if sort == 'created_at' and order == 'asc' %}desc{% else %}asc{% endif %}"
+                    hx-include="#filters" hx-target="#table-body">
+                    Date {% if sort == 'created_at' %}{{ '▲' if order == 'asc' else '▼' }}{% endif %}
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table-body" class="divide-y divide-gray-200">
+            {% include 'partials/_data_item_rows.html' %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

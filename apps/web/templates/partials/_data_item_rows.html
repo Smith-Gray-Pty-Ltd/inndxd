@@ -1,0 +1,36 @@
+{% for item in items %}
+<tr class="hover:bg-gray-50">
+    <td class="px-6 py-4 text-sm text-gray-500">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">{{ item.content_type }}</span>
+    </td>
+    <td class="px-6 py-4 text-sm">
+        {% if item.structured_payload %}
+            {% for key, value in item.structured_payload.items() %}
+            <div class="mb-1">
+                <span class="font-medium text-gray-900">{{ key }}</span>
+                <span class="text-gray-500 mx-1">→</span>
+                <span class="text-gray-600">{{ value|truncate(80) }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+        <span class="text-gray-400">—</span>
+        {% endif %}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+        {% if item.source_url %}
+        <a href="{{ item.source_url }}" target="_blank" class="text-blue-600 hover:underline" title="{{ item.source_url }}">{{ item.source_url|truncate(50) }}</a>
+        {% else %}
+        <span class="text-gray-400">—</span>
+        {% endif %}
+    </td>
+    <td class="px-6 py-4 text-sm text-gray-500">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+</tr>
+{% else %}
+<tr>
+    <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+        <p class="text-lg mb-2">No data items found.</p>
+        <p class="text-sm mb-4">Data items appear when briefs complete research.</p>
+        <a href="/ui/briefs" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Create a Brief</a>
+    </td>
+</tr>
+{% endfor %}
