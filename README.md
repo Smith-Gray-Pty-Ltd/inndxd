@@ -1,215 +1,154 @@
+```
+                          ____  _   _ _   _ ____  ____  __  __
+                         |_  _|| \ | | \ | |  _ \|  _ \ \ \/ /
+                           ||  |  \| |  \| | | | | | | | \  / 
+                           ||  | |\  | |\  | |_| | |_| | /  \ 
+                          |___||_| \_|_| \_|____/|____/ /_/\_\
+```
+
 # inndxd
 
-[![Stage 1 Complete](https://img.shields.io/badge/Stage-1%20Complete-brightgreen)](https://github.com/Smith-Gray-Pty-Ltd/inndxd)
+**AI agents that research, collect, and structure data — on autopilot.**
 
-Open-source agentic data platform. Define a project → autonomous agents research, collect, structure & deliver real-time data via API, MCP, WebSocket & skills.
+[![AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://python.org)
+[![Docker](https://img.shields.io/badge/docker-ready-brightgreen)](https://docker.com)
 
-## Features (Stage 1)
+Define a project in plain English. Autonomous agents plan the research, search the web and APIs, extract structured data, and deliver it through a REST API, WebSocket, or MCP server — all running inside your own infrastructure with zero data leaving your control.
 
-- ✅ **FastAPI REST API** - Tenant-scoped CRUD endpoints for projects, briefs, data-items, and runs
-- ✅ **LangGraph Research Swarm** - Automated research pipeline: planner → collector → structurer
-- ✅ **Docker Compose Infrastructure** - PostgreSQL with pgvector, Redis, and Ollama
-- ✅ **Async SQLAlchemy** - Full async support for database operations
-- ✅ **Tenant Isolation** - Multi-tenant support via X-Tenant-ID header
-- ✅ **Integration Tests** - pytest-asyncio test suite with SQLite in-memory
+---
 
-## Architecture
+### Autonomous &emsp; Open-Source &emsp; Production-Ready
 
-A monorepo with three key packages:
+**Multi-agent swarm** that plans, searches, validates, and structures. Five research tools with capability-based routing. Fan-out for parallel execution. Recursive follow-ups when data is incomplete.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     apps/api (FastAPI)                      │
-│  REST endpoints: projects, briefs, data-items, runs         │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                 packages/inndxd-agents (LangGraph)          │
-│  Swarm: planner → collector → structurer                    │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                  packages/inndxd-core (Models)              │
-│  SQLAlchemy models, repositories, domain schemas            │
-└─────────────────────────────────────────────────────────────┘
-```
+**AGPLv3.** Self-host or cloud. Your data stays yours. No vendor lock-in. Full API, MCP, WebSocket — integrate with anything.
+
+**JWT auth, API keys, rate limiting.** OpenTelemetry tracing, Prometheus metrics, JSON-structured logging. PostgreSQL + pgvector for semantic search. Celery + Redis for reliable distributed execution.
+
+---
 
 ## Quick Start
 
-### Prerequisites
-
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/) package manager
-- Docker & Docker Compose
-- [just](https://github.com/casey/just) (optional task runner)
-
-### Setup
-
 ```bash
-# 1. Clone and sync dependencies
 git clone https://github.com/Smith-Gray-Pty-Ltd/inndxd.git
 cd inndxd
-uv sync
-
-# 2. Create .env file
 cp .env.example .env
-# Edit .env with your PostgreSQL connection string
-# INNDXD_DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/inndxd
-
-# 3. Start infrastructure (PostgreSQL with pgvector, Redis, Ollama)
 docker compose up -d
+~/.local/bin/uv sync
 ```
 
-### Create Project
+### Register, build, monitor — four API calls
 
 ```bash
-TENANT_ID=$(uuidgen)
-PROJECT_ID=$(curl -s -X POST http://localhost:8000/api/projects \
+# 1. Register and get your JWT
+TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/register \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: ${TENANT_ID}" \
-  -d '{"name": "Property Investment", "description": "Find commercial properties"}' | jq -r '.id')
+  -d '{"email": "demo@inndxd.ai", "password": "securepass123"}' | jq -r '.access_token')
 
-echo "Created project: ${PROJECT_ID}"
-```
+# 2. Create a project
+PID=$(curl -s -X POST http://localhost:8000/api/projects \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Market Research", "description": "Q2 competitive analysis"}' | jq -r '.id')
 
-### Create Brief (Triggers Research Swarm)
-
-```bash
+# 3. Create a brief — the agents start working immediately
 curl -s -X POST http://localhost:8000/api/briefs \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: ${TENANT_ID}" \
-  -d "{\"project_id\": \"${PROJECT_ID}\", \"natural_language\": \"Find top 5 commercial property platforms in Sydney\"}" | jq .
+  -d "{\"project_id\": \"$PID\", \"natural_language\": \"Top 5 SaaS analytics tools in 2026 with pricing\"}" | jq .
 
-# Check brief status
-curl -s http://localhost:8000/api/briefs \
-  -H "X-Tenant-ID: ${TENANT_ID}" | jq .
-```
-
-### Check Data Items
-
-```bash
+# 4. Check your structured results
 curl -s http://localhost:8000/api/data-items \
-  -H "X-Tenant-ID: ${TENANT_ID}" | jq .
+  -H "Authorization: Bearer $TOKEN" | jq .
 ```
 
-## API Endpoints
+**Web dashboard** at [localhost:8080/ui](http://localhost:8080/ui) — login, manage projects, create briefs, view live results with HTMX-powered status updates.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/projects` | Create a new project |
-| GET | `/api/projects` | List projects for tenant |
-| GET | `/api/projects/{id}` | Get project details |
-| DELETE | `/api/projects/{id}` | Delete project |
-| POST | `/api/briefs` | Create brief (triggers research swarm) |
-| GET | `/api/briefs` | List briefs for tenant |
-| GET | `/api/briefs/{id}` | Get brief details |
-| GET | `/api/data-items` | List data items for tenant |
-| GET | `/api/data-items/{id}` | Get data item details |
-| GET | `/api/runs/{brief_id}` | Get run status for brief |
+---
 
-All endpoints require the `X-Tenant-ID` header (UUID format).
+## Architecture
 
-## Status
-
-### Stage 1 ✅ Complete
-
-- [x] Core models & repositories (`packages/inndxd-core/`)
-- [x] LangGraph research swarm (`packages/inndxd-agents/`)
-- [x] FastAPI REST API (`apps/api/`)
-- [x] Docker Compose infrastructure
-- [x] Tenant-scoped security
-- [x] Integration tests
-
-### Stage 2 🔄 In Progress
-
-#### Phase 0: ✅ Complete
-- [x] Fixed broken AgentState imports
-- [x] Wired TenantMiddleware into FastAPI app
-- [x] Alembic migration structure set up
-- [x] Pre-commit hooks configured
-- [x] Added test suite for routers, domain models, graph
-
-#### Phase 0.5: ✅ Complete
-- [x] Multi-provider LLM config models (`LLMProviderConfig`, `LLMConfig`)
-- [x] Injectable LLM clients per agent node
-- [x] Per-node model override env vars (`INNDXD_PLANNER_MODEL`, etc.)
-- [x] `resolve_model_for_node()` utility
-- [x] Roadmap entry for Stage 3
-
-#### Phase 1: ✅ Complete
-- [x] Conditional routing with retry limits
-- [x] Quality gate evaluator (collect data sufficiency, structured output validity)
-- [x] Plan validator node
-- [x] Human-in-the-loop approval interrupt point
-- [x] Graph state serialization helper
-- [x] Inter-step entry/exit logging on all nodes
-
-#### Phase 2: ✅ Complete
-- [x] Celery app with Redis broker/backend
-- [x] `run_research_task` Celery task (replaces BackgroundTasks)
-- [x] `cleanup_stuck_briefs` periodic task (Celery beat, every 30 min)
-- [x] Brief repository for async status updates
-- [x] `GET /api/runs/{brief_id}/task-status` endpoint for Celery task state
-- [x] `celery_worker` service in docker-compose.yml
-
-#### Phase 3: ✅ Complete
-- [x] Twitter/X search tool (`twitter_search_tool`)
-- [x] API fetch tool (`api_fetch_tool`) — REST/GraphQL endpoints
-- [x] Browser automation tool (`browser_tool`) — table extraction
-- [x] Database query tool (`db_query_tool`) — stats and recent items
-- [x] Tool registry v2 with capability-based routing (`get_tools_by_capability`)
-- [x] `invoke_tool_with_timeout` wrapper for all tools
-- [x] Collector node uses tool registry for dynamic tool selection
-- [x] Crawl4AI cache enabled for repeated queries
-- [x] Planner prompt updated with tool names and selection guidance
-
-#### Phase 4: ✅ Complete
-- [x] MCP SDK dependency added to `inndxd-mcp`
-- [x] Full MCP server exposing all 5 agent tools (`list_tools`, `call_tool`)
-- [x] Resource exposure: `inndxd://projects`, `inndxd://data-items/{project_id}`
-- [x] Prompt templates: `research_brief` with topic and depth arguments
-- [x] Dual transport: stdio (local AI tools) + SSE on port 8001 (web clients)
-- [x] Server versioned at 0.2.0
-
-#### Phase 5: ✅ Complete
-- [x] pgvector embedding column on DataItem + semantic search (`cosine_distance`)
-- [x] Embedding generation utility via Ollama API (`nomic-embed-text`)
-- [x] DB-level RLS enforced via `SET app.current_tenant_id` per session
-- [x] Structured JSON logging configuration (`configure_logging()`)
-- [x] Prometheus metrics endpoint (`GET /metrics`) with counters and histogram
-- [x] CSV and JSON export endpoints (`GET /api/data-items/export/csv|json`)
-- [x] WebSocket endpoint (`ws://.../ws/runs/{brief_id}`) for streaming agent progress
-
-### Stage 2 ✅ Complete — All 5 Phases Merged
-
-#### Next: Stage 3 →
-- [ ] Full multi-provider LLM system (API endpoints, DB-backed registry, hot-swap)
-- [ ] JWT-based session authentication
-- [ ] Web UI (to be planned)
-
-## Development
-
-```bash
-# Run tests
-just test
-
-# Lint and format
-just lint
-just fmt
-
-# Start dev server
-uv run uvicorn inndxd_api.main:app --reload
-
-# Docker tasks
-just up      # Start services
-just down    # Stop services
-just logs    # Follow logs
 ```
+                         ┌──────────────┐
+                         │  inndxd-mcp  │ ← tools, resources, prompts, SSE
+                         └──────┬───────┘
+                                │
+                                ▼
+┌──────────────┐         ┌──────────────┐
+│ inndxd-core  │◀────────│inndxd-agents │ ← LangGraph swarm, 5 tools, fan-out
+│ models, JWT  │         └──────┬───────┘
+└──────┬───────┘                │
+       │                        │
+       ▼                        ▼
+┌──────────────┐         ┌──────────────┐
+│  apps/api    │         │  apps/web    │
+│  Port 8000   │         │  Port 8080   │
+│  REST + WS   │         │  Dashboard   │
+└──────┬───────┘         └──────────────┘
+       │
+       ▼
+┌─────────────────────────────────────────┐
+│  PostgreSQL + pgvector  |  Redis  |  Ollama  │
+└─────────────────────────────────────────┘
+```
+
+### How a Research Brief Works
+
+```
+START → planner → plan_validator → collector → quality_gate
+                                                      │
+                                              ┌───────┘
+                                              ▼
+                                         structurer → END
+```
+
+The planner reads your brief and builds a query plan. The collector executes searches using the right tools for each target (web search, API fetch, browser scrape, database query, Twitter/X search). A quality gate checks if enough data was gathered — if not, it loops back for more. The structurer extracts clean, typed data and persists it to PostgreSQL.
+
+[Full source tree →](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project/blob/main/inndxd/architecture/source-tree.md)
+
+---
 
 ## Roadmap
 
-- **Stage 3 (Coming Soon):** Multi-Provider LLM Support — configure any OpenAI-compatible LLM provider (OpenAI, Anthropic, Groq, Ollama, DeepSeek API, etc.) and assign different models to each agent node. API endpoints for managing providers at runtime.
+| Stage | Status | What |
+|---|---|---|
+| **1** — Foundation | ✅ Complete | Core models, agent graph, FastAPI API, Docker infra |
+| **2** — Production | ✅ Complete | Celery workers, 5 research tools, MCP server, Prometheus, export, WebSocket |
+| **3** — Security & Observability | ✅ Complete | JWT auth, multi-provider LLM, API keys, OpenTelemetry, audit logs |
+| **4** — Web Dashboard | 🔄 In Progress | Jinja2 + Tailwind + HTMX — Phase 0-2 done, Phase 3 (Briefs) next |
+| **Cloud** | ⬜ Planned | Signup, billing, admin, gateway — [plan →](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project/blob/main/inndxd-cloud/planning/stage-cloud.md) |
+
+Detailed plans live in the [project docs repo](https://github.com/Smith-Gray-Pty-Ltd/inndxd-project).
+
+---
+
+## Features
+
+### Multi-Provider LLM
+
+DB-backed provider registry. Register any OpenAI-compatible endpoint — OpenAI, Anthropic, Groq, Ollama, DeepSeek, local models. Assign different models to different agent nodes. Health checks keep unhealthy providers out of rotation. Failover falls through providers in priority order.
+
+### Research Toolbelt
+
+Five tools with capability-based routing. **Web search** via Crawl4AI + DuckDuckGo. **Twitter/X search**. **API fetch** for any REST or GraphQL endpoint. **Browser scrape** with table extraction. **Internal DB query** for previously collected data. All tools support timeouts, retry, and caching.
+
+### Web Dashboard
+
+Server-rendered with HTMX — zero custom JavaScript. Login, register, project management, brief creation, live status updates via polling. Sortable data tables with CSV/JSON export. Admin panels for LLM providers, API keys, and audit logs. Feels like a SPA, ships nothing but HTML.
+
+### Developer API
+
+28 REST endpoints. Full CRUD for projects, briefs, and data items. Export to JSON or CSV. JWT auth with API key support and rate limiting. WebSocket streaming for agent progress. MCP server with stdio + SSE transport — works with Claude Desktop and web clients. Prometheus metrics at `/metrics`.
+
+### Observability Suite
+
+OpenTelemetry distributed tracing across the agent graph. JSON-structured logging. Prometheus counters for brief creation, data items collected, and request duration histograms. Audit log for every agent execution — who ran what, when, with what results.
+
+---
 
 ## License
 
-MIT
+AGPL-3.0-only — see [LICENSE](LICENSE).
+
+Built by [Smith & Gray](https://github.com/Smith-Gray-Pty-Ltd).
