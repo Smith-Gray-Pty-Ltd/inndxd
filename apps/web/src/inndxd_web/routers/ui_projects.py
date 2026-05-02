@@ -1,4 +1,5 @@
 """UI Project management routes."""
+
 from __future__ import annotations
 
 from uuid import UUID
@@ -20,9 +21,7 @@ async def list_projects(request: Request) -> HTMLResponse:
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
-        result = await session.execute(
-            select(Project).order_by(Project.created_at.desc())
-        )
+        result = await session.execute(select(Project).order_by(Project.created_at.desc()))
         projects = list(result.scalars().all())
     return templates.TemplateResponse(
         "projects/list.html",
@@ -120,9 +119,7 @@ async def project_detail(request: Request, project_id: UUID) -> HTMLResponse:
         if not project:
             return HTMLResponse("Project not found", status_code=404)
         result = await session.execute(
-            select(Brief)
-            .where(Brief.project_id == project_id)
-            .order_by(Brief.created_at.desc())
+            select(Brief).where(Brief.project_id == project_id).order_by(Brief.created_at.desc())
         )
         briefs = list(result.scalars().all())
     return templates.TemplateResponse(

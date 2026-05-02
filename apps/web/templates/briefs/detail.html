@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ brief.natural_language[:40] }}... — Inndxd{% endblock %}
+{% block page_title %}Brief Detail{% endblock %}
+{% block content %}
+<div class="mb-6 bg-white rounded-lg shadow p-6">
+    <div class="flex justify-between items-start mb-4">
+        <div>
+            <p class="text-gray-900 font-medium">{{ brief.natural_language }}</p>
+            <p class="text-sm text-gray-500 mt-1">
+                Project: <a href="/ui/projects/{{ brief.project_id }}" class="text-blue-600 hover:underline">{{ project.name }}</a>
+            </p>
+            <p class="text-sm text-gray-400">Created {{ brief.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="flex space-x-2">
+            <a href="/api/briefs/{{ brief.id }}/export/json" class="px-3 py-1 border rounded text-sm text-gray-600 hover:bg-gray-50">JSON</a>
+            <a href="/api/briefs/{{ brief.id }}/export/csv" class="px-3 py-1 border rounded text-sm text-gray-600 hover:bg-gray-50">CSV</a>
+        </div>
+    </div>
+</div>
+
+<div hx-get="/ui/briefs/{{ brief.id }}/status-partial"
+     hx-trigger="every 2s"
+     hx-swap="innerHTML">
+    {% include 'partials/_run_status.html' %}
+</div>
+
+<h2 class="text-lg font-semibold mb-4">Data Items</h2>
+{% if data_items %}
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Key</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for item in data_items %}
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium">
+                    {% if item.structured_payload %}
+                        {% for key, value in item.structured_payload.items() %}
+                        <div class="mb-1"><span class="text-gray-900">{{ key }}</span></div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="text-gray-400">—</span>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 text-sm">
+                    {% if item.structured_payload %}
+                        {% for key, value in item.structured_payload.items() %}
+                        <div class="mb-1"><span class="text-gray-600">{{ value|truncate(100) }}</span></div>
+                        {% endfor %}
+                    {% else %}
+                    <span class="text-gray-400">—</span>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                    <a href="{{ item.source_url }}" target="_blank" class="text-blue-600 hover:underline" title="{{ item.source_url }}">{{ item.source_url|truncate(50) or "—" }}</a>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ item.content_type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow p-8 text-center">
+    {% if brief.status == 'running' %}
+    <p class="text-gray-500">Research is still running. Data items will appear here when available.</p>
+    {% elif brief.status == 'pending' %}
+    <p class="text-gray-500">Research has not started yet.</p>
+    {% elif brief.status == 'failed' %}
+    <p class="text-red-500">Research failed. No data items were collected.</p>
+    {% else %}
+    <p class="text-gray-500">No data items collected for this brief.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

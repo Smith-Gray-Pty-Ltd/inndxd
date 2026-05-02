@@ -1,28 +1,19 @@
 {% extends "base.html" %}
-{% block title %}{{ project.name }} — Inndxd{% endblock %}
-{% block page_title %}{{ project.name }}{% endblock %}
+{% block title %}Briefs — Inndxd{% endblock %}
+{% block page_title %}Briefs{% endblock %}
 {% block content %}
-<div class="mb-8 bg-white rounded-lg shadow p-6">
-    <div class="flex justify-between items-start">
-        <div>
-            <p class="text-gray-500">{{ project.description or "No description" }}</p>
-            <p class="text-sm text-gray-400 mt-2">Created {{ project.created_at.strftime('%Y-%m-%d') }}</p>
-        </div>
-        <div class="flex space-x-2">
-            <a href="/ui/projects/{{ project.id }}/edit" class="px-3 py-1 border rounded text-sm text-gray-600 hover:bg-gray-50">Edit</a>
-            <a href="/ui/briefs/create?project_id={{ project.id }}" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">New Brief</a>
-        </div>
-    </div>
+<div class="mb-6 flex justify-between">
+    <p class="text-gray-500">{{ briefs|length }} brief(s)</p>
 </div>
 
-<h2 class="text-lg font-semibold mb-4">Briefs</h2>
 {% if briefs %}
 <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Query</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Natural Language</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
@@ -38,6 +29,7 @@
                         {% include 'partials/_status_badge.html' %}
                     </div>
                 </td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ brief.project_name or "—" }}</td>
                 <td class="px-6 py-4 text-sm text-gray-500">{{ brief.created_at.strftime('%Y-%m-%d') }}</td>
                 <td class="px-6 py-4 text-right">
                     <a href="/ui/briefs/{{ brief.id }}" class="text-blue-600 hover:underline text-sm">View</a>
@@ -48,9 +40,9 @@
     </table>
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow p-8 text-center">
-    <p class="text-gray-500 mb-4">No briefs yet for this project.</p>
-    <a href="/ui/briefs/create?project_id={{ project.id }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create your first brief</a>
+<div class="bg-white rounded-lg shadow p-12 text-center">
+    <p class="text-gray-500 text-lg mb-4">No briefs yet.</p>
+    <p class="text-gray-400">Briefs are created from project detail pages.</p>
 </div>
 {% endif %}
 {% endblock %}
