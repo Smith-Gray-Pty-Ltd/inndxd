@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Add Provider — Inndxd{% endblock %}
+{% block page_title %}Add LLM Provider{% endblock %}
+{% block content %}
+<div class="max-w-2xl bg-white rounded-lg shadow p-8">
+    {% if error %}
+    <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">{{ error }}</div>
+    {% endif %}
+    <form method="POST" action="/ui/admin/providers/create" class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Name *</label>
+            <input type="text" name="name" required
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="e.g. OpenAI">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Provider Type *</label>
+            <select name="provider_type" required
+                    class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="openai_compatible">OpenAI Compatible</option>
+                <option value="anthropic">Anthropic</option>
+                <option value="ollama">Ollama</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Base URL *</label>
+            <input type="url" name="base_url" required
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="https://api.openai.com/v1">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">API Key</label>
+            <input type="password" name="api_key"
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="sk-...">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Default Model *</label>
+            <input type="text" name="default_model" required
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="gpt-4o">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Available Models</label>
+            <input type="text" name="available_models"
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="gpt-4o, gpt-4o-mini (comma-separated)">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Priority</label>
+            <input type="number" name="priority" value="0" min="0"
+                   class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500">
+            <p class="text-xs text-gray-400 mt-1">Higher priority providers are tried first.</p>
+        </div>
+        <div class="flex space-x-4">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add Provider</button>
+            <a href="/ui/admin/providers" class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
