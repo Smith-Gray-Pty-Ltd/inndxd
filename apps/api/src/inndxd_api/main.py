@@ -25,6 +25,11 @@ async def lifespan(app: FastAPI):
     setup_tracing(otlp_endpoint=getattr(settings, "otlp_endpoint", None))
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    from inndxd_api.provider_sync import sync_providers_for_tenant
+
+    await sync_providers_for_tenant("00000000-0000-0000-0000-000000000000")
+
     yield
     await engine.dispose()
 
