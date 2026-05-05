@@ -62,6 +62,8 @@ def create_openai_compatible_client(provider_name: str | None = None) -> AsyncOp
     return AsyncOpenAI(
         base_url=provider.base_url,
         api_key=provider.api_key or "no-key",
+        timeout=120.0,
+        max_retries=1,
     )
 
 
