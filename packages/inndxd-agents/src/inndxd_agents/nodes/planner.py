@@ -4,7 +4,7 @@ import json
 import logging
 from typing import Any
 
-from inndxd_agents.llm import create_ollama_client, resolve_model_for_node
+from inndxd_agents.llm import create_openai_compatible_client, resolve_model_for_node
 from inndxd_agents.prompts.planner import PLANNER_SYSTEM, PLANNER_USER
 from inndxd_agents.state import ResearchState as AgentState
 
@@ -18,7 +18,7 @@ async def planner_node(
 ) -> dict:
     logger.debug("Entering planner_node for brief %s", state.get("brief_id"))
     if llm_client is None:
-        llm_client = create_ollama_client()
+        llm_client = create_openai_compatible_client()
     if model is None:
         model = resolve_model_for_node("planner")
 

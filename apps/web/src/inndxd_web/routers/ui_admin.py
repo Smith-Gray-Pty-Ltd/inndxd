@@ -39,7 +39,7 @@ async def _require_admin(request: Request) -> dict | HTMLResponse:
 
 
 @router.get("/providers", response_class=HTMLResponse)
-async def list_providers(request: Request) -> HTMLResponse:
+async def list_providers(request: Request):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -59,7 +59,7 @@ async def list_providers(request: Request) -> HTMLResponse:
 
 
 @router.get("/providers/create", response_class=HTMLResponse)
-async def create_provider_form(request: Request) -> HTMLResponse:
+async def create_provider_form(request: Request):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -80,7 +80,7 @@ async def create_provider(
     default_model: str = Form(...),
     available_models: str = Form(default=""),
     priority: int = Form(default=0),
-) -> RedirectResponse | HTMLResponse:
+):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -114,7 +114,7 @@ async def create_provider(
 
 
 @router.delete("/providers/{provider_id}")
-async def delete_provider(request: Request, provider_id: UUID) -> HTMLResponse:
+async def delete_provider(request: Request, provider_id: UUID):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -127,7 +127,7 @@ async def delete_provider(request: Request, provider_id: UUID) -> HTMLResponse:
 
 
 @router.get("/providers/{provider_id}/health", response_class=HTMLResponse)
-async def provider_health_badge(request: Request, provider_id: UUID) -> HTMLResponse:
+async def provider_health_badge(request: Request, provider_id: UUID):
     async with async_session_factory() as session:
         provider = await session.get(LLMProvider, provider_id)
         if not provider:
@@ -159,7 +159,7 @@ async def provider_health_badge(request: Request, provider_id: UUID) -> HTMLResp
 
 
 @router.get("/api-keys", response_class=HTMLResponse)
-async def list_api_keys(request: Request) -> HTMLResponse:
+async def list_api_keys(request: Request):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -179,7 +179,7 @@ async def list_api_keys(request: Request) -> HTMLResponse:
 
 
 @router.post("/api-keys/{key_id}/revoke")
-async def revoke_api_key(request: Request, key_id: UUID) -> HTMLResponse:
+async def revoke_api_key(request: Request, key_id: UUID):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -195,7 +195,7 @@ async def revoke_api_key(request: Request, key_id: UUID) -> HTMLResponse:
 async def create_api_key(
     request: Request,
     name: str = Form(...),
-) -> HTMLResponse:
+):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user
@@ -222,7 +222,7 @@ async def create_api_key(
 async def list_audit_logs(
     request: Request,
     event_type: str = Query(default=""),
-) -> HTMLResponse:
+):
     admin_user = await _require_admin(request)
     if isinstance(admin_user, HTMLResponse):
         return admin_user

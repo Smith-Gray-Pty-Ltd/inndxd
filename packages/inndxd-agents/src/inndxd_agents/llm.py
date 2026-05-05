@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 
 def _build_default_llm_config() -> LLMConfig:
     return LLMConfig(
-        default_provider="ollama",
+        default_provider=agent_settings.llm_provider_name,
         providers={
-            "ollama": LLMProviderConfig(
-                name="ollama",
-                base_url=agent_settings.ollama_base_url,
-                api_key="ollama",
-                default_model=agent_settings.ollama_model,
-                models=[agent_settings.ollama_model],
+            agent_settings.llm_provider_name: LLMProviderConfig(
+                name=agent_settings.llm_provider_name,
+                base_url=agent_settings.llm_base_url,
+                api_key=agent_settings.llm_api_key,
+                default_model=agent_settings.llm_model,
+                models=[agent_settings.llm_model],
             ),
         },
     )
@@ -71,7 +71,7 @@ def get_default_model(provider_name: str | None = None) -> str:
     provider = config.providers.get(provider_name)
     if provider:
         return provider.default_model
-    return agent_settings.ollama_model
+    return agent_settings.llm_model
 
 
 def resolve_model_for_node(node_name: str, tenant_id: str | None = None) -> str:

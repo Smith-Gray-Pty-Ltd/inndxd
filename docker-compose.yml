@@ -23,22 +23,6 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-      - ./docker/ollama/entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/bin/sh", "/entrypoint.sh"]
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-
   api:
     build:
       context: .
@@ -47,18 +31,35 @@ services:
       - "8000:8000"
     environment:
       INNDXD_DATABASE_URL: postgresql+asyncpg://inndxd:inndxd@postgres:5432/inndxd
-      INNDXD_OLLAMA_BASE_URL: http://ollama:11434/v1
+      INNDXD_LLM_PROVIDER_NAME: grok
+      INNDXD_LLM_BASE_URL: https://api.x.ai/v1
+      INNDXD_LLM_MODEL: grok-3-mini
       INNDXD_REDIS_URL: redis://redis:6379/0
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-      ollama:
-        condition: service_started
     volumes:
       - .:/app
-    command: ["uvicorn", "inndxd_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["uv", "run", "uvicorn", "inndxd_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      INNDXD_DATABASE_URL: postgresql+asyncpg://inndxd:inndxd@postgres:5432/inndxd
+      INNDXD_REDIS_URL: redis://redis:6379/0
+      INNDXD_LOG_LEVEL: INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: ["uv", "run", "uvicorn", "inndxd_web.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
 
   celery_worker:
     build:
@@ -77,18 +78,17 @@ services:
       ]
     environment:
       INNDXD_DATABASE_URL: postgresql+asyncpg://inndxd:inndxd@postgres:5432/inndxd
-      INNDXD_OLLAMA_BASE_URL: http://ollama:11434/v1
+      INNDXD_LLM_PROVIDER_NAME: grok
+      INNDXD_LLM_BASE_URL: https://api.x.ai/v1
+      INNDXD_LLM_MODEL: grok-3-mini
       INNDXD_REDIS_URL: redis://redis:6379/0
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-      ollama:
-        condition: service_started
     volumes:
       - .:/app
 
 volumes:
   pgdata:
-  ollama_data:

@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request) -> HTMLResponse:
+async def login_page(request: Request):
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "auth/login.html",
@@ -30,7 +30,7 @@ async def login_post(
     request: Request,
     email: str = Form(...),
     password: str = Form(...),
-) -> HTMLResponse | RedirectResponse:
+):
     templates = request.app.state.templates
     async with async_session_factory() as session:
         repo = UserRepository(session)
@@ -61,7 +61,7 @@ async def login_post(
 
 
 @router.get("/register", response_class=HTMLResponse)
-async def register_page(request: Request) -> HTMLResponse:
+async def register_page(request: Request):
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "auth/register.html",
@@ -77,7 +77,7 @@ async def register_post(
     request: Request,
     email: str = Form(...),
     password: str = Form(...),
-) -> HTMLResponse | RedirectResponse:
+):
     templates = request.app.state.templates
     async with async_session_factory() as session:
         repo = UserRepository(session)
@@ -111,7 +111,7 @@ async def register_post(
 
 
 @router.get("/logout")
-async def logout() -> RedirectResponse:
+async def logout():
     response = RedirectResponse(url="/ui/auth/login", status_code=303)
     clear_auth_cookie(response)
     return response

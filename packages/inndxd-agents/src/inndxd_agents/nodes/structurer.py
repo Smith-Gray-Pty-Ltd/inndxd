@@ -4,7 +4,7 @@ import json
 import logging
 from typing import Any
 
-from inndxd_agents.llm import create_ollama_client, resolve_model_for_node
+from inndxd_agents.llm import create_openai_compatible_client, resolve_model_for_node
 from inndxd_agents.prompts.structurer import STRUCTURER_SYSTEM, STRUCTURER_USER
 from inndxd_agents.state import ResearchState as AgentState
 
@@ -38,14 +38,26 @@ async def structurer_node(
         }
 
     if llm_client is None:
-        llm_client = create_ollama_client()
+        llm_client = create_openai_compatible_client()
     if model is None:
         model = resolve_model_for_node("structurer")
+
+    trimmed = []
+    for item in collected_data:
+        trimmed.append(
+            {k: (v[:500] if isinstance(v, str) and len(v) > 500 else v) for k, v in item.items()}
+        )
+    data_json = json.dumps(trimmed[:10], indent=2)
+    logger.info(
+        "Structurer processing %d trimmed items from %d collected",
+        len(trimmed[:10]),
+        len(collected_data),
+    )
 
     user_prompt = STRUCTURER_USER.format(
         natural_language=state["natural_language"],
         data_schema=data_schema,
-        collected_data=json.dumps(collected_data, indent=2),
+        collected_data=data_json,
     )
 
     response = await llm_client.chat.completions.create(
@@ -59,6 +71,7 @@ async def structurer_node(
     )
 
     content = response.choices[0].message.content or ""
+    logger.info("Structurer LLM response: %d chars (first 200: %s)", len(content), content[:200])
     structured_items: list[dict] = []
     errors: list[str] = []
 
@@ -75,7 +88,7 @@ async def structurer_node(
             item.setdefault("source_url", item.get("source_url"))
             item.setdefault("content_type", item.get("content_type", "web_page"))
             item.setdefault("raw_payload", {})
-            item.setdefault("structured_payload", item)
+            # structured_payload defaults to {} on model
 
         structured_items = parsed
         logger.info("Structurer produced %d structured items", len(structured_items))
@@ -83,6 +96,26 @@ async def structurer_node(
         error_msg = f"Structurer failed to parse output: {e}"
         logger.error(error_msg)
         errors.append(error_msg)
+
+    if not structured_items and collected_data:
+        structured_items = []
+        for item in collected_data[:20]:
+            structured_items.append(
+                {
+                    "source_url": item.get("url", ""),
+                    "content_type": "web_page",
+                    "structured_payload": {
+                        "title": item.get("title", ""),
+                        "snippet": (item.get("text", "") or "")[:500],
+                        "url": item.get("url", ""),
+                    },
+                    "raw_payload": item,
+                    "project_id": str(state["project_id"]),
+                    "tenant_id": str(state["tenant_id"]),
+                    "brief_id": str(state["brief_id"]),
+                }
+            )
+        logger.info("Structurer fallback: using %d raw items", len(structured_items))
 
     logger.info("structurer_node completed for brief %s", state.get("brief_id"))
     return {

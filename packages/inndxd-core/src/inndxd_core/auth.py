@@ -2,24 +2,33 @@
 
 from __future__ import annotations
 
+import base64
+import hashlib
+import os
 from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import UUID
 
 import jwt
-from passlib.context import CryptContext  # type: ignore[import-untyped]
 
 from inndxd_core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)  # type: ignore[no-any-return]
+    salt = os.urandom(16)
+    dk = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 600000)
+    return f"pbkdf2_sha256${base64.b64encode(salt).decode()}${base64.b64encode(dk).decode()}"
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)  # type: ignore[no-any-return]
+    try:
+        algo, salt_b64, dk_b64 = hashed_password.split("$")
+        salt = base64.b64decode(salt_b64)
+        expected = base64.b64decode(dk_b64)
+        actual = hashlib.pbkdf2_hmac("sha256", plain_password.encode(), salt, 600000)
+        return actual == expected
+    except (ValueError, base64.binascii.Error):
+        return False
 
 
 def create_access_token(user_id: UUID | str, tenant_id: str | None) -> str:
@@ -34,4 +43,4 @@ def create_access_token(user_id: UUID | str, tenant_id: str | None) -> str:
 
 
 def decode_access_token(token: str) -> dict[str, Any]:
-    return jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])  # type: ignore[no-any-return]
+    return jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])

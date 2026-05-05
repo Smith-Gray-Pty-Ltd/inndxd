@@ -20,7 +20,7 @@ ALLOWED_SORT_COLS = {"content_type", "created_at"}
 
 
 @router.get("/", response_class=HTMLResponse)
-async def list_data_items(request: Request) -> HTMLResponse:
+async def list_data_items(request: Request):
     user = require_ui_user(request)
     templates = request.app.state.templates
     tenant_id = user.get("tenant_id", "00000000-0000-0000-0000-000000000000")
@@ -54,7 +54,7 @@ async def data_item_rows(
     brief_id: str = Query(default=""),
     sort: str = Query(default="created_at"),
     order: str = Query(default="desc"),
-) -> HTMLResponse:
+):
     user = require_ui_user(request)
     templates = request.app.state.templates
 
