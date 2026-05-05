@@ -26,3 +26,5 @@ celery_app.conf.update(
         },
     },
 )
+
+import inndxd_api.tasks  # noqa: E402,F401

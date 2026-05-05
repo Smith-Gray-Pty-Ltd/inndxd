@@ -69,15 +69,29 @@ async def collector_node(state: AgentState) -> dict:
     }
 
 
-async def _search_and_collect(query: str) -> list[dict]:
+async def _search_and_collect(query_raw) -> list[dict]:
+    if isinstance(query_raw, dict):
+        query = query_raw.get("query", str(query_raw))
+        tool_name = query_raw.get("tool")
+    else:
+        query = str(query_raw)
+        tool_name = None
+
     search_tools = get_tools_by_capability("search", "web")
     if not search_tools:
         return []
 
     primary_tool = search_tools[0]
+    if tool_name:
+        for t in search_tools:
+            if t.name == tool_name:
+                primary_tool = t
+                break
+
     try:
         results = await primary_tool.ainvoke({"query": query, "max_results": 5})
-    except Exception:
+    except Exception as exc:
+        logger.warning("Search tool '%s' failed for query '%s': %s", primary_tool.name, query, exc)
         return []
 
     collected: list[dict] = []

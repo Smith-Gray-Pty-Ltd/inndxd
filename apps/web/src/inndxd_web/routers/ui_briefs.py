@@ -19,7 +19,7 @@ router = APIRouter()
 
 
 @router.get("/", response_class=HTMLResponse)
-async def list_briefs(request: Request) -> HTMLResponse:
+async def list_briefs(request: Request):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
@@ -32,7 +32,7 @@ async def list_briefs(request: Request) -> HTMLResponse:
 
 
 @router.get("/create", response_class=HTMLResponse)
-async def create_form(request: Request, project_id: str | None = None) -> HTMLResponse:
+async def create_form(request: Request, project_id: str | None = None):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
@@ -54,7 +54,7 @@ async def create_brief(
     request: Request,
     project_id: str = Form(...),
     natural_language: str = Form(...),
-) -> RedirectResponse | HTMLResponse:
+):
     user = require_ui_user(request)
     templates = request.app.state.templates
 
@@ -114,7 +114,7 @@ async def create_brief(
 
 
 @router.get("/{brief_id}", response_class=HTMLResponse)
-async def brief_detail(request: Request, brief_id: UUID) -> HTMLResponse:
+async def brief_detail(request: Request, brief_id: UUID):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
@@ -139,12 +139,13 @@ async def brief_detail(request: Request, brief_id: UUID) -> HTMLResponse:
             "brief": brief,
             "project": project,
             "data_items": data_items,
+            "status": brief.status,
         },
     )
 
 
 @router.get("/{brief_id}/status-partial", response_class=HTMLResponse)
-async def status_partial(request: Request, brief_id: UUID) -> HTMLResponse:
+async def status_partial(request: Request, brief_id: UUID):
     templates = request.app.state.templates
     async with async_session_factory() as session:
         brief = await session.get(Brief, brief_id)
@@ -157,7 +158,7 @@ async def status_partial(request: Request, brief_id: UUID) -> HTMLResponse:
 
 
 @router.get("/{brief_id}/status-badge", response_class=HTMLResponse)
-async def status_badge(request: Request, brief_id: UUID) -> HTMLResponse:
+async def status_badge(request: Request, brief_id: UUID):
     templates = request.app.state.templates
     async with async_session_factory() as session:
         brief = await session.get(Brief, brief_id)

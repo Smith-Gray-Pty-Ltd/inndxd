@@ -22,7 +22,7 @@ async def _count(model) -> int:
 
 
 @router.get("/", response_class=HTMLResponse)
-async def dashboard_home(request: Request) -> HTMLResponse:
+async def dashboard_home(request: Request):
     templates = request.app.state.templates
     user = get_ui_user(request)
     if not user:

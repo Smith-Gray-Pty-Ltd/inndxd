@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 @router.get("/", response_class=HTMLResponse)
-async def list_projects(request: Request) -> HTMLResponse:
+async def list_projects(request: Request):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
@@ -30,7 +30,7 @@ async def list_projects(request: Request) -> HTMLResponse:
 
 
 @router.get("/create", response_class=HTMLResponse)
-async def create_form(request: Request) -> HTMLResponse:
+async def create_form(request: Request):
     user = require_ui_user(request)
     templates = request.app.state.templates
     return templates.TemplateResponse(
@@ -44,7 +44,7 @@ async def create_project(
     request: Request,
     name: str = Form(...),
     description: str = Form(default=""),
-) -> RedirectResponse:
+):
     user = require_ui_user(request)
     templates = request.app.state.templates
     if not name.strip():
@@ -68,7 +68,7 @@ async def create_project(
 
 
 @router.get("/{project_id}/edit", response_class=HTMLResponse)
-async def edit_form(request: Request, project_id: UUID) -> HTMLResponse:
+async def edit_form(request: Request, project_id: UUID):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:
@@ -87,7 +87,7 @@ async def update_project(
     project_id: UUID,
     name: str = Form(...),
     description: str = Form(default=""),
-) -> RedirectResponse:
+):
     require_ui_user(request)
     async with async_session_factory() as session:
         project = await session.get(Project, project_id)
@@ -100,7 +100,7 @@ async def update_project(
 
 
 @router.delete("/{project_id}")
-async def delete_project(request: Request, project_id: UUID) -> HTMLResponse:
+async def delete_project(request: Request, project_id: UUID):
     require_ui_user(request)
     async with async_session_factory() as session:
         project = await session.get(Project, project_id)
@@ -111,7 +111,7 @@ async def delete_project(request: Request, project_id: UUID) -> HTMLResponse:
 
 
 @router.get("/{project_id}", response_class=HTMLResponse)
-async def project_detail(request: Request, project_id: UUID) -> HTMLResponse:
+async def project_detail(request: Request, project_id: UUID):
     user = require_ui_user(request)
     templates = request.app.state.templates
     async with async_session_factory() as session:

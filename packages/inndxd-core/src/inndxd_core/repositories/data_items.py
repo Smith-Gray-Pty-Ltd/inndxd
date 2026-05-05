@@ -68,6 +68,10 @@ class DataItemRepository:
         return list(result.scalars().all())
 
     async def bulk_insert(self, items: list[dict]) -> list[DataItem]:
-        instances = [DataItem(**item) for item in items]
+        valid_fields = {c.name for c in DataItem.__table__.columns}
+        instances = [
+            DataItem(**{k: v for k, v in item.items() if k in valid_fields})
+            for item in items
+        ]
         self.session.add_all(instances)
         return instances

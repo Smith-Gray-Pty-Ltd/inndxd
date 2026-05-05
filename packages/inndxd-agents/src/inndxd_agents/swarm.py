@@ -3,9 +3,6 @@
 import logging
 from uuid import UUID
 
-from inndxd_core.db import async_session_factory
-from inndxd_core.repositories.data_items import DataItemRepository
-
 from inndxd_agents.graph import build_research_graph
 
 logger = logging.getLogger(__name__)
@@ -61,23 +58,16 @@ async def run_research_swarm(
 
     structured_items = result.get("structured_items", [])
 
-    if structured_items:
-        try:
-            async with async_session_factory() as session:
-                repo = DataItemRepository(session)
-                await repo.bulk_insert(structured_items)
-                await session.commit()
-            logger.info(
-                "Persisted %d structured items for brief %s",
-                len(structured_items),
-                brief_id,
-            )
-        except Exception as exc:
-            logger.error(
-                "Failed to persist structured items for brief %s: %s",
-                brief_id,
-                exc,
-                exc_info=True,
-            )
+    if not structured_items and result.get("collected_data"):
+        structured_items = result["collected_data"]
+        for item in structured_items:
+            item.setdefault("project_id", str(project_id))
+            item.setdefault("tenant_id", str(tenant_id))
+            item.setdefault("brief_id", str(brief_id))
+            item.setdefault("source_url", item.get("url", ""))
+            item.setdefault("content_type", "web_page")
+            item.setdefault("raw_payload", {"text": item.get("text", "")})
+            item.setdefault("structured_payload", item.copy())
+        logger.info("Using raw collected data as fallback (%d items)", len(structured_items))
 
     return structured_items

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi.templating import Jinja2Templates as _Jinja2Templates
 
 from inndxd_web.routers.ui import router as ui_router
 from inndxd_web.routers.ui_admin import router as ui_admin_router
@@ -16,7 +16,26 @@ from inndxd_web.routers.ui_projects import router as ui_projects_router
 TEMPLATES_DIR = Path(__file__).resolve().parent.parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
 
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+_raw = _Jinja2Templates(directory=str(TEMPLATES_DIR))
+
+class Jinja2Templates:
+    def __init__(self, inner):
+        self._inner = inner
+
+    def TemplateResponse(  # noqa: N802
+        self, name, context=None, status_code=200, headers=None, media_type=None):
+        ctx = context or {}
+        request = ctx.get("request")
+        return self._inner.TemplateResponse(
+            request=request,
+            name=name,
+            context=ctx,
+            status_code=status_code,
+            headers=headers,
+            media_type=media_type,
+        )
+
+templates = Jinja2Templates(_raw)
 
 
 def create_app() -> FastAPI:
