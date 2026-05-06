@@ -1,25 +1,28 @@
 {% if status in ('completed', 'failed') %}
-<div hx-swap-oob="true" id="brief-status"
-     hx-trigger="none">
+<div id="brief-status" hx-swap-oob="true" hx-trigger="none">
 {% else %}
-<div id="brief-status" hx-trigger="every 2s">
+<div id="brief-status" hx-trigger="every 2s"
+     hx-get="/ui/briefs/{{ brief_id }}/status-partial"
+     hx-swap="innerHTML">
 {% endif %}
-    <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <div class="flex items-center space-x-4">
-            <h3 class="text-lg font-medium">Status</h3>
-            {% include 'partials/_status_badge.html' %}
+    <div class="card bg-base-100 shadow-sm mb-6">
+        <div class="card-body">
+            <div class="flex items-center gap-3">
+                <h3 class="card-title text-base">Status</h3>
+                {% include 'partials/_status_badge.html' %}
+            </div>
+            {% if status == 'running' %}
+            <div class="mt-3">
+                <progress class="progress progress-warning w-full"></progress>
+                <p class="text-sm text-base-content/60 mt-2">Research in progress — data items will appear as they are processed.</p>
+            </div>
+            {% elif status == 'completed' %}
+            <p class="text-sm text-success mt-2">Research completed successfully.</p>
+            {% elif status == 'failed' %}
+            <p class="text-sm text-error mt-2">Research failed. Please try again or check the logs.</p>
+            {% elif status == 'pending' %}
+            <p class="text-sm text-base-content/60 mt-2">Research queued, waiting to start.</p>
+            {% endif %}
         </div>
-        {% if status == 'running' %}
-        <div class="mt-4">
-            <div class="animate-pulse bg-blue-100 rounded h-2 w-full"></div>
-            <p class="text-sm text-gray-500 mt-2">Research in progress...</p>
-        </div>
-        {% endif %}
-        {% if status == 'completed' %}
-        <p class="text-sm text-green-600 mt-2">Research completed successfully.</p>
-        {% endif %}
-        {% if status == 'failed' %}
-        <p class="text-sm text-red-600 mt-2">Research failed. Please try again.</p>
-        {% endif %}
     </div>
 </div>
