@@ -1,4 +1,28 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: black --default, light;
+  themes: black --default;
+}
+@source "../../templates/";
+
+/* Collapsible sidebar */
+.sidebar-collapsed .sidebar-label { display: none; }
+.sidebar-collapsed .sidebar-tooltip { display: block; }
+.sidebar-tooltip { display: none; }
+.sidebar-collapsed .sidebar-width { width: 3.5rem; }
+.sidebar-width { width: 16rem; }
+@media (min-width: 1024px) {
+  .sidebar-collapsed .sidebar-width { width: 3.5rem; }
+  .sidebar-width { width: 16rem; }
+}
+@source "../../templates/";
+
+/* Collapsible sidebar — icon-only when .sidebar-collapsed */
+.sidebar-collapsed .sidebar-label { display: none; }
+.sidebar-collapsed .sidebar-tooltip { display: block; }
+.sidebar-tooltip { display: none; }
+.sidebar-collapsed .sidebar-width { width: 3.5rem; }
+.sidebar-width { width: 16rem; }
+@media (min-width: 1024px) {
+  .sidebar-collapsed .sidebar-width { width: 3.5rem; }
+  .sidebar-width { width: 16rem; }
 }
