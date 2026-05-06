@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from inndxd_core.db import async_session_factory
 from inndxd_core.models.brief import Brief
 from inndxd_core.models.project import Project
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from inndxd_web.auth import require_ui_user
 
@@ -23,6 +23,11 @@ async def list_projects(request: Request):
     async with async_session_factory() as session:
         result = await session.execute(select(Project).order_by(Project.created_at.desc()))
         projects = list(result.scalars().all())
+        for p in projects:
+            count = await session.scalar(
+                select(func.count()).select_from(Brief).where(Brief.project_id == p.id)
+            )
+            p.brief_count = count or 0
     return templates.TemplateResponse(
         "projects/list.html",
         {"request": request, "user": user, "projects": projects},
@@ -50,7 +55,13 @@ async def create_project(
     if not name.strip():
         return templates.TemplateResponse(
             "projects/create.html",
-            {"request": request, "user": user, "error": "Name is required"},
+            {
+                "request": request,
+                "user": user,
+                "error": "Name is required",
+                "name": name,
+                "description": description,
+            },
             status_code=400,
         )
     tenant_id = user.get("tenant_id")
