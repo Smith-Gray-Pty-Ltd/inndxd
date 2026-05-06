@@ -14,6 +14,9 @@ pip-wheel-metadata/
 .venv/
 uv.lock
 
+# Node
+node_modules/
+
 # Environments
 .env
 .env.local

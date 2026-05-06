@@ -1,0 +1,13 @@
+{
+  "name": "inndxd-web",
+  "private": true,
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./static/css/bundle.css --minify",
+    "watch:css": "npx @tailwindcss/cli -i ./src/css/input.css -o ./static/css/bundle.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "daisyui": "^5.0.27",
+    "tailwindcss": "^4.1.17"
+  }
+}
