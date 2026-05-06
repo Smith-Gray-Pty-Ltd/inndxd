@@ -1,0 +1,12 @@
+{% if messages %}
+{% for msg in messages %}
+{% with role=msg.role, content=msg.content, timestamp=msg.timestamp, avatar=msg.avatar %}
+{% include 'partials/_chat_message.html' %}
+{% endwith %}
+{% endfor %}
+{% else %}
+<div class="text-center text-base-content/50 py-8">
+    <p class="text-lg mb-2">No messages yet</p>
+    <p class="text-sm">Start the conversation to define your research goals.</p>
+</div>
+{% endif %}
