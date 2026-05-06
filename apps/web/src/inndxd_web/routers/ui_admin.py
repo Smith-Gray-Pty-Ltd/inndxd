@@ -25,13 +25,21 @@ async def _require_admin(request: Request) -> dict | HTMLResponse:
         db_user = await session.get(User, UUID(user["sub"]))
         if not db_user or not db_user.is_admin:
             return HTMLResponse(
-                '<html><body style="font-family:sans-serif;display:flex;align-items:center;'
-                'justify-content:center;height:100vh;background:#f3f4f6">'
-                '<div style="text-align:center">'
-                '<h1 style="font-size:4rem;color:#dc2626;margin:0">403</h1>'
-                '<p style="color:#6b7280">Admin access required</p>'
-                '<a href="/ui" style="color:#2563eb">Back to Dashboard</a>'
-                "</div></body></html>",
+                '<!DOCTYPE html><html lang="en" data-theme="black">'
+                '<head><meta charset="UTF-8">'
+                '<meta name="viewport" content="width=device-width,initial-scale=1.0">'
+                '<link href="https://cdn.jsdelivr.net/npm/daisyui@5/dist/full.css"'
+                ' rel="stylesheet">'
+                '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">'
+                "</script>"
+                "</head>"
+                '<body class="min-h-screen bg-base-200 flex items-center justify-center">'
+                '<div class="card bg-base-100 shadow-sm">'
+                '<div class="card-body items-center text-center">'
+                '<h1 class="text-6xl font-bold text-error mb-2">403</h1>'
+                '<p class="text-base-content/60 mb-4">Admin access required</p>'
+                '<a href="/ui" class="btn btn-primary btn-sm">Back to Dashboard</a>'
+                "</div></div></body></html>",
                 status_code=403,
             )
     user["admin"] = True
@@ -150,12 +158,9 @@ async def provider_health_badge(request: Request, provider_id: UUID):
         healthy = False
     latency = int((time.monotonic() - start) * 1000)
 
-    badge = "bg-green-100 text-green-800" if healthy else "bg-red-100 text-red-800"
+    badge_cls = "badge badge-success badge-sm" if healthy else "badge badge-error badge-sm"
     label = f"Healthy ({latency}ms)" if healthy else "Unhealthy"
-    return HTMLResponse(
-        f'<span class="inline-flex items-center px-2 py-0.5 '
-        f'rounded text-xs font-medium {badge}">{label}</span>'
-    )
+    return HTMLResponse(f'<span class="{badge_cls}">{label}</span>')
 
 
 @router.get("/api-keys", response_class=HTMLResponse)
