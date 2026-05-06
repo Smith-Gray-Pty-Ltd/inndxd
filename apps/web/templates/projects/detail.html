@@ -2,55 +2,83 @@
 {% block title %}{{ project.name }} — Inndxd{% endblock %}
 {% block page_title %}{{ project.name }}{% endblock %}
 {% block content %}
-<div class="mb-8 bg-white rounded-lg shadow p-6">
-    <div class="flex justify-between items-start">
-        <div>
-            <p class="text-gray-500">{{ project.description or "No description" }}</p>
-            <p class="text-sm text-gray-400 mt-2">Created {{ project.created_at.strftime('%Y-%m-%d') }}</p>
-        </div>
-        <div class="flex space-x-2">
-            <a href="/ui/projects/{{ project.id }}/edit" class="px-3 py-1 border rounded text-sm text-gray-600 hover:bg-gray-50">Edit</a>
-            <a href="/ui/briefs/create?project_id={{ project.id }}" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">New Brief</a>
-        </div>
-    </div>
+
+<div class="flex gap-3 mb-6">
+    <a href="/ui/projects/{{ project.id }}/edit" class="btn btn-ghost btn-sm">Edit</a>
+    <button class="btn btn-ghost btn-sm text-error" onclick="document.getElementById('delete-project-modal').showModal()">Delete</button>
+    <a href="/ui/briefs/create?project_id={{ project.id }}" class="btn btn-primary btn-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        New Brief
+    </a>
 </div>
+
+{% if project.description %}
+<div class="bg-base-100 rounded-box shadow-sm p-4 mb-6">
+    <p class="text-sm text-base-content/70">{{ project.description }}</p>
+</div>
+{% endif %}
 
 <h2 class="text-lg font-semibold mb-4">Briefs</h2>
 {% if briefs %}
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+<div class="bg-base-100 rounded-box shadow-sm overflow-hidden">
+    <table class="table">
+        <thead>
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Query</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th>Brief</th>
+                <th>Status</th>
+                <th>Created</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
+        <tbody>
             {% for brief in briefs %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm">{{ brief.natural_language[:80] }}{% if brief.natural_language|length > 80 %}...{% endif %}</td>
-                <td class="px-6 py-4">
-                    <div hx-get="/ui/briefs/{{ brief.id }}/status-badge"
-                         hx-trigger="every 2s"
-                         hx-swap="innerHTML">
-                        {% include 'partials/_status_badge.html' %}
-                    </div>
+            <tr>
+                <td>
+                    <a href="/ui/briefs/{{ brief.id }}" class="link link-hover">
+                        {{ brief.natural_language[:80] }}{% if brief.natural_language|length > 80 %}...{% endif %}
+                    </a>
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ brief.created_at.strftime('%Y-%m-%d') }}</td>
-                <td class="px-6 py-4 text-right">
-                    <a href="/ui/briefs/{{ brief.id }}" class="text-blue-600 hover:underline text-sm">View</a>
+                <td>
+                    {% if brief.status == 'completed' %}
+                    <span class="badge badge-success badge-sm">Done</span>
+                    {% elif brief.status == 'running' %}
+                    <span class="badge badge-warning badge-sm">Running</span>
+                    {% elif brief.status == 'failed' %}
+                    <span class="badge badge-error badge-sm">Failed</span>
+                    {% else %}
+                    <span class="badge badge-ghost badge-sm">Pending</span>
+                    {% endif %}
                 </td>
+                <td class="text-sm opacity-50">{{ brief.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow p-8 text-center">
-    <p class="text-gray-500 mb-4">No briefs yet for this project.</p>
-    <a href="/ui/briefs/create?project_id={{ project.id }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create your first brief</a>
-</div>
+{% with title="No briefs yet", message="Create your first research brief for this project.", action_url="/ui/briefs/create?project_id=" + project.id|string, action_label="Create Brief", icon="📋" %}
+{% include 'partials/_empty_state.html' %}
 {% endif %}
+
+<dialog id="delete-project-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Delete Project</h3>
+        <p class="py-4">Are you sure you want to delete "{{ project.name }}"? This will also remove all briefs and data items in this project.</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost btn-sm">Cancel</button>
+            </form>
+            <button class="btn btn-error btn-sm"
+                    hx-delete="/ui/projects/{{ project.id }}"
+                    hx-target="body"
+                    hx-swap="outerHTML"
+                    onclick="this.closest('dialog').close()">
+                Delete
+            </button>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
 {% endblock %}

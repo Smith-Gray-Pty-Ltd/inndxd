@@ -2,46 +2,36 @@
 {% block title %}Projects — Inndxd{% endblock %}
 {% block page_title %}Projects{% endblock %}
 {% block content %}
-<div class="mb-6 flex justify-between">
-    <p class="text-gray-500">{{ projects|length }} project(s)</p>
-    <a href="/ui/projects/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create Project</a>
+
+<div class="flex justify-between items-center mb-6">
+    <p class="text-base-content/60">{{ projects|length }} project{% if projects|length != 1 %}s{% endif %}</p>
+    <a href="/ui/projects/create" class="btn btn-primary btn-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        New Project
+    </a>
 </div>
 
 {% if projects %}
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            {% for project in projects %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap font-medium">{{ project.name }}</td>
-                <td class="px-6 py-4 text-gray-500 truncate max-w-xs">{{ project.description or "—" }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ project.created_at.strftime('%Y-%m-%d') }}</td>
-                <td class="px-6 py-4 text-right space-x-2">
-                    <a href="/ui/projects/{{ project.id }}" class="text-blue-600 hover:underline text-sm">View</a>
-                    <a href="/ui/projects/{{ project.id }}/edit" class="text-gray-600 hover:underline text-sm">Edit</a>
-                    <button hx-delete="/ui/projects/{{ project.id }}"
-                            hx-confirm="Delete this project?"
-                            hx-target="closest tr"
-                            hx-swap="outerHTML swap:1s"
-                            class="text-red-600 hover:underline text-sm">Delete</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for project in projects %}
+    <a href="/ui/projects/{{ project.id }}" class="card bg-base-100 shadow-sm hover:shadow-md transition-shadow">
+        <div class="card-body">
+            <h3 class="card-title text-lg">{{ project.name }}</h3>
+            {% if project.description %}
+            <p class="text-sm text-base-content/60">{{ project.description|truncate(120) }}</p>
+            {% endif %}
+            <div class="card-actions justify-between items-center mt-2">
+                <span class="text-xs text-base-content/40">{{ project.created_at.strftime('%Y-%m-%d') }}</span>
+                <span class="text-xs text-base-content/40">{{ project.brief_count|default(0) }} briefs</span>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow p-12 text-center">
-    <p class="text-gray-500 text-lg mb-4">No projects yet.</p>
-    <a href="/ui/projects/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create your first project</a>
-</div>
+{% with title="No projects yet", message="Create a project to organize your research briefs.", action_url="/ui/projects/create", action_label="Create Project", icon="📁" %}
+{% include 'partials/_empty_state.html' %}
+{% endwith %}
 {% endif %}
+
 {% endblock %}

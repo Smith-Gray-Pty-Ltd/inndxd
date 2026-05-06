@@ -1,14 +1,21 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Projects</p>
-        <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.projects }}</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Projects</div>
+        <div class="stat-value text-primary">{{ stats.projects }}</div>
+        <div class="stat-desc">Active research projects</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Briefs</p>
-        <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.briefs }}</p>
+    <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Briefs</div>
+        <div class="stat-value text-secondary">{{ stats.briefs }}</div>
+        <div class="stat-desc">
+            {% if stats.completed_briefs is defined %}
+            {{ stats.completed_briefs }} completed{% if stats.running_briefs %}, {{ stats.running_briefs }} running{% endif %}
+            {% endif %}
+        </div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-sm text-gray-500 uppercase tracking-wide">Data Items</p>
-        <p class="text-3xl font-bold text-purple-600 mt-2">{{ stats.data_items }}</p>
+    <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Data Items</div>
+        <div class="stat-value text-accent">{{ stats.data_items }}</div>
+        <div class="stat-desc">Collected and structured</div>
     </div>
 </div>
