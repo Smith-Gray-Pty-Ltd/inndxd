@@ -42,6 +42,7 @@ async def login_post(
                     "request": request,
                     "user": None,
                     "error": "Invalid email or password",
+                    "email": email,
                 },
                 status_code=401,
             )
@@ -52,6 +53,7 @@ async def login_post(
                     "request": request,
                     "user": None,
                     "error": "Account is disabled",
+                    "email": email,
                 },
                 status_code=403,
             )
@@ -89,6 +91,7 @@ async def register_post(
                     "request": request,
                     "user": None,
                     "error": "Email already registered",
+                    "email": email,
                 },
                 status_code=409,
             )
@@ -99,6 +102,7 @@ async def register_post(
                     "request": request,
                     "user": None,
                     "error": "Password must be at least 8 characters",
+                    "email": email,
                 },
                 status_code=400,
             )
