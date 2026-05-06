@@ -2,34 +2,45 @@
 {% block title %}Create Brief — Inndxd{% endblock %}
 {% block page_title %}Create Brief{% endblock %}
 {% block content %}
-<div class="max-w-2xl bg-white rounded-lg shadow p-8">
-    {% if error %}
-    <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">{{ error }}</div>
-    {% endif %}
-    <form method="POST" action="/ui/briefs/create" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Project *</label>
-            <select name="project_id" required
-                    class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Select a project...</option>
-                {% for project in projects %}
-                <option value="{{ project.id }}" {% if selected_project_id == project.id|string %}selected{% endif %}>
-                    {{ project.name }}
-                </option>
-                {% endfor %}
-            </select>
+
+<div class="max-w-2xl">
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            {% if error %}
+            <div role="alert" class="alert alert-error mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/ui/briefs/create">
+                <fieldset class="fieldset">
+                    <label class="fieldset-label">Project <span class="text-error">*</span></label>
+                    <select name="project_id" class="select w-full" required>
+                        <option value="">Select a project...</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}" {% if selected_project_id == project.id|string %}selected{% endif %}>
+                            {{ project.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
+                <fieldset class="fieldset mt-3">
+                    <label class="fieldset-label">Research Query <span class="text-error">*</span></label>
+                    <textarea name="natural_language" class="textarea w-full" rows="4" placeholder="Describe what you want to research... Be specific about the data you need." required minlength="10">{{ natural_language or "" }}</textarea>
+                    <span class="fieldset-label justify-end">
+                        {{ natural_language|length if natural_language else 0 }}/10 min
+                    </span>
+                </fieldset>
+                <div class="card-actions mt-6">
+                    <a href="/ui/briefs" class="btn btn-ghost">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        Create &amp; Run
+                    </button>
+                </div>
+            </form>
         </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Natural Language Query *</label>
-            <textarea name="natural_language" rows="5" required minlength="10"
-                      placeholder="Describe what you want to research..."
-                      class="mt-1 block w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500">{{ natural_language or "" }}</textarea>
-            <p class="text-xs text-gray-400 mt-1">Minimum 10 characters. Be specific about what data you need.</p>
-        </div>
-        <div class="flex space-x-4">
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create & Run</button>
-            <a href="/ui/projects" class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50">Cancel</a>
-        </div>
-    </form>
+    </div>
 </div>
+
 {% endblock %}
