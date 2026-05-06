@@ -294,3 +294,58 @@ async def brief_chat_run(
         )
 
     return RedirectResponse(url=f"/ui/briefs/{brief.id}", status_code=303)
+
+
+@router.post("/{brief_id}/refine")
+async def refine_brief(request: Request, brief_id: UUID):
+    user = require_ui_user(request)
+
+    tenant_id = user.get("tenant_id", "00000000-0000-0000-0000-000000000000")
+
+    async with async_session_factory() as session:
+        parent = await session.get(Brief, brief_id)
+        if not parent:
+            return HTMLResponse("Brief not found", status_code=404)
+
+        parent.is_active = False
+
+        new_brief = Brief(
+            tenant_id=UUID(tenant_id),
+            project_id=parent.project_id,
+            natural_language=parent.natural_language,
+            status="pending",
+            config=parent.config.copy() if parent.config else {},
+            version=parent.version + 1,
+            is_active=True,
+            parent_brief_id=parent.id,
+        )
+        session.add(new_brief)
+        await session.commit()
+        await session.refresh(new_brief)
+
+        brief_version_id = new_brief.id
+
+    return RedirectResponse(
+        url=f"/ui/briefs/{brief_version_id}/edit-chat", status_code=303
+    )
+
+
+@router.get("/{brief_id}/edit-chat", response_class=HTMLResponse)
+async def brief_edit_chat(request: Request, brief_id: UUID):
+    user = require_ui_user(request)
+    templates = request.app.state.templates
+    async with async_session_factory() as session:
+        brief = await session.get(Brief, brief_id)
+        if not brief:
+            return HTMLResponse("Brief not found", status_code=404)
+        project = await session.get(Project, brief.project_id)
+    return templates.TemplateResponse(
+        "briefs/chat.html",
+        {
+            "request": request,
+            "user": user,
+            "project": project,
+            "brief": brief,
+            "mode": "edit",
+        },
+    )
