@@ -47,7 +47,6 @@ pgdata/
 htmlcov/
 .tox/
 
-# OpenCode
-.opencode/
-plan/**
-opencode.json
+# Dev-only (gated behind INNDXD_DEV_MODE)
+apps/web/src/inndxd_web/routers/_design.py
+apps/web/templates/design/

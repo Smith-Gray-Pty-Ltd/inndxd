@@ -1,5 +1,6 @@
 """Inndxd Web Dashboard application."""
 
+import os
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -54,6 +55,11 @@ def create_app() -> FastAPI:
     app.include_router(ui_chat_router, prefix="/ui/chat", tags=["ui-chat"])
     app.include_router(ui_data_items_router, prefix="/ui/data-items", tags=["ui-data-items"])
     app.include_router(ui_projects_router, prefix="/ui/projects", tags=["ui-projects"])
+
+    if os.getenv("INNDXD_DEV_MODE", "").lower() in ("1", "true", "yes"):
+        from inndxd_web.routers._design import router as design_router
+
+        app.include_router(design_router, prefix="/ui/design", tags=["dev"])
 
     return app
 

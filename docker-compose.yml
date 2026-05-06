@@ -55,6 +55,7 @@ services:
       INNDXD_DATABASE_URL: postgresql+asyncpg://inndxd:inndxd@postgres:5432/inndxd
       INNDXD_REDIS_URL: redis://redis:6379/0
       INNDXD_LOG_LEVEL: INFO
+      INNDXD_DEV_MODE: "true"
     depends_on:
       postgres:
         condition: service_healthy
