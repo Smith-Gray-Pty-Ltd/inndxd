@@ -2,62 +2,55 @@
 {% block title %}LLM Providers — Inndxd{% endblock %}
 {% block page_title %}LLM Providers{% endblock %}
 {% block content %}
-<div class="mb-6 flex justify-between">
-    <p class="text-gray-500">{{ providers|length }} provider(s)</p>
-    <a href="/ui/admin/providers/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add Provider</a>
+
+<div class="flex justify-between items-center mb-6">
+    <p class="text-base-content/60">{{ providers|length }} provider{% if providers|length != 1 %}s{% endif %}</p>
+    <a href="/ui/admin/providers/create" class="btn btn-primary btn-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Add Provider
+    </a>
 </div>
 
 {% if providers %}
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Base URL</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Default Model</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Active</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priority</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Health</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            {% for p in providers %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-sm">{{ p.name }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ p.provider_type }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ p.base_url|truncate(40) }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ p.default_model }}</td>
-                <td class="px-6 py-4">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if p.is_active %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
-                        {{ "Active" if p.is_active else "Inactive" }}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ p.priority }}</td>
-                <td class="px-6 py-4">
-                    <div hx-get="/ui/admin/providers/{{ p.id }}/health"
-                         hx-trigger="load, every 30s"
-                         hx-swap="innerHTML">
-                        <span class="text-gray-400 text-xs">Checking...</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <button hx-delete="/ui/admin/providers/{{ p.id }}"
-                            hx-confirm="Delete {{ p.name }}?"
-                            hx-target="closest tr"
-                            hx-swap="outerHTML swap:1s"
-                            class="text-red-600 hover:underline text-sm">Delete</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for provider in providers %}
+    <div class="card bg-base-100 shadow-sm">
+        <div class="card-body">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="card-title text-base">{{ provider.name }}</h3>
+                    <p class="text-xs text-base-content/40 font-mono mt-1">{{ provider.base_url }}</p>
+                </div>
+                <span id="health-{{ provider.id }}"
+                      hx-get="/ui/admin/providers/{{ provider.id }}/health"
+                      hx-trigger="load"
+                      hx-swap="innerHTML"
+                      class="badge badge-ghost badge-sm">checking...</span>
+            </div>
+            <div class="text-sm space-y-1 mt-2">
+                <div><span class="text-base-content/50">Type:</span> {{ provider.provider_type }}</div>
+                <div><span class="text-base-content/50">Model:</span> {{ provider.default_model }}</div>
+                {% if provider.available_models %}
+                <div><span class="text-base-content/50">Models:</span> {{ provider.available_models|join(', ') }}</div>
+                {% endif %}
+                <div><span class="text-base-content/50">Priority:</span> {{ provider.priority }}</div>
+            </div>
+            <div class="card-actions justify-end mt-3">
+                <button class="btn btn-ghost btn-xs text-error"
+                        hx-delete="/ui/admin/providers/{{ provider.id }}"
+                        hx-target="closest .card"
+                        hx-swap="outerHTML">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow p-12 text-center">
-    <p class="text-gray-500 text-lg mb-4">No providers configured.</p>
-    <a href="/ui/admin/providers/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add your first provider</a>
-</div>
+{% with title="No LLM providers", message="Add a provider to enable AI-powered research.", action_url="/ui/admin/providers/create", action_label="Add Provider", icon="🤖" %}
+{% include 'partials/_empty_state.html' %}
+{% endwith %}
 {% endif %}
+
 {% endblock %}

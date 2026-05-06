@@ -2,59 +2,47 @@
 {% block title %}API Keys — Inndxd{% endblock %}
 {% block page_title %}API Keys{% endblock %}
 {% block content %}
-<div class="mb-6 flex justify-between">
-    <p class="text-gray-500">{{ api_keys|length }} key(s)</p>
-    <button onclick="document.getElementById('create-key-form').classList.toggle('hidden')"
-            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create Key</button>
-</div>
 
-<div id="create-key-form" class="hidden mb-6 bg-white rounded-lg shadow p-6">
-    <h3 class="font-medium mb-3">Create New API Key</h3>
-    <form hx-post="/ui/admin/api-keys/create"
-          hx-target="#key-created-modal"
-          hx-swap="innerHTML"
-          class="flex space-x-4">
-        <input type="text" name="name" required placeholder="Key name..."
-               class="flex-1 border rounded p-2 focus:ring-blue-500 focus:border-blue-500">
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Generate</button>
-        <button type="button" onclick="this.closest('#create-key-form').classList.add('hidden')"
-                class="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50">Cancel</button>
-    </form>
-    <div id="key-created-modal"></div>
+<div class="flex justify-between items-center mb-6">
+    <p class="text-base-content/60">{{ api_keys|length }} key{% if api_keys|length != 1 %}s{% endif %}</p>
+    <button class="btn btn-primary btn-sm" onclick="document.getElementById('create-key-modal').showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Create Key
+    </button>
 </div>
 
 {% if api_keys %}
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+<div class="bg-base-100 rounded-box shadow-sm overflow-hidden">
+    <table class="table">
+        <thead>
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prefix</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Active</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Used</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th>Name</th>
+                <th>Prefix</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th></th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
-            {% for k in api_keys %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm font-mono">{{ k.key_prefix }}</td>
-                <td class="px-6 py-4 text-sm font-medium">{{ k.name }}</td>
-                <td class="px-6 py-4">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if k.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                        {{ "Active" if k.is_active else "Revoked" }}
-                    </span>
+        <tbody>
+            {% for key in api_keys %}
+            <tr>
+                <td class="font-medium">{{ key.name }}</td>
+                <td><code class="text-xs bg-base-200 px-1 py-0.5 rounded">{{ key.key_prefix }}</code></td>
+                <td>
+                    {% if key.is_active %}
+                    <span class="badge badge-success badge-sm">Active</span>
+                    {% else %}
+                    <span class="badge badge-error badge-sm">Revoked</span>
+                    {% endif %}
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ k.created_at.strftime('%Y-%m-%d') }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ k.last_used_at.strftime('%Y-%m-%d') if k.last_used_at else "—" }}</td>
-                <td class="px-6 py-4 text-right space-x-2">
-                    {% if k.is_active %}
-                    <button hx-post="/ui/admin/api-keys/{{ k.id }}/revoke"
-                            hx-confirm="Revoke this key?"
-                            hx-target="closest tr"
-                            hx-swap="outerHTML swap:1s"
-                            class="text-red-600 hover:underline text-sm">Revoke</button>
+                <td class="text-sm opacity-50">{{ key.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    {% if key.is_active %}
+                    <button class="btn btn-ghost btn-xs text-error"
+                            hx-post="/ui/admin/api-keys/{{ key.id }}/revoke"
+                            hx-swap="none">
+                        Revoke
+                    </button>
                     {% endif %}
                 </td>
             </tr>
@@ -63,10 +51,35 @@
     </table>
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow p-12 text-center">
-    <p class="text-gray-500 text-lg mb-4">No API keys configured.</p>
-    <button onclick="document.getElementById('create-key-form').classList.remove('hidden')"
-            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create your first key</button>
-</div>
+{% with title="No API keys", message="Create an API key to allow programmatic access to the API.", action_label="Create Key", icon="🔑" %}
+{% include 'partials/_empty_state.html' %}
+{% endwith %}
 {% endif %}
+
+<div id="key-result"></div>
+
+<dialog id="create-key-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Create API Key</h3>
+        <form hx-post="/ui/admin/api-keys/create"
+              hx-target="#key-result"
+              hx-swap="innerHTML"
+              hx-on::after-request="if(event.detail.successful) this.closest('dialog').close()">
+            <fieldset class="fieldset mt-4">
+                <label class="fieldset-label">Key Name</label>
+                <input type="text" name="name" class="input w-full" placeholder="e.g. Production Server" required autofocus>
+            </fieldset>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn btn-ghost btn-sm">Cancel</button>
+                </form>
+                <button type="submit" class="btn btn-primary btn-sm">Create</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
 {% endblock %}

@@ -1,63 +1,52 @@
 {% extends "base.html" %}
-{% block title %}Audit Logs — Inndxd{% endblock %}
-{% block page_title %}Audit Logs{% endblock %}
+{% block title %}Audit Log — Inndxd{% endblock %}
+{% block page_title %}Audit Log{% endblock %}
 {% block content %}
-<div class="mb-6 flex space-x-4">
-    <select name="event_type" hx-get="/ui/admin/audit-logs" hx-target="#audit-content"
-            class="border rounded p-2" hx-swap="innerHTML">
-        <option value="">All Event Types</option>
-        {% for et in event_types %}
-        <option value="{{ et }}" {% if et == current_event_type %}selected{% endif %}>{{ et }}</option>
-        {% endfor %}
-    </select>
-    <p class="text-gray-500 self-center">{{ logs|length }} entries</p>
+
+<div class="card bg-base-100 shadow-sm mb-6">
+    <div class="card-body">
+        <form method="GET" action="/ui/admin/audit-logs" class="flex gap-4 items-end flex-wrap">
+            <fieldset class="fieldset">
+                <label class="fieldset-label">Event Type</label>
+                <select name="event_type" class="select select-sm" onchange="this.form.submit()">
+                    <option value="">All events</option>
+                    {% for et in event_types %}
+                    <option value="{{ et }}" {% if current_event_type == et %}selected{% endif %}>{{ et }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
-<div id="audit-content">
-{% if logs %}
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+<div class="bg-base-100 rounded-box shadow-sm overflow-hidden">
+    <table class="table">
+        <thead>
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Event</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actor</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Actor</th>
+                <th>Details</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
+        <tbody>
             {% for log in logs %}
-            <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                <td class="px-6 py-4 text-sm">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">{{ log.event_type }}</span>
+            <tr>
+                <td class="text-sm opacity-50 whitespace-nowrap">{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>
+                    {% set event_colors = {'user.login': 'badge-info', 'user.logout': 'badge-ghost', 'brief.created': 'badge-primary', 'brief.completed': 'badge-success', 'brief.failed': 'badge-error', 'provider.created': 'badge-warning', 'provider.deleted': 'badge-error', 'api_key.created': 'badge-warning', 'api_key.revoked': 'badge-error'} %}
+                    <span class="badge badge-sm {{ event_colors.get(log.event_type, 'badge-ghost') }}">{{ log.event_type }}</span>
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ log.actor }}</td>
-                <td class="px-6 py-4">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if log.status == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                        {{ log.status }}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs">
-                    {% if log.details %}
-                    <details>
-                        <summary class="cursor-pointer text-blue-600 hover:underline">Show</summary>
-                        <pre class="mt-2 text-xs bg-gray-50 p-2 rounded overflow-auto max-h-40">{{ log.details|tojson(indent=2) }}</pre>
-                    </details>
-                    {% else %}
-                    <span class="text-gray-400">—</span>
-                    {% endif %}
-                </td>
+                <td class="text-sm">{{ log.actor_id or 'system' }}</td>
+                <td class="text-sm opacity-70 max-w-xs truncate" title="{{ log.details }}">{{ log.details or '—' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="text-center py-8 text-base-content/50">No audit log entries found.</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-{% else %}
-<div class="bg-white rounded-lg shadow p-12 text-center">
-    <p class="text-gray-500 text-lg">No audit log entries found.</p>
-</div>
-{% endif %}
-</div>
+
 {% endblock %}
