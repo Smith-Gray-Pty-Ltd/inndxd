@@ -22,7 +22,7 @@ async def _update_brief_status(brief_id: UUID, status: str) -> None:
         await conn.close()
 
 
-@celery_app.task(bind=True, max_retries=3, default_retry_delay=60)
+@celery_app.task(bind=True, max_retries=3, default_retry_delay=60, soft_time_limit=540, time_limit=600)
 def run_research_task(
     self, brief_id_str: str, tenant_id_str: str, project_id_str: str, natural_language: str
 ):

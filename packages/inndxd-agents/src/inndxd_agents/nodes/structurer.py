@@ -81,14 +81,26 @@ async def structurer_node(
         if not isinstance(parsed, list):
             raise ValueError(f"Expected JSON array, got {type(parsed).__name__}")
 
+        _meta_keys = {
+            "project_id",
+            "tenant_id",
+            "brief_id",
+            "source_url",
+            "content_type",
+            "raw_payload",
+            "structured_payload",
+        }
         for item in parsed:
             item.setdefault("project_id", str(state["project_id"]))
             item.setdefault("tenant_id", str(state["tenant_id"]))
             item.setdefault("brief_id", str(state["brief_id"]))
             item.setdefault("source_url", item.get("source_url"))
             item.setdefault("content_type", item.get("content_type", "web_page"))
-            item.setdefault("raw_payload", {})
-            # structured_payload defaults to {} on model
+            item.setdefault("raw_payload", item.copy())
+            item.setdefault(
+                "structured_payload",
+                {k: v for k, v in item.items() if k not in _meta_keys and v is not None},
+            )
 
         structured_items = parsed
         logger.info("Structurer produced %d structured items", len(structured_items))
