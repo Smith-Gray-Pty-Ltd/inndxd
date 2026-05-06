@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}New Brief — Inndxd{% endblock %}
+{% block page_title %}New Brief{% endblock %}
+{% block content %}
+
+<div class="flex gap-4 h-[calc(100vh-12rem)]">
+    <div class="flex-1">
+        {% with post_url="/ui/chat/send", target="#chat-messages", sse_url="/ui/chat/stream?project_id=" + project.id|string + "&mode=brief_setup", status_text="Connected" %}
+        {% include 'partials/_chat_container.html' %}
+        {% endwith %}
+    </div>
+    <div class="w-80 flex-shrink-0 space-y-4">
+        <div class="card bg-base-100 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title text-base">{{ project.name }}</h3>
+                {% if project.description %}
+                <p class="text-sm text-base-content/60">{{ project.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-sm" id="brief-config-panel">
+            <div class="card-body p-3">
+                <p class="text-xs text-base-content/50 mb-2">Brief Configuration</p>
+                <div id="brief-config-preview" class="text-xs space-y-1">
+                    <span class="text-base-content/30">Waiting for schema definition...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-sm">
+            <div class="card-body p-3">
+                <button id="run-research-btn"
+                        class="btn btn-primary btn-sm w-full"
+                        disabled
+                        hx-post="/ui/briefs/create/chat/run"
+                        hx-include="#brief-config-preview"
+                        hx-swap="none">
+                    Run Research
+                </button>
+                <p class="text-xs text-base-content/40 text-center mt-1">
+                    Define your data schema first
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    htmx.ajax('GET', '/ui/chat/history?project_id={{ project.id }}', {
+        target: '#chat-messages',
+        swap: 'innerHTML'
+    });
+});
+</script>
+
+{% endblock %}
