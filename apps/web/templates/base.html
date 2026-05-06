@@ -36,11 +36,11 @@
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
                             <div class="bg-neutral text-neutral-content rounded-full w-8">
-                                <span class="text-xs">{{ user.email[:1].upper() }}</span>
+                                <span class="text-xs">{{ user.get("email", "?")[0].upper() }}</span>
                             </div>
                         </label>
                         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3 z-50">
-                            <li class="menu-title text-xs opacity-50">{{ user.email }}</li>
+                            <li class="menu-title text-xs opacity-50">{{ user.get("email", "?") }}</li>
                             <li><a href="/ui/auth/logout" class="text-error">Logout</a></li>
                         </ul>
                     </div>
@@ -62,11 +62,11 @@
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
                             <div class="bg-neutral text-neutral-content rounded-full w-8">
-                                <span class="text-xs">{{ user.email[:1].upper() }}</span>
+                                <span class="text-xs">{{ user.get("email", "?")[0].upper() }}</span>
                             </div>
                         </label>
                         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3 z-50">
-                            <li class="menu-title text-xs opacity-50">{{ user.email }}</li>
+                            <li class="menu-title text-xs opacity-50">{{ user.get("email", "?") }}</li>
                             <li><a href="/ui/auth/logout" class="text-error">Logout</a></li>
                         </ul>
                     </div>
