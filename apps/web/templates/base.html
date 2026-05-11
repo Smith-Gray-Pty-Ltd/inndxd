@@ -18,6 +18,7 @@
                     <label for="drawer-toggle" class="btn btn-ghost btn-square drawer-button lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
                     </label>
+                    {% block header_left %}{% endblock %}
                 </div>
                 <div class="flex-1">
                     <h1 class="text-lg font-semibold px-2">{% block page_title %}Dashboard{% endblock %}</h1>
@@ -41,14 +42,17 @@
                 </div>
             </header>
 
+            {% block main %}
             <main class="flex-1 overflow-auto p-6 min-h-0">
                 {% block content %}{% endblock %}
             </main>
+            {% endblock %}
         </div>
 
         <div class="drawer-side z-40">
             <label for="drawer-toggle" aria-label="close sidebar" class="drawer-overlay"></label>
-            <aside class="bg-base-200 w-64 min-h-full flex flex-col">
+            {% block sidebar %}
+            <aside class="bg-base-100 w-64 min-h-full flex flex-col">
                 <div class="px-4 py-4 border-b border-base-content/10">
                     <a href="/ui" class="text-lg font-bold">Inndxd</a>
                 </div>
@@ -106,6 +110,7 @@
                     v{{ version }}
                 </div>
             </aside>
+            {% endblock %}
         </div>
     </div>
 </body>
