@@ -169,14 +169,19 @@ inndxd/
 │   └── web/                            # Dashboard UI — Port 8080
 │       ├── pyproject.toml
 │       ├── src/inndxd_web/
-│       │   ├── main.py                 # Jinja2Templates, static mount
+│       │   ├── main.py                 # App factory, 7 UI routers, dev-only design catalog
 │       │   ├── auth.py                 # JWT httpOnly cookie session
 │       │   └── routers/
-│       │       ├── ui.py               # Dashboard home (real DB stats)
+│       │       ├── ui.py               # Dashboard home (live DB stats)
 │       │       ├── ui_auth.py          # Login, register, logout
-│       │       └── ui_projects.py      # Project list, create, edit, delete
+│       │       ├── ui_projects.py      # Project CRUD + setup chat
+│       │       ├── ui_briefs.py        # Brief lifecycle + chat + refine
+│       │       ├── ui_chat.py          # SSE streaming chat agent
+│       │       ├── ui_data_items.py    # Sortable/filterable data table
+│       │       ├── ui_admin.py         # Admin: LLM providers, API keys, audit logs
+│       │       └── _design.py          # DaisyUI design catalog (dev mode only)
 │       ├── templates/
-│       │   ├── base.html               # Sidebar + header layout
+│       │   ├── base.html               # DaisyUI drawer layout, collapsible sidebar
 │       │   ├── auth/
 │       │   │   ├── login.html
 │       │   │   └── register.html
@@ -186,11 +191,41 @@ inndxd/
 │       │   │   ├── list.html
 │       │   │   ├── create.html
 │       │   │   ├── edit.html
-│       │   │   └── detail.html
+│       │   │   ├── detail.html
+│       │   │   └── setup_chat.html
+│       │   ├── briefs/
+│       │   │   ├── list.html
+│       │   │   ├── create.html
+│       │   │   ├── detail.html
+│       │   │   └── chat.html
+│       │   ├── data_items/
+│       │   │   └── list.html
+│       │   ├── admin/
+│       │   │   ├── providers/
+│       │   │   │   ├── list.html
+│       │   │   │   └── create.html
+│       │   │   ├── api_keys/
+│       │   │   │   └── list.html
+│       │   │   └── audit_logs/
+│       │   │       └── list.html
+│       │   ├── design/
+│       │   │   └── index.html          # Component catalog with collapsible sidebar
 │       │   └── partials/
 │       │       ├── _status_badge.html
-│       │       └── _stats_cards.html
-│       ├── static/css/input.css
+│       │       ├── _run_status.html    # HTMX-polled brief progress
+│       │       ├── _stats_cards.html
+│       │       ├── _data_item_rows.html
+│       │       ├── _empty_state.html
+│       │       ├── _chat_container.html
+│       │       ├── _chat_message.html
+│       │       ├── _chat_input.html
+│       │       ├── _chat_history.html
+│       │       ├── _flash_messages.html
+│       │       ├── _confirm_modal.html
+│       │       └── _key_created_modal.html
+│       ├── static/css/
+│       │   ├── input.css               # Tailwind directives
+│       │   └── bundle.css              # Compiled Tailwind v4 + DaisyUI v5
 │       └── tests/
 │
 ├── docker/
@@ -212,8 +247,8 @@ inndxd/
 | **1** — Foundation | ✅ Complete | Core models, agent graph, FastAPI API, Docker infra |
 | **2** — Production | ✅ Complete | Celery workers, 5 research tools, MCP server, Prometheus, export, WebSocket |
 | **3** — Security & Observability | ✅ Complete | JWT auth, multi-provider LLM, API keys, OpenTelemetry, audit logs |
-| **4** — Web Dashboard | 🔄 In Progress | Jinja2 + Tailwind + HTMX — Phase 0-2 done, Phase 3 (Briefs) next |
-| **Cloud** | ⬜ Planned | Business ops — website, identity, billing, admin, gateway |
+| **4** — Web Dashboard | ✅ Complete | Jinja2 + DaisyUI + HTMX — 55/55 tasks, 7 routers, 24 templates, live polling |
+| **Cloud** | 🔄 Next | Business ops — website, identity, billing, admin, gateway → `inndxd-cloud` repo |
 
 ---
 
@@ -229,7 +264,7 @@ Five tools with capability-based routing. **Web search** via Crawl4AI + DuckDuck
 
 ### Web Dashboard
 
-Server-rendered with HTMX — zero custom JavaScript. Login, register, project management, brief creation, live status updates via polling. Sortable data tables with CSV/JSON export. Admin panels for LLM providers, API keys, and audit logs. Feels like a SPA, ships nothing but HTML.
+Server-rendered with HTMX + DaisyUI (v5) — zero custom JavaScript. Login, register, project management, brief creation, live status updates via HTMX polling. AI chat agent for natural-language brief refinement. Sortable data tables with CSV/JSON export. Admin panels for LLM providers, API keys, and audit logs. DaisyUI design catalog at `/ui/design` (dev mode). Feels like a SPA, ships nothing but HTML.
 
 ### Developer API
 
