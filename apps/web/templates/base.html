@@ -6,64 +6,30 @@
     <title>{% block title %}Inndxd{% endblock %}</title>
     <link href="/static/css/bundle.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script>
-        if (localStorage.getItem("inndxd-theme")) {
-            document.documentElement.setAttribute("data-theme", localStorage.getItem("inndxd-theme"));
-        }
-    </script>
     {% block head %}{% endblock %}
 </head>
-<body class="min-h-screen bg-base-200">
-    <div class="drawer lg:drawer-open">
+<body class="h-screen bg-base-200 flex flex-col overflow-hidden">
+    <div class="drawer lg:drawer-open flex-1 min-h-0">
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle">
 
-        <div class="drawer-content flex flex-col">
-            <header class="navbar bg-base-100 shadow-sm lg:hidden">
+        <div class="drawer-content flex flex-col min-h-0">
+            <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
                 <div class="flex-none">
-                    <label for="drawer-toggle" class="btn btn-ghost btn-square drawer-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    <label for="drawer-toggle" class="btn btn-ghost btn-square drawer-button lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
                     </label>
                 </div>
                 <div class="flex-1">
-                    <a href="/ui" class="text-xl font-bold">Inndxd</a>
-                </div>
-                <div class="flex-none">
-                    <button class="btn btn-ghost btn-circle" onclick="toggleTheme()" title="Toggle theme">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                    </button>
-                    {% if user %}
-                    <div class="dropdown dropdown-end">
-                        <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
-                            <div class="bg-neutral text-neutral-content rounded-full w-8">
-                                <span class="text-xs">{{ user.get("email", "?")[0].upper() }}</span>
-                            </div>
-                        </label>
-                        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3 z-50">
-                            <li class="menu-title text-xs opacity-50">{{ user.get("email", "?") }}</li>
-                            <li><a href="/ui/auth/logout" class="text-error">Logout</a></li>
-                        </ul>
-                    </div>
-                    {% else %}
-                    <a href="/ui/auth/login" class="btn btn-ghost btn-sm">Sign In</a>
-                    {% endif %}
-                </div>
-            </header>
-
-            <header class="navbar bg-base-100 shadow-sm hidden lg:flex">
-                <div class="flex-1">
-                    <h1 class="text-xl font-semibold px-4">{% block page_title %}Dashboard{% endblock %}</h1>
+                    <h1 class="text-lg font-semibold px-2">{% block page_title %}Dashboard{% endblock %}</h1>
                 </div>
                 <div class="flex-none gap-2">
-                    <button class="btn btn-ghost btn-circle" onclick="toggleTheme()" title="Toggle theme">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                    </button>
                     {% if user %}
                     <div class="dropdown dropdown-end">
-                        <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
+                        <div tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
                             <div class="bg-neutral text-neutral-content rounded-full w-8">
                                 <span class="text-xs">{{ user.get("email", "?")[0].upper() }}</span>
                             </div>
-                        </label>
+                        </div>
                         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3 z-50">
                             <li class="menu-title text-xs opacity-50">{{ user.get("email", "?") }}</li>
                             <li><a href="/ui/auth/logout" class="text-error">Logout</a></li>
@@ -75,54 +41,64 @@
                 </div>
             </header>
 
-            {% include 'partials/_flash_messages.html' %}
-
-            <main class="flex-1 overflow-auto p-6">
+            <main class="flex-1 overflow-auto p-6 min-h-0">
                 {% block content %}{% endblock %}
             </main>
         </div>
 
         <div class="drawer-side z-40">
             <label for="drawer-toggle" aria-label="close sidebar" class="drawer-overlay"></label>
-            <aside class="bg-base-300 w-64 min-h-full flex flex-col">
-                <div class="p-4 text-xl font-bold border-b border-base-content/10 hidden lg:block">
-                    <a href="/ui">Inndxd</a>
+            <aside class="bg-base-200 w-64 min-h-full flex flex-col">
+                <div class="px-4 py-4 border-b border-base-content/10">
+                    <a href="/ui" class="text-lg font-bold">Inndxd</a>
                 </div>
-                <nav class="flex-1 p-4 space-y-1">
+                <nav class="menu flex-1 p-2 gap-1">
                     {% if user %}
                     {% set current_path = request.url.path %}
-                    <a href="/ui"
-                       class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path == '/ui' %}bg-base-content/10 font-medium{% endif %}">
-                       Dashboard
-                    </a>
-                    <a href="/ui/projects"
-                       class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/projects') %}bg-base-content/10 font-medium{% endif %}">
-                       Projects
-                    </a>
-                    <a href="/ui/briefs"
-                       class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/briefs') %}bg-base-content/10 font-medium{% endif %}">
-                       Briefs
-                    </a>
-                    <a href="/ui/data-items"
-                       class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/data-items') %}bg-base-content/10 font-medium{% endif %}">
-                       Data Items
-                    </a>
+                    <li>
+                        <a href="/ui" class="{% if current_path == '/ui' %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/ui/projects" class="{% if current_path.startswith('/ui/projects') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            Projects
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/ui/briefs" class="{% if current_path.startswith('/ui/briefs') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                            Datasets
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/ui/data-items" class="{% if current_path.startswith('/ui/data-items') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            Data Items
+                        </a>
+                    </li>
                     {% if admin %}
-                    <div class="pt-4 mt-4 border-t border-base-content/10">
-                        <p class="px-3 text-xs uppercase opacity-50 tracking-wider">Admin</p>
-                        <a href="/ui/admin/providers"
-                           class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/admin/providers') %}bg-base-content/10 font-medium{% endif %}">
-                           LLM Providers
+                    <li class="menu-title mt-4"><span class="text-xs uppercase opacity-50">Admin</span></li>
+                    <li>
+                        <a href="/ui/admin/providers" class="{% if current_path.startswith('/ui/admin/providers') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            LLM Providers
                         </a>
-                        <a href="/ui/admin/api-keys"
-                           class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/admin/api-keys') %}bg-base-content/10 font-medium{% endif %}">
-                           API Keys
+                    </li>
+                    <li>
+                        <a href="/ui/admin/api-keys" class="{% if current_path.startswith('/ui/admin/api-keys') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                            API Keys
                         </a>
-                        <a href="/ui/admin/audit-logs"
-                           class="block px-3 py-2 rounded-lg hover:bg-base-content/10 {% if current_path.startswith('/ui/admin/audit-logs') %}bg-base-content/10 font-medium{% endif %}">
-                           Audit Log
+                    </li>
+                    <li>
+                        <a href="/ui/admin/audit-logs" class="{% if current_path.startswith('/ui/admin/audit-logs') %}menu-active{% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Audit Log
                         </a>
-                    </div>
+                    </li>
                     {% endif %}
                     {% endif %}
                 </nav>
@@ -132,14 +108,5 @@
             </aside>
         </div>
     </div>
-
-    <script>
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute("data-theme");
-            const next = current === "black" ? "light" : "black";
-            document.documentElement.setAttribute("data-theme", next);
-            localStorage.setItem("inndxd-theme", next);
-        }
-    </script>
 </body>
 </html>
