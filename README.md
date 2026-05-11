@@ -247,7 +247,8 @@ inndxd/
 | **1** — Foundation | ✅ Complete | Core models, agent graph, FastAPI API, Docker infra |
 | **2** — Production | ✅ Complete | Celery workers, 5 research tools, MCP server, Prometheus, export, WebSocket |
 | **3** — Security & Observability | ✅ Complete | JWT auth, multi-provider LLM, API keys, OpenTelemetry, audit logs |
-| **4** — Web Dashboard | ✅ Complete | Jinja2 + DaisyUI + HTMX — 55/55 tasks, 7 routers, 24 templates, live polling |
+| **4** — Web Dashboard | ✅ Complete | DaisyUI + HTMX — 64 tasks, 8 routers, 24 templates, AI chat, live polling |
+| **5** — Production Polish | ⬜ Planned | Security hardening, performance, testing, code quality — 33 tasks |
 | **Cloud** | 🔄 Next | Business ops — website, identity, billing, admin, gateway → `inndxd-cloud` repo |
 
 ---
