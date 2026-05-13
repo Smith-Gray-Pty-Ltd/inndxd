@@ -1,0 +1,453 @@
+{% extends "base.html" %}
+
+{% block title %}Design System — Inndxd{% endblock %}
+
+{% block head %}
+<style>
+  .size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }
+  .size-4 { width: calc(var(--spacing) * 4); height: calc(var(--spacing) * 4); }
+  .size-12 { width: calc(var(--spacing) * 12); height: calc(var(--spacing) * 12); }
+  svg { max-width: 100%; height: auto; }
+  .grid { display: grid; }
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .gap-2 { gap: 0.5rem; }
+  .gap-4 { gap: 1rem; }
+  .space-y-4 > * + * { margin-top: 1rem; }
+  .min-h-\[400px\] { min-height: 400px; }
+  .min-h-\[200px\] { min-height: 200px; }
+  @media (min-width: 1024px) {
+    .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lg\:flex { display: flex !important; }
+  }
+  #sidebar {
+    width: 16rem; min-width: 16rem;
+    transition: width 0.2s ease-in-out, min-width 0.2s ease-in-out;
+    overflow: hidden;
+  }
+  #sidebar.collapsed { width: 3.5rem; min-width: 3.5rem; }
+  #sidebar.collapsed .sidebar-text,
+  #sidebar.collapsed .sidebar-brand-text,
+  #sidebar.collapsed .menu-title { display: none; }
+  .sidebar-collapsed-show { display: none; }
+  #sidebar.collapsed .sidebar-collapsed-show { display: block !important; }
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: hsl(var(--bc) / 0.1); border-radius: 3px; }
+  .chat-bubble { max-width: 85%; word-wrap: break-word; }
+  .empty-state {
+    background-image: repeating-linear-gradient(0deg, hsl(var(--bc) / 0.03), hsl(var(--bc) / 0.03) 1px, transparent 1px, transparent 20px);
+  }
+  .mockup-code pre { padding-right: 1rem; }
+  .tab-active { border-bottom: 2px solid hsl(var(--p)); color: hsl(var(--p)); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .component-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .component-box { border: 1px solid hsl(var(--bc) / 0.1); padding: 1rem; border-radius: var(--radius-box); background: hsl(var(--b1)); }
+  .component-label { font-size: 0.75rem; opacity: 0.5; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+</style>
+{% endblock %}
+
+{% block page_title %}Design System{% endblock %}
+
+{% block header_left %}
+<button onclick="document.getElementById('sidebar').classList.toggle('collapsed')" class="btn btn-ghost btn-square hidden lg:flex mr-2" title="Toggle sidebar">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 4v16"/><path d="M14 10l2 2l-2 2"/></svg>
+</button>
+{% endblock %}
+
+{% block main %}
+<main class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+  <div class="flex gap-6 border-b border-base-content/10 mb-6">
+    <button onclick="switchTab('components')" id="tab-components" class="tab-active pb-3 text-sm font-medium">Components</button>
+    <button onclick="switchTab('dataset')" id="tab-dataset" class="pb-3 text-sm font-medium opacity-60">Dataset Layout</button>
+  </div>
+
+  <div id="panel-components" class="tab-panel active space-y-6">
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Colors</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Base</div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-base-100 text-base-content p-3 text-center text-xs rounded">base-100</div>
+            <div class="bg-base-200 text-base-content p-3 text-center text-xs rounded">base-200</div>
+            <div class="bg-base-300 text-base-content p-3 text-center text-xs rounded">base-300</div>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Semantic</div>
+          <div class="space-y-2">
+            <div class="bg-primary text-primary-content p-2 text-xs rounded">Primary</div>
+            <div class="bg-secondary text-secondary-content p-2 text-xs rounded">Secondary</div>
+            <div class="bg-accent text-accent-content p-2 text-xs rounded">Accent</div>
+            <div class="bg-neutral text-neutral-content p-2 text-xs rounded">Neutral</div>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">States</div>
+          <div class="space-y-2">
+            <div class="bg-info text-info-content p-2 text-xs rounded">Info</div>
+            <div class="bg-success text-success-content p-2 text-xs rounded">Success</div>
+            <div class="bg-warning text-warning-content p-2 text-xs rounded">Warning</div>
+            <div class="bg-error text-error-content p-2 text-xs rounded">Error</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Buttons</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Variants</div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-accent">Accent</button>
+            <button class="btn btn-neutral">Neutral</button>
+            <button class="btn btn-ghost">Ghost</button>
+            <button class="btn btn-link">Link</button>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Sizes</div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button class="btn btn-xs">xs</button>
+            <button class="btn btn-sm">sm</button>
+            <button class="btn">md</button>
+            <button class="btn btn-lg">lg</button>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Shapes</div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-primary">Default</button>
+            <button class="btn btn-primary btn-outline">Outline</button>
+            <button class="btn btn-circle btn-primary">C</button>
+            <button class="btn btn-square btn-primary">S</button>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Loading</div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-primary loading">Loading</button>
+            <button class="btn btn-primary" disabled>Disabled</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Form Elements</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Inputs</div>
+          <div class="space-y-2">
+            <input type="text" placeholder="Default input" class="input input-bordered w-full" />
+            <input type="text" placeholder="Primary input" class="input input-bordered input-primary w-full" />
+            <input type="text" placeholder="Error input" class="input input-bordered input-error w-full" />
+            <input type="text" placeholder="Small input" class="input input-bordered input-sm w-full" />
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Select & Textarea</div>
+          <div class="space-y-2">
+            <select class="select select-bordered w-full"><option>Select option</option><option>Option 1</option></select>
+            <textarea class="textarea textarea-bordered w-full" placeholder="Textarea" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Checkbox & Toggle</div>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="checkbox" checked /><span class="text-sm">Checkbox</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="checkbox checkbox-primary" checked /><span class="text-sm">Primary checkbox</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="toggle" checked /><span class="text-sm">Toggle</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="toggle toggle-primary" checked /><span class="text-sm">Primary toggle</span></label>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Radio & Range</div>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="radio-demo" class="radio" checked /><span class="text-sm">Radio 1</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="radio-demo" class="radio radio-primary" /><span class="text-sm">Radio 2</span></label>
+            <input type="range" min="0" max="100" class="range range-primary w-full" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Feedback</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Alerts</div>
+          <div class="space-y-2">
+            <div class="alert alert-info"><span>Info alert</span></div>
+            <div class="alert alert-success"><span>Success alert</span></div>
+            <div class="alert alert-warning"><span>Warning alert</span></div>
+            <div class="alert alert-error"><span>Error alert</span></div>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Badges</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge">Default</span>
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-secondary">Secondary</span>
+            <span class="badge badge-accent">Accent</span>
+            <span class="badge badge-ghost">Ghost</span>
+            <span class="badge badge-info">Info</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-error">Error</span>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Loading</div>
+          <div class="flex flex-wrap gap-4 items-center">
+            <span class="loading loading-spinner"></span>
+            <span class="loading loading-dots"></span>
+            <span class="loading loading-ring"></span>
+            <span class="loading loading-ball"></span>
+            <span class="loading loading-bars"></span>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Progress</div>
+          <div class="space-y-2">
+            <progress class="progress w-full" value="25" max="100"></progress>
+            <progress class="progress progress-primary w-full" value="50" max="100"></progress>
+            <progress class="progress progress-success w-full" value="75" max="100"></progress>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Data Display</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Table</div>
+          <div class="overflow-x-auto">
+            <table class="table table-zebra w-full text-sm">
+              <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Alice</td><td>Admin</td><td><span class="badge badge-success badge-sm">Active</span></td></tr>
+                <tr><td>Bob</td><td>User</td><td><span class="badge badge-warning badge-sm">Pending</span></td></tr>
+                <tr><td>Carol</td><td>User</td><td><span class="badge badge-error badge-sm">Inactive</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Cards</div>
+          <div class="space-y-2">
+            <div class="card bg-base-200 p-3"><h3 class="font-semibold text-sm">Card Title</h3><p class="text-xs opacity-70">Card body content</p></div>
+            <div class="card card-bordered p-3"><h3 class="font-semibold text-sm">Bordered Card</h3><p class="text-xs opacity-70">With border</p></div>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Stats</div>
+          <div class="stats shadow">
+            <div class="stat">
+              <div class="stat-title text-xs">Total</div>
+              <div class="stat-value text-lg">2,400</div>
+              <div class="stat-desc text-xs">↗︎ 12%</div>
+            </div>
+          </div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">List</div>
+          <ul class="list-disc list-inside text-sm space-y-1"><li>List item one</li><li>List item two</li><li>List item three</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Navigation</h2>
+      <div class="component-grid">
+        <div class="component-box">
+          <div class="component-label">Menu</div>
+          <ul class="menu bg-base-200 rounded-box w-full"><li><a>Item 1</a></li><li><a class="menu-active">Active Item</a></li><li><a>Item 3</a></li></ul>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Breadcrumbs</div>
+          <div class="breadcrumbs text-sm"><ul><li><a>Home</a></li><li><a>Projects</a></li><li>Current</li></ul></div>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Steps</div>
+          <ul class="steps w-full text-xs"><li class="step step-primary">Register</li><li class="step step-primary">Choose plan</li><li class="step">Purchase</li><li class="step">Done</li></ul>
+        </div>
+        <div class="component-box">
+          <div class="component-label">Pagination</div>
+          <div class="join">
+            <button class="join-item btn btn-sm">«</button>
+            <button class="join-item btn btn-sm">1</button>
+            <button class="join-item btn btn-sm btn-active">2</button>
+            <button class="join-item btn btn-sm">3</button>
+            <button class="join-item btn btn-sm">»</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Chat</h2>
+      <div class="component-box max-w-lg">
+        <div class="chat chat-start mb-2">
+          <div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs">AI</span></div></div>
+          <div class="chat-header mb-1"><span class="text-xs opacity-50">Planner</span></div>
+          <div class="chat-bubble chat-bubble-neutral text-sm">Hello! How can I help you today?</div>
+        </div>
+        <div class="chat chat-end">
+          <div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs">U</span></div></div>
+          <div class="chat-header mb-1"><span class="text-xs opacity-50">You</span></div>
+          <div class="chat-bubble chat-bubble-primary text-sm">Find CTOs for AI Frontier Labs</div>
+          <div class="chat-footer text-xs opacity-40 mt-1">Delivered</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Code Mockup</h2>
+      <div class="mockup-code text-sm bg-base-300">
+        <pre data-prefix="$"><code>npm install daisyui</code></pre>
+        <pre data-prefix=">" class="text-success"><code>added 1 package in 0.5s</code></pre>
+        <pre data-prefix="$"><code>python main.py</code></pre>
+        <pre data-prefix=">" class="text-warning"><code>Server running on port 8080</code></pre>
+      </div>
+    </section>
+  </div>
+
+  <div id="panel-dataset" class="tab-panel space-y-4 lg:space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 min-h-[400px]">
+      <div class="card bg-base-100 shadow-sm flex flex-col">
+        <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center">
+          <h2 class="text-sm font-semibold">Planner Chat</h2>
+          <div class="badge badge-sm badge-ghost gap-1 ml-auto"><span class="status status-xs status-success"></span>Online</div>
+        </div>
+        <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar min-h-[200px]">
+          <div class="chat chat-start">
+            <div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div>
+            <div class="chat-header mb-1"><span class="text-xs opacity-50">Planner</span></div>
+            <div class="chat-bubble chat-bubble-neutral text-sm">Dataset loaded: <strong>CTOs</strong>. 50 records, 4 fields. CRM has 32 matching. What next?</div>
+          </div>
+          <div class="chat chat-end">
+            <div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div></div>
+            <div class="chat-header mb-1"><span class="text-xs opacity-50">You</span></div>
+            <div class="chat-bubble chat-bubble-primary text-sm">Find LinkedIn profiles for each CTO</div>
+          </div>
+          <div class="chat chat-start">
+            <div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div>
+            <div class="chat-header mb-1"><span class="text-xs opacity-50">Planner</span></div>
+            <div class="chat-bubble chat-bubble-neutral text-sm">32 already in CRM. Enriching 18 via web. Adding <code class="bg-base-100/20 px-1 rounded">linkedin</code> column.</div>
+            <div class="chat-footer text-xs opacity-40 ml-12 mt-1"><svg xmlns="http://www.w3.org/2000/svg" class="inline size-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>Referenced: CRM dataset (32 matching)</div>
+          </div>
+          <div class="chat chat-end">
+            <div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div></div>
+            <div class="chat-header mb-1"><span class="text-xs opacity-50">You</span></div>
+            <div class="chat-bubble chat-bubble-primary text-sm">Run it as v2.</div>
+          </div>
+        </div>
+        <div class="card-body border-t border-base-content/10 p-4 gap-3">
+          <div class="join w-full">
+            <input type="text" class="input input-sm input-bordered join-item flex-1" placeholder="Ask about this dataset..." aria-label="Chat message">
+            <button class="btn btn-primary btn-sm join-item btn-square" aria-label="Send message"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Add Column</button>
+            <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button>
+            <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>New v2</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-sm flex flex-col">
+        <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center">
+          <h2 class="text-sm font-semibold">Schema</h2>
+          <span class="badge badge-warning badge-xs ml-auto">v2 — proposed</span>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 custom-scrollbar min-h-[200px]">
+          <div class="mockup-code text-sm bg-base-300">
+            <pre data-prefix="1"><code>{</code></pre>
+            <pre data-prefix="2"><code>  "name": "AI Frontier Lab CTOs",</code></pre>
+            <pre data-prefix="3"><code>  "records": 50,</code></pre>
+            <pre data-prefix="4"><code>  "version": 2,</code></pre>
+            <pre data-prefix="5"><code>  "sources": {</code></pre>
+            <pre data-prefix="6"><code>    "twitter.com": 20,</code></pre>
+            <pre data-prefix="7"><code>    "linkedin.com": 15,</code></pre>
+            <pre data-prefix="8"><code>    "other": 15</code></pre>
+            <pre data-prefix="9"><code>  },</code></pre>
+            <pre data-prefix="10"><code>  "fields": [</code></pre>
+            <pre data-prefix="11"><code class="text-success">    {"name": "name", "type": "str", "filled": 50},</code></pre>
+            <pre data-prefix="12"><code class="text-success">    {"name": "company", "type": "str", "filled": 50},</code></pre>
+            <pre data-prefix="13"><code class="text-success">    {"name": "role", "type": "str", "filled": 48},</code></pre>
+            <pre data-prefix="14"><code class="text-success">    {"name": "twitter", "type": "str", "filled": 45},</code></pre>
+            <pre data-prefix="15"><code>    {</code></pre>
+            <pre data-prefix="16"><code class="text-warning">      "name": "linkedin",</code></pre>
+            <pre data-prefix="17"><code class="text-warning">      "type": "str",</code></pre>
+            <pre data-prefix="18"><code class="text-warning">      "filled": 0,</code></pre>
+            <pre data-prefix="19"><code class="text-warning">      "status": "pending"</code></pre>
+            <pre data-prefix="20"><code>    }</code></pre>
+            <pre data-prefix="21"><code>  ]</code></pre>
+            <pre data-prefix="22"><code>}</code></pre>
+          </div>
+        </div>
+        <div class="card-body border-t border-base-content/10 p-4 gap-2">
+          <div class="grid grid-cols-3 gap-2">
+            <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+            <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</button>
+            <button class="btn btn-primary btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Approve v2</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-sm">
+      <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center">
+        <h2 class="text-sm font-semibold">Data Items</h2>
+        <div class="flex gap-2 ml-auto">
+          <span class="badge badge-sm">50 records</span>
+          <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button>
+        </div>
+      </div>
+      <div class="p-8 empty-state text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-12 mx-auto mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <p class="text-sm opacity-40 mb-1">Data items table</p>
+        <p class="text-xs opacity-30">50 records ready to display</p>
+        <button class="btn btn-ghost btn-sm mt-3"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Records</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('[id^="tab-"]').forEach(t => { t.classList.remove('tab-active'); t.classList.add('opacity-60'); });
+  document.getElementById('panel-' + tabName).classList.add('active');
+  var btn = document.getElementById('tab-' + tabName);
+  btn.classList.add('tab-active'); btn.classList.remove('opacity-60');
+}
+</script>
+{% endblock %}
+
+{% block sidebar %}
+<aside id="sidebar" class="flex flex-col bg-base-100 min-h-full">
+  <div class="w-full px-4 py-4 border-b border-base-content/10 flex items-center justify-center flex-shrink-0">
+    <span class="font-bold text-base sidebar-brand-text">Inndxd</span>
+    <span class="font-bold text-base hidden sidebar-collapsed-show">I</span>
+  </div>
+  <ul class="menu w-full grow p-2 gap-1 overflow-hidden flex-shrink-0">
+    <li><a href="/ui" title="Dashboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="sidebar-text">Dashboard</span></a></li>
+    <li><a href="/ui/projects" title="Projects"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg><span class="sidebar-text">Projects</span></a></li>
+    <li><a href="/ui/briefs" title="Datasets"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg><span class="sidebar-text">Datasets</span></a></li>
+    <li><a href="/ui/data-items" title="Data Items"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg><span class="sidebar-text">Data Items</span></a></li>
+    <li class="menu-title mt-4"><span class="px-2 text-xs uppercase opacity-50 sidebar-text">Admin</span></li>
+    <li><a href="/ui/admin/providers"><span class="sidebar-text">LLM Providers</span></a></li>
+    <li><a href="/ui/admin/api-keys"><span class="sidebar-text">API Keys</span></a></li>
+    <li><a href="/ui/admin/audit-logs"><span class="sidebar-text">Audit Log</span></a></li>
+  </ul>
+  <div class="w-full p-3 border-t border-base-content/10 flex-shrink-0"><span class="text-xs opacity-50 sidebar-text">v0.4.0</span></div>
+</aside>
+{% endblock %}
