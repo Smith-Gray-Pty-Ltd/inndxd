@@ -6,6 +6,9 @@
   <title>Components — Inndxd Design</title>
   <link href="/static/css/bundle.css" rel="stylesheet">
   <style>
+    .drawer-open { grid-auto-columns: max-content auto; }
+    .drawer-open > .drawer-side { overflow-y: auto; }
+    @media (min-width: 1024px) { .drawer-open { grid-auto-columns: max-content auto; } }
     .size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }
     .size-4 { width: calc(var(--spacing) * 4); height: calc(var(--spacing) * 4); }
     .size-5 { width: calc(var(--spacing) * 5); height: calc(var(--spacing) * 5); }
@@ -56,11 +59,14 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: hsl(var(--bc) / 0.1); border-radius: 3px; }
     .component-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
     .component-box { border: 1px solid hsl(var(--bc) / 0.1); padding: 1rem; border-radius: var(--radius-box); background: hsl(var(--b1)); }
-    .component-label { font-size: 0.75rem; opacity: 0.5; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    0
+    /* Force persistent sidebar for design mockups — bypass overlay mode */
+    .drawer-open { grid-template-columns: max-content 1fr !important; }
+    .drawer-open .drawer-side { position: relative !important; }
   </style>
 </head>
 <body class="h-screen bg-base-200 flex flex-col overflow-hidden">
-<div class="drawer lg:drawer-open flex-1 min-h-0">
+<div class="drawer drawer-open flex-1 min-h-0"><input type="checkbox" class="drawer-toggle" checked>
   <div class="drawer-content flex flex-col min-h-0">
     <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
       <div class="flex-1"><h1 class="text-lg font-semibold px-2">Components</h1></div>
