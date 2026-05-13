@@ -16,7 +16,7 @@
 <div class="drawer drawer-open flex-1 min-h-0"><input type="checkbox" class="drawer-toggle" checked>
   <div class="drawer-content flex flex-col min-h-0">
     <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
-      <button onclick="document.getElementById('sidebar').classList.toggle('collapsed')" class="btn btn-ghost btn-square mr-2" title="Toggle sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 4v16"/><path d="M14 10l2 2l-2 2"/></svg></button>
+      <button onclick="toggleSidebar()" class="btn btn-ghost btn-square mr-2" title="Toggle sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 4v16"/><path d="M14 10l2 2l-2 2"/></svg></button>
       <div class="flex-1"><h1 class="text-lg font-semibold px-2">Dashboard</h1></div>
     </header>
     <main class="flex-1 overflow-y-auto p-6 custom-scrollbar">
@@ -85,5 +85,6 @@
   <div class="p-3 border-t border-base-content/10"><span class="text-xs opacity-50">v0.5.0 — design</span></div>
 </aside></div>
 </div>
+<script>var s=document.getElementById("sidebar");if(localStorage.getItem("sb")==="1")s.classList.add("collapsed");function toggleSidebar(){s.classList.toggle("collapsed");localStorage.setItem("sb",s.classList.contains("collapsed")?"1":"0")}</script>
 </body>
 </html>
