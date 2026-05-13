@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="black">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Inndxd Design</title>
+  <link href="/static/css/bundle.css" rel="stylesheet">
+  <style>.size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }.flex { display: flex; }.grid { display: grid; }.grid-cols-1 { grid-template-columns: repeat(1,minmax(0,1fr)); }.gap-2 { gap: .5rem; }.gap-4 { gap: 1rem; }.gap-6 { gap: 1.5rem; }.p-2 { padding: .5rem; }.p-3 { padding: .75rem; }.p-4 { padding: 1rem; }.p-6 { padding: 1.5rem; }.px-2 { padding-left: .5rem; padding-right: .5rem; }.text-xs { font-size: .75rem; }.text-sm { font-size: .875rem; }.text-base { font-size: 1rem; }.text-lg { font-size: 1.125rem; }.text-2xl { font-size: 1.5rem; }.font-semibold { font-weight: 600; }.font-bold { font-weight: 700; }.font-medium { font-weight: 500; }.opacity-50 { opacity: .5; }.opacity-60 { opacity: .6; }.opacity-70 { opacity: .7; }.rounded { border-radius: var(--radius-box); }.mb-4 { margin-bottom: 1rem; }.mt-2 { margin-top: .5rem; }.ml-auto { margin-left: auto; }.w-full { width: 100%; }.overflow-y-auto { overflow-y: auto; }.overflow-x-auto { overflow-x: auto; }.items-center { align-items: center; }.custom-scrollbar::-webkit-scrollbar { width: 6px; }.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }.custom-scrollbar::-webkit-scrollbar-thumb { background-color: hsl(var(--bc)/.1); border-radius: 3px; }@media(min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+</head>
+<body class="h-screen bg-base-200 flex flex-col overflow-hidden">
+<div class="drawer lg:drawer-open flex-1 min-h-0">
+  <div class="drawer-content flex flex-col min-h-0">
+    <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
+      <div class="flex-1"><h1 class="text-lg font-semibold px-2">Admin</h1></div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="stats shadow"><div class="stat"><div class="stat-title">LLM Providers</div><div class="stat-value text-2xl">4</div><div class="stat-desc">3 healthy</div></div></div>
+        <div class="stats shadow"><div class="stat"><div class="stat-title">API Keys</div><div class="stat-value text-2xl">8</div><div class="stat-desc">6 active</div></div></div>
+        <div class="stats shadow"><div class="stat"><div class="stat-title">Audit Events</div><div class="stat-value text-2xl">1,247</div><div class="stat-desc">Today</div></div></div>
+      </div>
+
+      <div class="card bg-base-100 shadow-sm mb-6">
+        <div class="card-body border-b border-base-content/10 p-4"><h2 class="text-sm font-semibold">LLM Providers</h2></div>
+        <div class="overflow-x-auto">
+          <table class="table table-zebra w-full text-sm">
+            <thead><tr><th>Name</th><th>Type</th><th>Model</th><th>Priority</th><th>Health</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="font-medium">OpenAI</td><td>openai_compatible</td><td>gpt-4o</td><td>1</td><td><span class="badge badge-success badge-sm gap-1"><span class="status status-xs status-success"></span>Healthy</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+              <tr><td class="font-medium">Anthropic</td><td>openai_compatible</td><td>claude-sonnet-4</td><td>2</td><td><span class="badge badge-success badge-sm gap-1"><span class="status status-xs status-success"></span>Healthy</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+              <tr><td class="font-medium">Groq</td><td>openai_compatible</td><td>llama-3.3-70b</td><td>3</td><td><span class="badge badge-warning badge-sm gap-1"><span class="status status-xs status-warning" style="background:orange"></span>Slow</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+              <tr><td class="font-medium">Ollama</td><td>ollama</td><td>llama3.2</td><td>4</td><td><span class="badge badge-success badge-sm gap-1"><span class="status status-xs status-success"></span>Healthy</span></td><td><button class="btn btn-ghost btn-xs">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card bg-base-100 shadow-sm">
+          <div class="card-body border-b border-base-content/10 p-4"><h2 class="text-sm font-semibold">API Keys</h2></div>
+          <div class="overflow-x-auto">
+            <table class="table w-full text-sm">
+              <thead><tr><th>Name</th><th>Prefix</th><th>Active</th><th>Last Used</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Production</td><td class="font-mono text-xs opacity-60">inx_prod_...</td><td><span class="badge badge-success badge-sm">Active</span></td><td>2h ago</td><td><button class="btn btn-ghost btn-xs">Revoke</button></td></tr>
+                <tr><td>Staging</td><td class="font-mono text-xs opacity-60">inx_stg_...</td><td><span class="badge badge-success badge-sm">Active</span></td><td>1d ago</td><td><button class="btn btn-ghost btn-xs">Revoke</button></td></tr>
+                <tr><td>Dev</td><td class="font-mono text-xs opacity-60">inx_dev_...</td><td><span class="badge badge-error badge-sm">Revoked</span></td><td>—</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-sm">
+          <div class="card-body border-b border-base-content/10 p-4"><h2 class="text-sm font-semibold">Audit Log</h2></div>
+          <div class="overflow-x-auto">
+            <table class="table w-full text-sm">
+              <thead><tr><th>Event</th><th>Actor</th><th>Status</th><th>Time</th></tr></thead>
+              <tbody>
+                <tr><td>brief.created</td><td class="opacity-70">james@inndxd.ai</td><td><span class="badge badge-success badge-sm">OK</span></td><td class="opacity-50 text-xs">2m ago</td></tr>
+                <tr><td>research.completed</td><td class="opacity-70">sys</td><td><span class="badge badge-success badge-sm">OK</span></td><td class="opacity-50 text-xs">5m ago</td></tr>
+                <tr><td>provider.health.fail</td><td class="opacity-70">sys</td><td><span class="badge badge-warning badge-sm">Slow</span></td><td class="opacity-50 text-xs">12m ago</td></tr>
+                <tr><td>api_key.revoked</td><td class="opacity-70">james@inndxd.ai</td><td><span class="badge badge-info badge-sm">OK</span></td><td class="opacity-50 text-xs">1h ago</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <div class="drawer-side z-40"><!-- Shared sidebar for all design mockup pages -->
+<aside class="flex flex-col bg-base-100 min-h-full w-64">
+  <div class="w-full px-4 py-4 border-b border-base-content/10"><span class="font-bold text-base">Inndxd</span></div>
+  <ul class="menu w-full grow p-2 gap-1">
+    <li><a href="/ui/design/" title="Components" class="{% if current == 'components' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+      Components</a></li>
+    <li><a href="/ui/design/dashboard" title="Dashboard" class="{% if current == 'dashboard' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Dashboard</a></li>
+    <li><a href="/ui/design/datasets" title="Datasets" class="{% if current == 'datasets' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+      Datasets</a></li>
+    <li><a href="/ui/design/projects" title="Projects" class="{% if current == 'projects' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+      Projects</a></li>
+    <li><a href="/ui/design/briefs" title="Briefs" class="{% if current == 'briefs' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Briefs</a></li>
+    <li><a href="/ui/design/data-items" title="Data Items" class="{% if current == 'data-items' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+      Data Items</a></li>
+    <li class="menu-title mt-4"><span class="px-2 text-xs uppercase opacity-50">Admin</span></li>
+    <li><a href="/ui/design/admin" title="Admin" class="{% if current == 'admin' %}menu-active{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Admin</a></li>
+  </ul>
+  <div class="p-3 border-t border-base-content/10"><span class="text-xs opacity-50">v0.5.0 — design</span></div>
+</aside></div>
+</div>
+</body>
+</html>
