@@ -4,12 +4,19 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Items — Inndxd Design</title>
   <link href="/static/css/bundle.css" rel="stylesheet">
-  <style>.size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }.flex { display: flex; }.gap-2 { gap: .5rem; }.gap-4 { gap: 1rem; }.p-2 { padding: .5rem; }.p-4 { padding: 1rem; }.p-6 { padding: 1.5rem; }.px-2 { padding-left: .5rem; padding-right: .5rem; }.text-xs { font-size: .75rem; }.text-sm { font-size: .875rem; }.text-lg { font-size: 1.125rem; }.font-semibold { font-weight: 600; }.font-medium { font-weight: 500; }.opacity-50 { opacity: .5; }.opacity-70 { opacity: .7; }.rounded { border-radius: var(--radius-box); }.mb-4 { margin-bottom: 1rem; }.w-full { width: 100%; }.overflow-y-auto { overflow-y: auto; }.overflow-x-auto { overflow-x: auto; }.custom-scrollbar::-webkit-scrollbar { width: 6px; }.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }.custom-scrollbar::-webkit-scrollbar-thumb { background-color: hsl(var(--bc)/.1); border-radius: 3px; }</style>
+  <style>.size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }.flex { display: flex; }.gap-2 { gap: .5rem; }.gap-4 { gap: 1rem; }.p-2 { padding: .5rem; }.p-4 { padding: 1rem; }.p-6 { padding: 1.5rem; }.px-2 { padding-left: .5rem; padding-right: .5rem; }.text-xs { font-size: .75rem; }.text-sm { font-size: .875rem; }.text-lg { font-size: 1.125rem; }.font-semibold { font-weight: 600; }.font-medium { font-weight: 500; }.opacity-50 { opacity: .5; }.opacity-70 { opacity: .7; }.rounded { border-radius: var(--radius-box); }.mb-4 { margin-bottom: 1rem; }.w-full { width: 100%; }.overflow-y-auto { overflow-y: auto; }.overflow-x-auto { overflow-x: auto; }.custom-scrollbar::-webkit-scrollbar { width: 6px; }.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }.custom-scrollbar::-webkit-scrollbar-thumb { background-color: hsl(var(--bc)/.1); border-radius: 3px; }
+#sidebar { width: 16rem; min-width: 16rem; transition: width 0.2s, min-width 0.2s; overflow: hidden; }
+#sidebar.collapsed { width: 3.5rem; min-width: 3.5rem; }
+#sidebar.collapsed .sidebar-text, #sidebar.collapsed .sidebar-brand-text, #sidebar.collapsed .menu-title { display: none; }
+#sidebar.collapsed .sidebar-collapsed-show { display: block !important; }
+.sidebar-collapsed-show { display: none; }
+</style>
 </head>
 <body class="h-screen bg-base-200 flex flex-col overflow-hidden">
 <div class="drawer drawer-open flex-1 min-h-0"><input type="checkbox" class="drawer-toggle" checked>
   <div class="drawer-content flex flex-col min-h-0">
     <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
+      <button onclick="document.getElementById('sidebar').classList.toggle('collapsed')" class="btn btn-ghost btn-square mr-2" title="Toggle sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 4v16"/><path d="M14 10l2 2l-2 2"/></svg></button>
       <div class="flex-1"><h1 class="text-lg font-semibold px-2">Data Items</h1></div>
     </header>
     <main class="flex-1 overflow-y-auto p-6 custom-scrollbar">
@@ -40,31 +47,31 @@
     </main>
   </div>
   <div class="drawer-side z-40"><!-- Shared sidebar for all design mockup pages -->
-<aside class="flex flex-col bg-base-100 min-h-full w-64">
-  <div class="w-full px-4 py-4 border-b border-base-content/10"><span class="font-bold text-base">Inndxd</span></div>
+<aside id="sidebar" class="flex flex-col bg-base-100 min-h-full w-64">
+  <div class="w-full px-4 py-4 border-b border-base-content/10"><span class="font-bold text-base sidebar-brand-text">Inndxd</span><span class="font-bold text-base hidden sidebar-collapsed-show">I</span></div>
   <ul class="menu w-full grow p-2 gap-1">
     <li><a href="/ui/design/" title="Components" class="{% if current == 'components' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
-      Components</a></li>
+      <span class="sidebar-text">Components</span></a></li>
     <li><a href="/ui/design/dashboard" title="Dashboard" class="{% if current == 'dashboard' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-      Dashboard</a></li>
+      <span class="sidebar-text">Dashboard</span></a></li>
     <li><a href="/ui/design/datasets" title="Datasets" class="{% if current == 'datasets' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-      Datasets</a></li>
+      <span class="sidebar-text">Datasets</span></a></li>
     <li><a href="/ui/design/projects" title="Projects" class="{% if current == 'projects' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-      Projects</a></li>
+      <span class="sidebar-text">Projects</span></a></li>
     <li><a href="/ui/design/briefs" title="Briefs" class="{% if current == 'briefs' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      Briefs</a></li>
+      <span class="sidebar-text">Briefs</span></a></li>
     <li><a href="/ui/design/data-items" title="Data Items" class="{% if current == 'data-items' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-      Data Items</a></li>
+      <span class="sidebar-text">Data Items</span></a></li>
     <li class="menu-title mt-4"><span class="px-2 text-xs uppercase opacity-50">Admin</span></li>
     <li><a href="/ui/design/admin" title="Admin" class="{% if current == 'admin' %}menu-active{% endif %}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      Admin</a></li>
+      <span class="sidebar-text">Admin</span></a></li>
   </ul>
   <div class="p-3 border-t border-base-content/10"><span class="text-xs opacity-50">v0.5.0 — design</span></div>
 </aside></div>
