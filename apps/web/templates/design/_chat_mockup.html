@@ -1,0 +1,157 @@
+<!-- OpenWebUI-style chat mockup for design pages -->
+<div class="card bg-base-100 shadow-sm flex flex-col overflow-hidden">
+  
+  <!-- Chat Toolbar -->
+  <div class="px-4 py-2 border-b border-base-content/10 flex items-center gap-3 flex-shrink-0 flex-wrap">
+    <div class="dropdown dropdown-end">
+      <button tabindex="0" class="btn btn-ghost btn-xs gap-1">Model: Grok-3 Mini <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+      <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-300 rounded-box w-52 mt-1 z-50">
+        <li><a class="menu-active">Grok-3 Mini</a></li>
+        <li><a>GPT-4o</a></li>
+        <li><a>Claude Sonnet 4</a></li>
+        <li><a>Llama 3.3 70B</a></li>
+      </ul>
+    </div>
+    <div class="flex items-center gap-1">
+      <span class="text-xs opacity-60">Temp</span>
+      <input type="range" min="0" max="100" value="70" class="range range-primary range-xs w-16" />
+      <span class="text-xs opacity-60">0.7</span>
+    </div>
+    <button class="btn btn-ghost btn-xs ml-auto" title="System prompt">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+    </button>
+    <button class="btn btn-ghost btn-xs" title="Clear chat">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    </button>
+  </div>
+
+  <!-- System Prompt (collapsible) -->
+  <details class="border-b border-base-content/10 group">
+    <summary class="px-4 py-2 text-xs opacity-50 cursor-pointer hover:opacity-70">System Prompt ▼</summary>
+    <div class="px-4 pb-3">
+      <textarea class="textarea textarea-bordered w-full text-xs font-mono" rows="3" readonly>You are a data research planner. Analyze the dataset structure, identify enrichment opportunities, and suggest column additions. Reference existing CRM data when available.</textarea>
+    </div>
+  </details>
+
+  <!-- Chat Messages -->
+  <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar min-h-[200px]">
+
+    <!-- AI Message -->
+    <div class="chat chat-start group">
+      <div class="chat-image avatar placeholder">
+        <div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div>
+      </div>
+      <div class="chat-header mb-1 flex items-center gap-2">
+        <span class="text-xs opacity-50">Planner</span>
+        <span class="text-xs opacity-30">12:34 PM</span>
+      </div>
+      <div class="chat-bubble chat-bubble-neutral text-sm">
+        Dataset loaded: <strong>CTOs</strong>. 50 records, 4 fields. CRM has 32 matching. Here's the schema:<br><br>
+        <div class="mockup-code text-xs bg-base-100 my-2">
+          <pre data-prefix="1"><code class="text-success">{</code></pre>
+          <pre data-prefix="2"><code class="text-success">  "name": "AI Frontier Lab CTOs",</code></pre>
+          <pre data-prefix="3"><code>  "records": 50,</code></pre>
+          <pre data-prefix="4"><code>  "fields": {</code></pre>
+          <pre data-prefix="5"><code>    "name":       { "type": "str", "filled": 50 },</code></pre>
+          <pre data-prefix="6"><code>    "company":    { "type": "str", "filled": 50 },</code></pre>
+          <pre data-prefix="7"><code>    "role":       { "type": "str", "filled": 48 },</code></pre>
+          <pre data-prefix="8"><code>    "twitter":    { "type": "str", "filled": 45 }</code></pre>
+          <pre data-prefix="9"><code>  }</code></pre>
+          <pre data-prefix="10"><code class="text-success">}</code></pre>
+        </div>
+        What would you like to do?
+      </div>
+      <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 ml-12 flex gap-2 transition-opacity">
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Regenerate</button>
+      </div>
+    </div>
+
+    <!-- User Message -->
+    <div class="chat chat-end group">
+      <div class="chat-image avatar placeholder">
+        <div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div>
+      </div>
+      <div class="chat-header mb-1 flex items-center gap-2 justify-end">
+        <span class="text-xs opacity-30">12:36 PM</span>
+        <span class="text-xs opacity-50">You</span>
+      </div>
+      <div class="chat-bubble chat-bubble-primary text-sm">Find LinkedIn profiles for each CTO and add linkedin_url as a new column</div>
+      <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 flex gap-2 justify-end transition-opacity">
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit</button>
+      </div>
+    </div>
+
+    <!-- AI Response with JSON data -->
+    <div class="chat chat-start group">
+      <div class="chat-image avatar placeholder">
+        <div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div>
+      </div>
+      <div class="chat-header mb-1 flex items-center gap-2">
+        <span class="text-xs opacity-50">Planner</span>
+        <span class="text-xs opacity-30">12:38 PM</span>
+      </div>
+      <div class="chat-bubble chat-bubble-neutral text-sm">
+        32 already in CRM. Searching LinkedIn for 18 new contacts. Adding <code class="bg-base-100/20 px-1 rounded">linkedin_url</code> column — here's a sample:<br><br>
+        <div class="mockup-code text-xs bg-base-100 my-2">
+          <pre data-prefix="1"><code class="text-warning">[</code></pre>
+          <pre data-prefix="2"><code>  {<span class="text-success">"name": "Jane Smith"</span>, "company": "Anthropic",</code></pre>
+          <pre data-prefix="3"><code>   <span class="text-success">"linkedin_url"</span>: <span class="text-info">"https://linkedin.com/in/janesmith"</span>},</code></pre>
+          <pre data-prefix="4"><code>  {<span class="text-success">"name": "Alex Chen"</span>, "company": "DeepMind",</code></pre>
+          <pre data-prefix="5"><code>   <span class="text-success">"linkedin_url"</span>: <span class="text-info">"https://linkedin.com/in/alexchen"</span>},</code></pre>
+          <pre data-prefix="6"><code>  {<span class="text-success">"name": "Priya Patel"</span>, "company": "OpenAI",</code></pre>
+          <pre data-prefix="7"><code>   <span class="text-success">"linkedin_url"</span>: <span class="text-info">"https://linkedin.com/in/priyapatel"</span>}</code></pre>
+          <pre data-prefix="8"><code class="text-warning">]</code></pre>
+        </div>
+        <div class="flex items-center gap-1 mt-2 text-xs opacity-50"><svg xmlns="http://www.w3.org/2000/svg" class="inline size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>Referenced: CRM dataset (32 existing matches)</div>
+      </div>
+      <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 ml-12 flex gap-2 transition-opacity">
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Approve</button>
+        <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Regenerate</button>
+      </div>
+    </div>
+
+    <!-- AI status: enriching -->
+    <div class="flex items-center gap-3 px-1 py-2">
+      <span class="loading loading-dots loading-sm text-warning"></span>
+      <span class="text-xs opacity-50">Enriching 15 remaining records via web search...</span>
+      <button class="btn btn-ghost btn-xs ml-auto gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-6.219-8.56"/></svg>Stop
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Chat Input Area -->
+  <div class="border-t border-base-content/10 p-4 flex-shrink-0 space-y-3">
+    <div class="flex gap-2">
+      <textarea class="textarea textarea-bordered textarea-sm flex-1 min-h-[80px]" placeholder="Ask about this dataset..." aria-label="Chat message" rows="3"></textarea>
+      <div class="flex flex-col gap-2">
+        <button class="btn btn-primary btn-sm btn-square" aria-label="Send message">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-sm btn-square" title="Attach file">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex gap-2 flex-wrap">
+        <button class="btn btn-ghost btn-xs gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Add Column
+        </button>
+        <button class="btn btn-ghost btn-xs gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter
+        </button>
+        <button class="btn btn-ghost btn-xs gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>New v2
+        </button>
+        <button class="btn btn-ghost btn-xs gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>Export Data
+        </button>
+      </div>
+      <span class="text-xs opacity-40 ml-auto" title="Context window">324/8,192 tokens · grok-3-mini · 0.7 temp</span>
+    </div>
+  </div>
+</div>

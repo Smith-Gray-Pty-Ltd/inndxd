@@ -4,75 +4,223 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datasets — Inndxd Design</title>
   <link href="/static/css/bundle.css" rel="stylesheet">
-  <style>.size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }.size-4 { width: calc(var(--spacing) * 4); height: calc(var(--spacing) * 4); }.size-5 { width: calc(var(--spacing) * 5); height: calc(var(--spacing) * 5); }.size-12 { width: calc(var(--spacing) * 12); height: calc(var(--spacing) * 12); }svg{max-width:100%;height:auto}.flex{display:flex}.flex-wrap{flex-wrap:wrap}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.gap-2{gap:.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-4>*+*{margin-top:1rem}.min-h-\[400px\]{min-height:400px}.min-h-\[200px\]{min-height:200px}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-4{padding-left:1rem;padding-right:1rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-lg{font-size:1.125rem}.text-center{text-align:center}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.opacity-20{opacity:.2}.opacity-30{opacity:.3}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-70{opacity:.7}.rounded{border-radius:var(--radius-box)}.mb-1{margin-bottom:.25rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mt-1{margin-top:.25rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mr-1{margin-right:.25rem}.mr-2{margin-right:.5rem}.ml-auto{margin-left:auto}.ml-12{margin-left:3rem}.w-full{width:100%}.overflow-y-auto{overflow-y:auto}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:transparent}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:hsl(var(--bc)/.1);border-radius:3px}.chat-bubble{max-width:85%;word-wrap:break-word}.empty-state{background-image:repeating-linear-gradient(0deg,hsl(var(--bc)/.03),hsl(var(--bc)/.03) 1px,transparent 1px,transparent 20px)}.mockup-code pre{padding-right:1rem}@media(min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
-#sidebar { width: 16rem; min-width: 16rem; transition: width 0.2s, min-width 0.2s; overflow: hidden; }
-#sidebar.collapsed { width: 3.5rem; min-width: 3.5rem; }
-#sidebar.collapsed .sidebar-text, #sidebar.collapsed .sidebar-brand-text, #sidebar.collapsed .menu-title { display: none; }
-#sidebar.collapsed .sidebar-collapsed-show { display: block !important; }
-.sidebar-collapsed-show { display: none; }
-</style>
+  <style>
+    .size-3 { width: calc(var(--spacing) * 3); height: calc(var(--spacing) * 3); }
+    .size-4 { width: calc(var(--spacing) * 4); height: calc(var(--spacing) * 4); }
+    .size-5 { width: calc(var(--spacing) * 5); height: calc(var(--spacing) * 5); }
+    .size-12 { width: calc(var(--spacing) * 12); height: calc(var(--spacing) * 12); }
+    svg{max-width:100%;height:auto}
+    .flex{display:flex}.flex-wrap{flex-wrap:wrap}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.justify-end{justify-content:flex-end}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2>*+*{margin-top:.5rem}.space-y-3>*+*{margin-top:.75rem}.space-y-4>*+*{margin-top:1rem}.min-h-\[400px\]{min-height:400px}.min-h-\[200px\]{min-height:200px}.min-h-\[80px\]{min-height:80px}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-4{padding-left:1rem;padding-right:1rem}.px-2{padding-left:.5rem;padding-right:.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-3{padding-bottom:.75rem}.text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-lg{font-size:1.125rem}.text-center{text-align:center}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-mono{font-family:ui-monospace,monospace}.opacity-0{opacity:0}.opacity-20{opacity:.2}.opacity-30{opacity:.3}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.opacity-70{opacity:.7}.rounded{border-radius:var(--radius-box)}.mb-1{margin-bottom:.25rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.my-2{margin-top:.5rem;margin-bottom:.5rem}.mr-1{margin-right:.25rem}.mr-2{margin-right:.5rem}.ml-auto{margin-left:auto}.ml-12{margin-left:3rem}.w-full{width:100%}.w-8{width:2rem}.w-16{width:4rem}.w-52{width:13rem}.h-8{height:2rem}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.cursor-pointer{cursor:pointer}.hover\:opacity-70:hover{opacity:.7}.group:hover .group-hover\:opacity-40{opacity:.4}.custom-scrollbar::-webkit-scrollbar{width:6px}.custom-scrollbar::-webkit-scrollbar-track{background:transparent}.custom-scrollbar::-webkit-scrollbar-thumb{background-color:hsl(var(--bc)/.1);border-radius:3px}.custom-scrollbar::-webkit-scrollbar-thumb:hover{background-color:hsl(var(--bc)/.2)}.mockup-code pre{padding-right:1rem}.empty-state{background-image:repeating-linear-gradient(0deg,hsl(var(--bc)/.03),hsl(var(--bc)/.03) 1px,transparent 1px,transparent 20px)}.chat-bubble{max-width:85%;word-wrap:break-word}@media(min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    #sidebar { width: 16rem; min-width: 16rem; transition: width 0.2s, min-width 0.2s; overflow: hidden; }
+    #sidebar.collapsed { width: 3.5rem; min-width: 3.5rem; }
+    #sidebar.collapsed .sidebar-text, #sidebar.collapsed .sidebar-brand-text, #sidebar.collapsed .menu-title { display: none; }
+    #sidebar.collapsed .sidebar-collapsed-show { display: block !important; }
+    .sidebar-collapsed-show { display: none; }
+  </style>
 </head>
 <body class="h-screen bg-base-200 flex flex-col overflow-hidden">
 <div class="drawer drawer-open flex-1 min-h-0"><input type="checkbox" class="drawer-toggle" checked>
   <div class="drawer-content flex flex-col min-h-0">
     <header class="navbar bg-base-100 shadow-sm w-full flex-shrink-0 min-h-14">
       <button onclick="toggleSidebar()" class="btn btn-ghost btn-square mr-2" title="Toggle sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 4v16"/><path d="M14 10l2 2l-2 2"/></svg></button>
-      <div class="flex-1"><h1 class="text-lg font-semibold px-2">Dataset <span class="text-sm font-normal opacity-40">/ AI Frontier Labs / CTOs</span></h1></div>
+      <div class="flex-1"><h1 class="text-lg font-semibold px-2">CTOs <span class="text-sm font-normal opacity-40">/ AI Frontier Labs / 50 records</span></h1></div>
     </header>
     <main class="flex-1 overflow-y-auto p-4 custom-scrollbar">
       <div class="space-y-4">
+
+        <!-- Top Row: Chat + Schema -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-[400px]">
-          <div class="card bg-base-100 shadow-sm flex flex-col">
-            <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center"><h2 class="text-sm font-semibold">Planner Chat</h2><div class="badge badge-sm badge-ghost gap-1 ml-auto"><span class="status status-xs status-success"></span>Online</div></div>
-            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar min-h-[200px]">
-              <div class="chat chat-start"><div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div><div class="chat-header mb-1"><span class="text-xs opacity-50">Planner</span></div><div class="chat-bubble chat-bubble-neutral text-sm">Dataset loaded: <strong>CTOs</strong>. 50 records, 4 fields. CRM has 32 matching. What next?</div></div>
-              <div class="chat chat-end"><div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div></div><div class="chat-header mb-1"><span class="text-xs opacity-50">You</span></div><div class="chat-bubble chat-bubble-primary text-sm">Find LinkedIn profiles for each CTO</div></div>
-              <div class="chat chat-start"><div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div><div class="chat-header mb-1"><span class="text-xs opacity-50">Planner</span></div><div class="chat-bubble chat-bubble-neutral text-sm">32 already in CRM. Enriching 18 via web. Adding <code class="bg-base-100/20 px-1 rounded">linkedin</code> column.</div><div class="chat-footer text-xs opacity-40 ml-12 mt-1"><svg xmlns="http://www.w3.org/2000/svg" class="inline size-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>Referenced: CRM (32 matching)</div></div>
-              <div class="chat chat-end"><div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div></div><div class="chat-header mb-1"><span class="text-xs opacity-50">You</span></div><div class="chat-bubble chat-bubble-primary text-sm">Run it as v2.</div></div>
+
+          <!-- Planner Chat — OpenWebUI style -->
+          <div class="card bg-base-100 shadow-sm flex flex-col overflow-hidden">
+
+            <!-- Chat Toolbar -->
+            <div class="px-4 py-2 border-b border-base-content/10 flex items-center gap-3 flex-shrink-0 flex-wrap">
+              <div class="dropdown dropdown-end">
+                <button tabindex="0" class="btn btn-ghost btn-xs gap-1">Grok-3 Mini <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-300 rounded-box w-48 mt-1 z-50">
+                  <li><a class="menu-active">Grok-3 Mini</a></li>
+                  <li><a>GPT-4o</a></li>
+                  <li><a>Claude Sonnet 4</a></li>
+                  <li><a>Llama 3.3 70B</a></li>
+                </ul>
+              </div>
+              <span class="text-xs opacity-60">Temp</span>
+              <input type="range" min="0" max="100" value="70" class="range range-primary range-xs w-16" />
+              <span class="text-xs opacity-60">0.7</span>
+              <button class="btn btn-ghost btn-xs ml-auto" title="System prompt">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+              </button>
+              <button class="btn btn-ghost btn-xs" title="Clear chat">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
             </div>
-            <div class="card-body border-t border-base-content/10 p-4 gap-3">
-              <div class="join w-full"><input type="text" class="input input-sm input-bordered join-item flex-1" placeholder="Ask about this dataset..."><button class="btn btn-primary btn-sm join-item btn-square"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button></div>
-              <div class="flex gap-2 flex-wrap"><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Add Column</button><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>New v2</button></div>
+
+            <!-- System Prompt collapsible -->
+            <details class="border-b border-base-content/10">
+              <summary class="px-4 py-2 text-xs opacity-50 cursor-pointer">System Prompt ▼</summary>
+              <div class="px-4 pb-3"><textarea class="textarea textarea-bordered w-full text-xs font-mono" rows="3" readonly>You are a data research planner. Analyze the dataset structure, identify enrichment opportunities, and suggest column additions. Reference existing CRM data when available.</textarea></div>
+            </details>
+
+            <!-- Chat Messages -->
+            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar min-h-[200px]">
+
+              <!-- AI Message with JSON block -->
+              <div class="chat chat-start group">
+                <div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 h-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div>
+                <div class="chat-header mb-1 flex items-center gap-2"><span class="text-xs opacity-50">Planner</span><span class="text-xs opacity-30">12:34 PM</span></div>
+                <div class="chat-bubble chat-bubble-neutral text-sm">
+                  Dataset loaded: <strong>CTOs</strong>. 50 records, 4 fields. CRM has 32 matching.<br><br>
+                  <span class="text-xs opacity-50 uppercase tracking-wider">Schema</span>
+                  <div class="mockup-code text-xs bg-base-100 my-2">
+                    <pre data-prefix="1"><code class="text-success">{</code></pre>
+                    <pre data-prefix="2"><code class="text-success">  "name": "AI Frontier Lab CTOs",</code></pre>
+                    <pre data-prefix="3"><code>  "records": 50,</code></pre>
+                    <pre data-prefix="4"><code>  "fields": {</code></pre>
+                    <pre data-prefix="5"><code>    "name":    { "type": "str", "filled": 50 },</code></pre>
+                    <pre data-prefix="6"><code>    "company": { "type": "str", "filled": 50 },</code></pre>
+                    <pre data-prefix="7"><code>    "role":    { "type": "str", "filled": 48 },</code></pre>
+                    <pre data-prefix="8"><code>    "twitter": { "type": "str", "filled": 45 }</code></pre>
+                    <pre data-prefix="9"><code>  }</code></pre>
+                    <pre data-prefix="10"><code class="text-success">}</code></pre>
+                  </div>
+                  What would you like to do?
+                </div>
+                <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 ml-12 flex gap-2 transition-opacity">
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Regenerate</button>
+                </div>
+              </div>
+
+              <!-- User Message -->
+              <div class="chat chat-end group">
+                <div class="chat-image avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center"><span class="text-xs font-medium">J</span></div></div>
+                <div class="chat-header mb-1 flex items-center gap-2 justify-end"><span class="text-xs opacity-30">12:36 PM</span><span class="text-xs opacity-50">You</span></div>
+                <div class="chat-bubble chat-bubble-primary text-sm">Find LinkedIn profiles for each CTO and add linkedin_url as a new column</div>
+                <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 flex gap-2 justify-end transition-opacity">
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit</button>
+                </div>
+              </div>
+
+              <!-- AI Response with sample data -->
+              <div class="chat chat-start group">
+                <div class="chat-image avatar placeholder"><div class="bg-neutral text-neutral-content rounded-full w-8 h-8 flex items-center justify-center"><span class="text-xs font-medium">AI</span></div></div>
+                <div class="chat-header mb-1 flex items-center gap-2"><span class="text-xs opacity-50">Planner</span><span class="text-xs opacity-30">12:38 PM</span></div>
+                <div class="chat-bubble chat-bubble-neutral text-sm">
+                  32 already in CRM. Searching LinkedIn for 18 new contacts. Adding <code class="bg-base-100/20 px-1 rounded">linkedin_url</code> column — sample:
+                  <div class="mockup-code text-xs bg-base-100 my-2">
+                    <pre data-prefix="1"><code class="text-warning">[</code></pre>
+                    <pre data-prefix="2"><code>  {<span class="text-success">"name": "Jane Smith"</span>, <span class="text-info">"company"</span>: "Anthropic",</code></pre>
+                    <pre data-prefix="3"><code>   <span class="text-success">"linkedin_url"</span>: <span class="text-info">"https://linkedin.com/in/..."</span>},</code></pre>
+                    <pre data-prefix="4"><code>  {<span class="text-success">"name": "Alex Chen"</span>, <span class="text-info">"company"</span>: "DeepMind",</code></pre>
+                    <pre data-prefix="5"><code>   <span class="text-success">"linkedin_url"</span>: <span class="text-info">"https://linkedin.com/in/..."</span>},</code></pre>
+                    <pre data-prefix="6"><code>  ...</code></pre>
+                    <pre data-prefix="7"><code class="text-warning">]</code></pre>
+                  </div>
+                  <span class="flex items-center gap-1 text-xs opacity-50"><svg xmlns="http://www.w3.org/2000/svg" class="inline size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> Referenced: CRM (32 matches)</span>
+                </div>
+                <div class="chat-footer text-xs opacity-0 group-hover:opacity-40 mt-1 ml-12 flex gap-2 transition-opacity">
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Approve</button>
+                  <button class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Regenerate</button>
+                </div>
+              </div>
+
+              <!-- Progress indicator -->
+              <div class="flex items-center gap-3 px-1 py-2">
+                <span class="loading loading-dots loading-xs text-warning"></span>
+                <span class="text-xs opacity-50">Enriching 15 remaining records via web search...</span>
+                <button class="btn btn-ghost btn-xs ml-auto gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>Stop
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="border-t border-base-content/10 p-4 flex-shrink-0 space-y-3">
+              <div class="flex gap-2">
+                <textarea class="textarea textarea-bordered textarea-sm flex-1 min-h-[80px]" placeholder="Ask about this dataset..." rows="3"></textarea>
+                <div class="flex flex-col gap-2">
+                  <button class="btn btn-primary btn-sm btn-square"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                  <button class="btn btn-ghost btn-sm btn-square" title="Attach"><svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg></button>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex gap-2 flex-wrap">
+                  <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Add Column</button>
+                  <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button>
+                  <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>New v2</button>
+                  <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>Export</button>
+                </div>
+                <span class="text-xs opacity-40 ml-auto">324/8,192 tokens · grok-3-mini</span>
+              </div>
             </div>
           </div>
+
+          <!-- Schema Panel -->
           <div class="card bg-base-100 shadow-sm flex flex-col">
             <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center"><h2 class="text-sm font-semibold">Schema</h2><span class="badge badge-warning badge-xs ml-auto">v2 — proposed</span></div>
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar min-h-[200px]">
-              <div class="mockup-code text-sm bg-base-300"><pre data-prefix="1"><code>{</code></pre><pre data-prefix="2"><code>  "name": "AI Frontier Lab CTOs",</code></pre><pre data-prefix="3"><code>  "records": 50,</code></pre><pre data-prefix="4"><code>  "version": 2,</code></pre><pre data-prefix="5"><code>  "sources": {</code></pre><pre data-prefix="6"><code>    "twitter.com": 20,</code></pre><pre data-prefix="7"><code>    "linkedin.com": 15,</code></pre><pre data-prefix="8"><code>    "other": 15</code></pre><pre data-prefix="9"><code>  },</code></pre><pre data-prefix="10"><code>  "fields": [</code></pre><pre data-prefix="11"><code class="text-success">    {"name": "name", "type": "str", "filled": 50},</code></pre><pre data-prefix="12"><code class="text-success">    {"name": "company", "type": "str", "filled": 50},</code></pre><pre data-prefix="13"><code class="text-success">    {"name": "role", "type": "str", "filled": 48},</code></pre><pre data-prefix="14"><code class="text-success">    {"name": "twitter", "type": "str", "filled": 45},</code></pre><pre data-prefix="15"><code>    {</code></pre><pre data-prefix="16"><code class="text-warning">      "name": "linkedin",</code></pre><pre data-prefix="17"><code class="text-warning">      "type": "str",</code></pre><pre data-prefix="18"><code class="text-warning">      "filled": 0,</code></pre><pre data-prefix="19"><code class="text-warning">      "status": "pending"</code></pre><pre data-prefix="20"><code>    }</code></pre><pre data-prefix="21"><code>  ]</code></pre><pre data-prefix="22"><code>}</code></pre></div>
+              <div class="mockup-code text-sm bg-base-300">
+                <pre data-prefix="1"><code>{</code></pre>
+                <pre data-prefix="2"><code>  "name": "AI Frontier Lab CTOs",</code></pre>
+                <pre data-prefix="3"><code>  "records": 50,</code></pre>
+                <pre data-prefix="4"><code>  "version": 2,</code></pre>
+                <pre data-prefix="5"><code>  "sources": {</code></pre>
+                <pre data-prefix="6"><code>    "twitter.com": 20,</code></pre>
+                <pre data-prefix="7"><code>    "linkedin.com": 15,</code></pre>
+                <pre data-prefix="8"><code>    "other": 15</code></pre>
+                <pre data-prefix="9"><code>  },</code></pre>
+                <pre data-prefix="10"><code>  "fields": [</code></pre>
+                <pre data-prefix="11"><code class="text-success">    {"name": "name", "type": "str", "filled": 50},</code></pre>
+                <pre data-prefix="12"><code class="text-success">    {"name": "company", "type": "str", "filled": 50},</code></pre>
+                <pre data-prefix="13"><code class="text-success">    {"name": "role", "type": "str", "filled": 48},</code></pre>
+                <pre data-prefix="14"><code class="text-success">    {"name": "twitter", "type": "str", "filled": 45},</code></pre>
+                <pre data-prefix="15"><code>    {</code></pre>
+                <pre data-prefix="16"><code class="text-warning">      "name": "linkedin_url",</code></pre>
+                <pre data-prefix="17"><code class="text-warning">      "type": "str",</code></pre>
+                <pre data-prefix="18"><code class="text-warning">      "filled": 3,</code></pre>
+                <pre data-prefix="19"><code class="text-warning">      "status": "collecting"</code></pre>
+                <pre data-prefix="20"><code>    }</code></pre>
+                <pre data-prefix="21"><code>  ]</code></pre>
+                <pre data-prefix="22"><code>}</code></pre>
+              </div>
             </div>
-            <div class="card-body border-t border-base-content/10 p-4 gap-2"><div class="grid grid-cols-3 gap-2"><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</button><button class="btn btn-primary btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Approve v2</button></div></div>
+            <div class="card-body border-t border-base-content/10 p-4 gap-2">
+              <div class="grid grid-cols-3 gap-2">
+                <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</button>
+                <button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</button>
+                <button class="btn btn-primary btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Approve v2</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="card bg-base-100 shadow-sm"><div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center"><h2 class="text-sm font-semibold">Data Items</h2><div class="flex gap-2 ml-auto"><span class="badge badge-sm">50 records</span><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button></div></div><div class="p-8 empty-state text-center"><svg xmlns="http://www.w3.org/2000/svg" class="size-12 mx-auto mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg><p class="text-sm opacity-40 mb-1">Data items table</p><p class="text-xs opacity-30">50 records ready to display</p><button class="btn btn-ghost btn-sm mt-3"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Records</button></div></div>
+
+        <!-- Bottom: Data Items -->
+        <div class="card bg-base-100 shadow-sm">
+          <div class="card-body border-b border-base-content/10 p-4 gap-0 flex-row items-center"><h2 class="text-sm font-semibold">Data Items</h2><div class="flex gap-2 ml-auto"><span class="badge badge-sm">50 records</span><button class="btn btn-ghost btn-xs gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>Filter</button></div></div>
+          <div class="p-8 empty-state text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-12 mx-auto mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <p class="text-sm opacity-40 mb-1">Data items table</p>
+            <p class="text-xs opacity-30">50 records ready to display</p>
+            <button class="btn btn-ghost btn-sm mt-3"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Records</button>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
-  <div class="drawer-side z-40"><!-- Shared sidebar for all design mockup pages -->
-<aside id="sidebar" class="flex flex-col bg-base-100 min-h-full w-64">
+  <div class="drawer-side z-40"><aside id="sidebar" class="flex flex-col bg-base-100 min-h-full w-64">
   <div class="w-full px-4 py-4 border-b border-base-content/10"><span class="font-bold text-base sidebar-brand-text">Inndxd</span><span class="font-bold text-base hidden sidebar-collapsed-show">I</span></div>
   <ul class="menu w-full grow p-2 gap-1">
-    <li><a href="/ui/design/" title="Components" class="{% if current == 'components' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
-      <span class="sidebar-text">Components</span></a></li>
-    <li><a href="/ui/design/dashboard" title="Dashboard" class="{% if current == 'dashboard' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-      <span class="sidebar-text">Dashboard</span></a></li>
-    <li><a href="/ui/design/datasets" title="Datasets" class="{% if current == 'datasets' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-      <span class="sidebar-text">Datasets</span></a></li>
-    <li><a href="/ui/design/projects" title="Projects" class="{% if current == 'projects' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-      <span class="sidebar-text">Projects</span></a></li>
-    <li><a href="/ui/design/briefs" title="Briefs" class="{% if current == 'briefs' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      <span class="sidebar-text">Briefs</span></a></li>
-    <li><a href="/ui/design/data-items" title="Data Items" class="{% if current == 'data-items' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-      <span class="sidebar-text">Data Items</span></a></li>
+    <li><a href="/ui/design/" title="Components" class="{% if current == 'components' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg><span class="sidebar-text">Components</span></a></li>
+    <li><a href="/ui/design/dashboard" title="Dashboard" class="{% if current == 'dashboard' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="sidebar-text">Dashboard</span></a></li>
+    <li><a href="/ui/design/datasets" title="Datasets" class="menu-active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg><span class="sidebar-text">Datasets</span></a></li>
+    <li><a href="/ui/design/projects" title="Projects" class="{% if current == 'projects' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg><span class="sidebar-text">Projects</span></a></li>
+    <li><a href="/ui/design/briefs" title="Briefs" class="{% if current == 'briefs' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="sidebar-text">Briefs</span></a></li>
+    <li><a href="/ui/design/data-items" title="Data Items" class="{% if current == 'data-items' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg><span class="sidebar-text">Data Items</span></a></li>
     <li class="menu-title mt-4"><span class="px-2 text-xs uppercase opacity-50">Admin</span></li>
-    <li><a href="/ui/design/admin" title="Admin" class="{% if current == 'admin' %}menu-active{% endif %}">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      <span class="sidebar-text">Admin</span></a></li>
+    <li><a href="/ui/design/admin" title="Admin" class="{% if current == 'admin' %}menu-active{% endif %}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="sidebar-text">Admin</span></a></li>
   </ul>
   <div class="p-3 border-t border-base-content/10"><span class="text-xs opacity-50">v0.5.0 — design</span></div>
 </aside></div>
